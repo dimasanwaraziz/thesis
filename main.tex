@@ -1,0 +1,114 @@
+\documentclass{ittelkom}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tabularx, ragged2e, lmodern, bigstrut}
+\usepackage[sgvnames, table]{xcolor}
+\newcommand{\blue}{\cellcolor{blue!75}}
+
+
+\begin{document}
+
+\project{Steganography with Multiple Embedding in Color Images}
+\submit{Dimas Anwar Aziz}
+\nim{203022410012}
+\concentration{Cyber Security}
+\email{dimasanwaraziz@student.telkomuniversity.ac.id}
+\supervisor{Prof.\ Ari Moesriami Barmawi, Ph.D.}
+\submitdate{08}{10}{2024}
+
+\summary{Topic Summary}
+{This is a summary and a word length of 300 words. Summary is written briefly from the entire contents of the thesis/proposal and so on until it is finished.}
+
+\newpage
+\section{INTRODUCTION \color{red} (assessment 1)}
+Steganografi, seni dan ilmu menyembunyikan informasi dalam bentuk data digital yang tampak tidak mencurigakan, menjadi salah satu topik penting dalam bidang keamanan informasi. Seiring dengan meningkatnya kebutuhan akan komunikasi yang aman dan privasi data di era digital, metode steganografi menjadi semakin relevan untuk dikembangkan. Penelitian ini berfokus pada peningkatan kapasitas penyembunyian data menggunakan steganografi menggunakan code base dengan strategi multiple embedding, yang dapat memberikan peningkatan kapasitas signifikan dibandingkan metode tradisional. Motivasi utama dari penelitian ini adalah untuk menemukan solusi yang lebih efisien dalam menyembunyikan informasi tanpa terdeteksi, khususnya dengan menerapkan pendekatan yang memungkinkan penyimpanan data dalam jumlah lebih besar di dalam media digital.
+
+Pada penelitian sebelumnya yang menggunakan metode Molaei, telah berhasil meningkatkan kapasitas penyembunyian data hingga 450\% pada gambar grayscale. Namun, pendekatan ini masih terbatas pada penggunaan gambar grayscale, yang hanya memiliki satu channel pencahayaan hitam-putih, sehingga membatasi kapasitas penyimpanan. Oleh karena itu, penelitian ini mencoba untuk memperluas metode embedding ini ke gambar berwarna yang memiliki tiga channel warna (Merah, Hijau, dan Biru), dengan harapan dapat meningkatkan kapasitas penyembunyian lebih banyak lagi.
+
+Tambahkan terkait tantangan dalam menerapkan steganografi pada gambar berwarna, yang memerlukan strategi yang lebih canggih untuk memastikan data yang disembunyikan tidak terdeteksi.
+
+Metode steganografi konvensional memiliki keterbatasan dalam kapasitas penyimpanan data, dan potensi masa depan yang memungkinkan peningkatan kapasitas yang lebih besar dengan penggunaan gambar berwarna. Dengan demikian, penelitian ini tidak hanya diharapkan memberikan kontribusi signifikan terhadap pengembangan konsep steganografi yang lebih efisien, tetapi juga mendorong kemajuan dalam praktik industri yang memerlukan perlindungan data yang lebih baik.
+
+
+\section{Preliminary Literature Review \color{red}(assessment 2)}
+Preliminary literature review: provide a summary of previous related research on the research problem and their strength and weakness and a justification of your research \- What is known/what have been done by others? And, why your research is still necessary?
+
+To complete this section, see the detail in the assignment form of assessment-2.
+
+\section{Problem Statement \color{red} (assessment 2)} \label{resquest}
+Problem statement concludes the challenge issues/open problems based on {\bf the strength} and limitation emerged on the previous section. It provides a clear and concise description of the issues that need to be addressed - What is the specific problem in that research area that you will address (e.g. lack of understanding of a subject, low performance ...)?
+
+\section{Objective and Hypothesis \color{red}(assessment 3)} \label{hyp}
+This section should contain objective research direction (sharp and measurable) and the hypotheses (The explanation of method, concept which will be used to solve the problem as well as the reason why they will be used in the research; the explanation about the difference between method, concept, and theorem which will be used and the method, concept method, concept which were used previously.
+
+To complete this section, see the detail in the assignment form of assessment-3. 
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.4\textwidth]{TelU_1.jpg}
+%%\caption{Logo University}
+%\end{figure}
+
+
+\section{Research Method \color{red}(assessment 4,5)}
+Research method should contain brief description on fundamental knowledge related to the addressed problem. You should highlight that the concept is appropriate for your problem. Write down the mapping between the concept used and the problem solved.
+
+Also, it defines the logic steps - What to do and how to solve the problem and achieve proposed objectives? Which research methods (e.g. survey, modeling, case study ...) will be used? 
+
+More specifically, the section comprises the following components:
+\begin{itemize}
+\item[1.] Requirement identification
+\item[2.] Design process (including general system architecture)
+\item[3.] Implementation process
+\item[4.] Experiment design and plan (including data collection process)
+\item[5.] Analysis/Evaluation method which will be used for analyzing the experiment result
+\end{itemize}
+
+To complete this section, see the detail in the assignment form of assessment-4 and assessment-5.
+
+\section{Work Plan and Time Schedule}
+Write a work plan along with the schedule for completion. The following is the example. You may adjust the activities  and time schedule according to the problem.
+\newline
+
+\begin{table}[h!]
+\caption{Activity Schedule (\color{red}example) \label{tab:schedule}}
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}l|l|*{11}{>{\centering\arraybackslash}X|}>{\centering\arraybackslash}X<{\bigstrut}|}
+\hline
+\multicolumn{2}{|l|}{}&\multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}\\
+\cline{3-14}
+\multicolumn{2}{|c|}{\bfseries Activity}&\multicolumn{3}{c|}{\bfseries 1}&\multicolumn{3}{c|}{\bfseries 2}&\multicolumn{3}{c|}{\bfseries 3}&\multicolumn{3}{c|}{\bfseries 4\bigstrut}\\
+\hline
+
+1&Literature study&\blue&&&&&&&&&&&\\
+\hline
+2&Problem identification&\blue&\blue&&&&&&&&&&\\
+\hline
+3&Contribution formulation&\blue&\blue&&&&&&&&&&\\
+\hline
+4&Hypothesis formulation&\blue&\blue&&&&&&&&&&\\
+\hline
+5&Proposal&&&\blue&&&&&&&&&\\
+\hline
+6&Data collection&&&&\blue&&&&&&&&\\
+\hline
+7&Requirement identification&&&&&&\blue&\blue&&&&&\\
+\hline
+8&Design process&&&&&&&&\blue&\blue&&&\\
+\hline
+9&Implementation process&&&&&&&&&\blue&&&\\
+\hline
+10&Experiment design&&&&&&&&&\blue&&&\\
+\hline
+11&Evaluation and analysis&&&&&&&&&\blue&\blue&\blue&\\
+\hline
+12&Thesis draft&&&&&&&&&&&&\blue\\
+\hline
+
+\end{tabularx}
+\end{table}
+
+%\section{Summary}
+\supervisorcomments
+
+
+\end{document} 
