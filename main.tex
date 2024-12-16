@@ -4,6 +4,9 @@
 \usepackage{tabularx, ragged2e, lmodern, bigstrut}
 \usepackage[sgvnames, table]{xcolor}
 \newcommand{\blue}{\cellcolor{blue!75}}
+\usepackage[style=numeric]{biblatex} % Menggunakan gaya referensi numerik
+\addbibresource{referensi.bib}       % Memuat file bibliografi
+
 
 
 \begin{document}
@@ -21,7 +24,7 @@
 
 \newpage
 \section{INTRODUCTION \color{red} (assessment 1)}
-Steganografi, seni dan ilmu menyembunyikan informasi dalam bentuk data digital yang tampak tidak mencurigakan, menjadi salah satu topik penting dalam bidang keamanan informasi. Seiring dengan meningkatnya kebutuhan akan komunikasi yang aman dan privasi data di era digital, metode steganografi menjadi semakin relevan untuk dikembangkan. Penelitian ini berfokus pada peningkatan kapasitas penyembunyian data menggunakan steganografi menggunakan code base dengan strategi multiple embedding, yang dapat memberikan peningkatan kapasitas signifikan dibandingkan metode tradisional. Motivasi utama dari penelitian ini adalah untuk menemukan solusi yang lebih efisien dalam menyembunyikan informasi tanpa terdeteksi, khususnya dengan menerapkan pendekatan yang memungkinkan penyimpanan data dalam jumlah lebih besar di dalam media digital.
+Steganografi, seni dan ilmu menyembunyikan \cite{juneja2013improved} informasi dalam bentuk data digital yang tampak tidak mencurigakan, menjadi salah satu topik penting dalam bidang keamanan informasi. Seiring dengan meningkatnya kebutuhan akan komunikasi yang aman dan privasi data di era digital, metode steganografi menjadi semakin relevan untuk dikembangkan. Penelitian ini berfokus pada peningkatan kapasitas penyembunyian data menggunakan steganografi menggunakan code base dengan strategi multiple embedding, yang dapat memberikan peningkatan kapasitas signifikan dibandingkan metode tradisional. Motivasi utama dari penelitian ini adalah untuk menemukan solusi yang lebih efisien dalam menyembunyikan informasi tanpa terdeteksi, khususnya dengan menerapkan pendekatan yang memungkinkan penyimpanan data dalam jumlah lebih besar di dalam media digital.
 
 Pada penelitian sebelumnya yang menggunakan metode Molaei, telah berhasil meningkatkan kapasitas penyembunyian data hingga 450\% pada gambar grayscale. Namun, pendekatan ini masih terbatas pada penggunaan gambar grayscale, yang hanya memiliki satu channel pencahayaan hitam-putih, sehingga membatasi kapasitas penyimpanan. Oleh karena itu, penelitian ini mencoba untuk memperluas metode embedding ini ke gambar berwarna yang memiliki tiga channel warna (Merah, Hijau, dan Biru), dengan harapan dapat meningkatkan kapasitas penyembunyian lebih banyak lagi.
 
@@ -109,6 +112,9 @@ Write a work plan along with the schedule for completion. The following is the e
 
 %\section{Summary}
 \supervisorcomments
+
+
+\printbibliography
 
 
 \end{document} 
