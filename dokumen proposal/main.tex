@@ -1,0 +1,558 @@
+\documentclass{ittelkom}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tabularx, ragged2e, lmodern, bigstrut}
+\usepackage[sgvnames, table]{xcolor}
+\newcommand{\blue}{\cellcolor{blue!75}}
+\usepackage[style=numeric,sorting=none]{biblatex}
+\addbibresource{referensi.bib}
+
+\begin{document}
+
+\project{Steganography with Multiple Embedding in Color Images}
+\submit{Dimas Anwar Aziz}
+\nim{203022410012}
+\concentration{Cyber Security}
+\email{dimasanwaraziz@student.telkomuniversity.ac.id}
+\supervisor{Prof.\ Ari Moesriami Barmawi, Ph.D.}
+\submitdate{08}{10}{2024}
+
+\summary{Topic Summary}
+{This is a summary and a word length of 300 words. Summary is written briefly from the entire contents of the thesis/proposal and so on until it is finished.}
+
+\newpage
+\section{INTRODUCTION \color{red} (assessment 1)}
+Steganografi merupakan teknik menyembunyikan pesan di dalam suatu media penyisipan pesan atau cover image,
+sehingga keberadaan pesan rahasia yang disisipkan tidak dapat dilihat secara langsung \cite{pujianto2021uji}. Steganografi
+memungkinkan pertukaran pesan rahasia melalui penyembunyian informasi pada berbagai media digital seperti gambar, video, dan audio,
+tanpa menimbulkan kecurigaan \cite{siaulhak2023sistem}. Steganografi dapat dipandang sebagai kelanjutan
+kriptografi dan dalam prakteknya pesan rahasia dienkripsi terlebih dahulu, kemudian
+cipherteks disembunyikan di dalam media lain sehingga pihak ketiga tidak menyadari
+keberadaannya. Pesan rahasia yang disembunyikan dapat diekstraksi kembali persis
+sama seperti aslinya \cite{soetarmono2012studi}.
+
+Di antara berbagai media digital yang dapat digunakan untuk steganografi,
+gambar menjadi pilihan yang populer karena beberapa alasan. Pertama, gambar
+digital tersedia secara luas dan pertukaran gambar di internet adalah hal yang
+umum, sehingga tidak menimbulkan kecurigaan. Kedua, gambar memiliki kapasitas
+untuk menyembunyikan informasi. Ketiga, manipulasi pixel pada gambar dapat
+dilakukan dengan berbagai teknik. Namun, tantangan utama dalam steganografi
+gambar adalah menemukan keseimbangan antara kapasitas penyembunyian data,
+kualitas gambar, dan ketahanan terhadap deteksi \cite{fikri2022optimasi}.
+
+Penelitian sebelumnya telah menunjukkan kemajuan signifikan dalam meningkatkan
+kapasitas penyembunyian data pada gambar grayscale. Kingsley et al.
+\cite{kingsley2020improving} berhasil meningkatkan kapasitas penyembunyian data
+hingga 450\% menggunakan metode code base. Meski begitu, penggunaan gambar
+grayscale membatasi aplikasi praktis karena hanya memiliki satu channel
+pencahayaan. Di sisi lain, Fikri et al. \cite{fikri2022optimasi}
+mendemonstrasikan bahwa penerapan steganografi pada gambar berwarna memiliki
+ketahanan yang baik, meskipun gambar dengan dominasi warna hitam menunjukkan
+kompatibilitas yang kurang optimal. Berdasarkan temuan-temuan tersebut,
+penelitian ini bertujuan untuk memperluas metode embedding ke gambar berwarna
+yang memiliki tiga channel warna (Merah, Hijau, dan Biru). Fokus utama adalah
+untuk meningkatkan kapasitas penyembunyian data sambil mempertahankan kualitas
+visual dan ketahanan terhadap deteksi. Penelitian ini juga akan mengevaluasi
+kompatibilitas metode yang diusulkan dengan berbagai jenis gambar berwarna,
+termasuk yang memiliki area gelap yang luas. Dengan mengoptimalkan penggunaan
+ketiga channel warna, diharapkan dapat dicapai peningkatan signifikan dalam
+kapasitas penyembunyian data dibandingkan dengan metode yang hanya menggunakan
+gambar grayscale, sambil tetap mempertahankan kealamiahan gambar yang
+dihasilkan.
+
+Penelitian ini mencakup empat aspek utama: pengetahuan, pengguna, kegunaan, dan
+infrastruktur. Aspek pengetahuan meliputi teknik steganografi gambar berwarna,
+metode berbasis kode, dan analisis kualitas gambar digital, termasuk manipulasi
+channel warna RGB. Pengguna potensial meliputi profesional keamanan informasi,
+peneliti, dan pengembang aplikasi keamanan data. Kegunaan mencakup implementasi
+dalam sistem data hiding, perlindungan hak cipta, dan watermarking, dengan
+fokus pada integrasi yang mudah, efisiensi, dan keseimbangan antara kapasitas
+penyembunyian data, kualitas gambar, dan ketahanan terhadap deteksi. Aspek
+infrastruktur melibatkan penggunaan Mac mini M2 dengan spesifikasi prosesor
+Apple M2 chip dengan 8-core CPU dan 10-core GPU, memori 8GB, penyimpanan SSD
+256GB, dan sistem operasi macOS.
+
+\section{Preliminary Literature Review \color{red}(assessment 2)}
+Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap serangan seperti kebisingan dan kompresi JPEG. Namun, penelitian ini masih diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
+
+Pada penelitian yang dilakukan oleh Dwi Andika et al (2020), mereka membahas
+keterbatasan kapasitas penyimpanan dalam teknik steganografi menggunakan
+algoritma GifShuffle pada citra GIF. Tantangan utama yang dihadapi adalah
+kesulitan dalam menyisipkan pesan teks dengan ukuran besar. Untuk mengatasi
+masalah ini, mereka memodifikasi nilai bit dalam penyimpanan pesan, yang
+bertujuan meningkatkan kapasitas tanpa mengorbankan kualitas visual gambar. Uji
+coba menggunakan parameter seperti ukuran data yang dapat disisipkan serta
+kualitas gambar menunjukkan bahwa metode ini berhasil meningkatkan kapasitas
+penyimpanan hingga lebih dari 256 KB tanpa mengurangi kualitas gambar secara
+signifikan. Namun, metode ini memerlukan modifikasi tambahan pada algoritma
+GifShuffle yang dapat meningkatkan kompleksitas implementasi dan pemrosesan
+\cite{andika2020modifikasi}.
+
+Susanto et al (2020) dalam penelitiannya menggabungkan metode steganografi
+Least Significant Bit (LSB) dengan algoritma enkripsi RSA untuk meningkatkan
+keamanan dalam penyisipan pesan terenkripsi pada gambar. Parameter yang
+digunakan untuk mengukur kualitas gambar setelah penyisipan adalah Peak
+Signal-to-Noise Ratio (PSNR), dengan hasil yang menunjukkan PSNR tertinggi
+sebesar 78 dB untuk pesan berukuran 1024 bit. Kelebihan metode ini adalah
+perubahan kualitas gambar yang hampir tidak terlihat, namun kekurangannya
+adalah kompleksitas yang meningkat seiring dengan ukuran pesan dan besarnya
+kunci RSA yang digunakan, yang memengaruhi performa
+\cite{susanto2020kombinasi}.
+
+Basri et al (2021) meneliti penggunaan metode steganografi dengan teknik Least
+Significant Bit (LSB) untuk menyembunyikan gambar di dalam gambar lainnya,
+khususnya dalam konteks interaksi sosial melalui media digital. Penelitian ini
+mengukur rasio ukuran gambar tersembunyi terhadap gambar cover serta kemampuan
+gambar cover mempertahankan kualitas visualnya. Hasilnya menunjukkan bahwa
+metode ini efektif menyembunyikan informasi tanpa perubahan signifikan pada
+gambar cover. Namun, metode ini memiliki keterbatasan dalam menangani gambar
+dengan transparansi, karena hanya memperhitungkan komponen warna merah, hijau,
+dan biru (RGB), tanpa memperhitungkan komponen alpha \cite{basri2021penerapan}.
+
+Penelitian Wiranata et al (2021) berfokus pada penyisipan pesan rahasia dalam
+gambar dan audio menggunakan metode Least Significant Bit (LSB) yang
+dikombinasikan dengan enkripsi Caesar Chipper dan Rivest Code 4 untuk menjaga
+kerahasiaan data. Penelitian ini menguji kemampuan aplikasi untuk
+menyembunyikan dan mengambil pesan secara utuh, serta perubahan ukuran file
+gambar dan audio setelah proses penyisipan. Kelebihan metode ini adalah
+kemampuannya menjaga kerahasiaan tanpa perubahan signifikan pada kualitas
+gambar atau suara. Namun, ada perubahan ukuran file yang diakibatkan oleh
+proses enkripsi dan penyisipan pesan \cite{wiranata2021aplikasi}.
+
+% fasilitas belum, terkait perangkat simulasi. Masukan perangkat yang digunakan.
+
+Penelitian yang dilakukan oleh Abdillah et al (2023) membahas tentang
+perlindungan data dan akses dengan menggunakan steganografi melalui teknik
+Least Significant Bit (LSB), di mana teks disisipkan dalam gambar melalui
+perubahan nilai pixel terkecil. Parameter yang diukur mencakup akurasi
+penyisipan teks dan kualitas gambar yang tetap terjaga setelah proses encoding
+dan decoding. Kelebihan utama metode ini adalah kemampuannya menyembunyikan
+informasi tanpa mengubah kualitas visual gambar secara signifikan. Namun,
+metode ini memiliki keterbatasan dalam kapasitas penyisipan teks dan rentan
+terhadap serangan manipulasi gambar yang dapat merusak data tersembunyi
+\cite{abdillah2023implementasi}.
+
+\section{Problem Statement \textcolor{red}{(Assessment 2)}} \label{request}
+
+Penelitian sebelumnya dalam steganografi berbasis kode telah menunjukkan
+kemajuan signifikan. Kingsley et al. \cite{kingsley2020improving} berhasil
+meningkatkan kapasitas penyembunyian data dari sekitar 150\% menjadi 450\%,
+yang merupakan peningkatan substansial untuk case yang membutuhkan kapasitas
+tinggi. Meskipun demikian, penelitian pada gambar grayscale
+\cite{soetarmono2012studi} masih membatasi pengaplikasiannya karena kurangnya
+fleksibilitas dalam penggunaan channel warna.
+
+Sementara itu, penerapan steganografi pada gambar berwarna (RGB) membuka
+peluang untuk peningkatan kapasitas, namun juga menghadirkan tantangan baru.
+Fikri et al. \cite{fikri2022optimasi} menemukan bahwa meskipun gambar RGB
+menawarkan robbustnes yang baik, terdapat masalah kompatibilitas pada gambar
+dengan dominasi warna gelap. Selain itu, penggunaan multiple embedding pada
+gambar RGB berpotensi meningkatkan kompleksitas komputasi
+\cite{juneja2013improved}.
+
+\section{Objective and Hypothesis \color{red}(assessment 3)} \label{hyp}
+
+Penelitian ini memiliki dua tujuan utama beserta hipotesis terkait. Pertama,
+mengembangkan teknik steganografi berbasis kode dengan multiple embedding untuk
+gambar RGB dan meningkatkan kapasitas penyembunyian data minimal 50\%
+dibandingkan dengan metode sebelumnya, dengan harapan bahwa metode ini akan
+meningkatkan kapasitas penyembunyian data secara signifikan dan penerapan pada
+gambar RGB akan menghasilkan peningkatan kapasitas lebih besar dibandingkan
+pada gambar grayscale. Kedua, mempertahankan PSNR di atas 40 dB untuk gambar
+stego, dengan hipotesis bahwa peningkatan kapasitas melalui multiple embedding
+tidak akan menurunkan kualitas visual secara signifikan
+\cite{nasution2018image}.
+
+% \subsection{Tujuan Utama Penelitian}
+% \begin{enumerate}
+%     \item Mengembangkan teknik steganografi berbasis kode dengan multiple embedding untuk gambar RGB.
+%     \item Meningkatkan kapasitas penyembunyian data minimal 50\% dibanding metode konvensional.
+%     \item Mempertahankan PSNR di atas 40 dB untuk gambar stego.
+%     \item Mengevaluasi ketahanan metode terhadap serangan steganalisis.
+% \end{enumerate}
+
+% \subsection{Hipotesis yang Diajukan}
+% \begin{itemize}
+%     \item H1: Multiple embedding akan meningkatkan kapasitas penyembunyian data secara signifikan dibanding metode steganografi berbasis kode konvensional.
+%     \item H2: Peningkatan kapasitas melalui multiple embedding tidak akan menurunkan kualitas visual (PSNR $>$ 40 dB) secara signifikan.
+%     \item H3: Metode yang diusulkan akan lebih tahan terhadap steganalisis dibanding steganografi LSB konvensional.
+%     \item H4: Penerapan pada gambar RGB akan menghasilkan peningkatan kapasitas lebih besar dibanding pada gambar grayscale.
+% \end{itemize}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.4\textwidth]{TelU_1.jpg}
+%%\caption{Logo University}
+%\end{figure}
+
+\section{Research Method \color{red}(assessment 4,5)}
+Penelitian ini akan menggunakan pendekatan eksperimental untuk menguji hipotesis yang diajukan. Metode penelitian mencakup beberapa tahap utama, mengintegrasikan konsep dasar steganografi dan mengatasi tantangan khusus steganografi berbasis kode dengan teknik penyisipan ganda.
+
+\subsection{Identifikasi Kebutuhan}
+
+Berdasarkan analisis literatur dan tujuan penelitian, kebutuhan utama untuk
+pengembangan metode steganografi berbasis kode dengan penyisipan ganda:
+
+\begin{enumerate}
+    \item Algoritma penyisipan dengan multiple embedding pada gambar RGB
+    \item Peningkatan kapasitas penyembunyian data minimal 50\%
+    \item Teknik mempertahankan kualitas visual (PSNR $>$ 40 dB)
+\end{enumerate}
+
+Identifikasi kebutuhan ini akan menjadi dasar untuk proses desain dan
+implementasi sistem steganografi yang diusulkan.
+
+\subsection{Proses Desain}
+Berdasarkan kebutuhan yang diidentifikasi, penelitian ini akan merancang
+algoritma untuk steganografi berbasis kode dengan multiple embedding.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{gambar/proposed.png}
+    \caption{Design method}
+    \label{fig:flow}
+\end{figure}
+
+% jelaskan juga metode di bab ini
+% Cari metode untuk handle gambar berwarna ini
+% Rencana metodenya apa, tulis lagi per prosesnya. Cari reasoning, problemnya harus disolusikan.
+
+Arsitektur sistem umum akan mencakup
+
+\begin{enumerate}
+    \item Secret Image
+
+          Informasi rahasia yang akan disembunyikan dalam sistem steganografi, yang dapat
+          mencakup gambar dalam berbagai format (JPG, PNG, BMP) yang akan dilindungan
+          keamanan dan kerahasiaan. Pemilihan jenis data rahasia ini akan mempengaruhi
+          kapasitas penyimpanan yang diperlukan dan metode penyisipan yang digunakan
+          dalam proses steganografi.
+
+          Gambar ini merupakan inputan dinamis user untuk nanti disisipkan pada cover
+          image yang berwarna, dan nanti akan dicek terkait berapa kapasitas dan noise
+          yang dihasilkan dari hasil penyisipan secret image ini.
+
+    \item Encoding Process
+
+          Merupakan tahap transformasi image menjadi format yang sesuai untuk proses
+          penyisipan, melibatkan serangkaian konversi dari format asli menjadi
+          representasi biner. Proses ini mencakup analisis karakteristik data input,
+          pemilihan metode kompresi yang optimal untuk mengurangi ukuran data tanpa
+          mengorbankan integritas informasi, dan penyesuaian format keluaran untuk
+          memastikan kompatibilitas dengan algoritma penyisipan yang akan digunakan.
+
+          Tahap ini juga mempertimbangkan aspek efisiensi penyimpanan melalui
+          implementasi teknik kompresi yang sesuai dengan karakteristik data.
+
+    \item Generating Key Trace
+
+          Proses pembuatan kunci yang akan menentukan di mana dan bagaimana data akan
+          disembunyikan dalam gambar. Sistem menggunakan cara khusus untuk membuat pola
+          acak yang memastikan data tersebar merata dalam gambar. Cara ini membuat sistem
+          lebih aman karena menambah lapisan pengamanan, sekaligus memudahkan pengambilan
+          data kembali tanpa merusak gambar. Jika terjadi masalah atau ada yang mencoba
+          mengambil data secara ilegal, sistem ini juga membantu mengelola dan memulihkan
+          data dengan lebih baik.
+
+    \item Agreed Image
+
+          Gambar yang telah ditentukan bersama antara pengirim dan penerima sebagai media
+          penyimpanan jejak kunci steganografi. Pemilihan gambar ini dilakukan dengan
+          mempertimbangkan berbagai karakteristik teknis seperti kompleksitas tekstur,
+          distribusi warna, dan noise level yang optimal untuk mendukung proses
+          penyembunyian informasi tanpa menimbulkan kecurigaan. Gambar yang dipilih juga
+          harus memiliki kapasitas yang memadai untuk menampung jejak kunci sambil tetap
+          mempertahankan kualitas visual yang baik setelah proses penyisipan.
+
+    \item Embedding Key Trace into Agreed Image
+
+          Tahap kritis dimana key trace disisipkan ke dalam gambar yang telah disepakati
+          sebelumnya menggunakan teknik steganografi. Proses ini memerlukan presisi untuk
+          memastikan integritas data dan imperceptibility optimal. Penyisipan dilakukan
+          dengan mempertimbangkan karakteristik gambar dan distribusi nilai pixel untuk
+          mengoptimalkan keseimbangan antara kapasitas penyimpanan dan kualitas visual.
+          Teknik steganografi yang digunakan juga mempertimbangkan aspek keamanan untuk
+          mencegah deteksi dan ekstraksi unauthorized.
+
+    \item Agreed Stego
+
+          Hasil akhir dari proses penyisipan jejak kunci ke dalam gambar yang telah
+          disepakati bersama. Gambar ini memiliki karakteristik visual yang identik
+          dengan gambar asli untuk menghindari kecurigaan, namun di dalamnya telah
+          tertanam informasi rahasia dalam bentuk jejak kunci yang akan digunakan untuk
+          proses ekstraksi data. Kualitas gambar tetap terjaga meskipun telah melalui
+          proses penyisipan, dengan perubahan nilai pixel yang minimal dan tidak
+          terdeteksi oleh mata manusia. Gambar ini berperan penting sebagai pembawa
+          informasi kontrol yang diperlukan untuk proses steganografi selanjutnya.
+
+    \item Embedding secret bits into Cover Image
+
+          Embedding secret bits into cover image merupakan proses penyisipan bit-bit data
+          rahasia ke dalam gambar cover dilakukan dengan memanfaatkan algoritma
+          steganografi yang canggih dan teroptimasi. Proses ini melibatkan analisis
+          karakteristik gambar cover untuk menentukan lokasi optimal penyisipan data,
+          kemudian menggunakan teknik transformasi yang presisi untuk menyisipkan bit-bit
+          informasi rahasia. Algoritma yang digunakan dirancang khusus untuk
+          memaksimalkan kapasitas penyimpanan data sambil tetap mempertahankan kualitas
+          visual gambar, dengan fokus khusus pada minimalisasi distorsi yang dapat
+          terdeteksi baik secara visual maupun statistik. Proses ini juga
+          mempertimbangkan aspek keseimbangan antara efisiensi penyisipan dan ketahanan
+          terhadap berbagai teknik steganalisis.
+
+    \item Cover Image
+
+          Cover image merupakan gambar yang berfungsi sebagai media utama untuk
+          penyembunyian data rahasia, dipilih dengan pertimbangan khusus berdasarkan
+          kompleksitas tekstur, distribusi warna, dan karakteristik statistik yang
+          optimal untuk mendukung proses penyisipan informasi. Pemilihan cover image yang
+          tepat sangat kritis karena akan mempengaruhi kapasitas penyimpanan data,
+          ketahanan terhadap deteksi, dan kualitas visual hasil akhir steganografi.
+          Gambar dengan area tekstur yang kompleks dan variasi nilai pixel yang tinggi
+          umumnya lebih ideal karena dapat menyembunyikan perubahan yang diakibatkan oleh
+          proses penyisipan data dengan lebih efektif.
+
+    \item Generate random pixels positions
+
+          Algoritma untuk menghasilkan posisi piksel secara acak namun tetap
+          deterministik berdasarkan seed value yang ditentukan. Proses ini menggunakan
+          pembangkit bilangan pseudo-random yang telah terverifikasi untuk menghasilkan
+          sekuens posisi piksel yang terdistribusi merata di seluruh gambar. Pendekatan
+          deterministik ini penting untuk memastikan konsistensi dalam proses penyisipan
+          dan ekstraksi data, sekaligus meningkatkan keamanan dengan menciptakan pola
+          penyebaran data yang sulit diprediksi oleh pihak yang tidak berwenang.
+
+    \item Generating ECC Key Pairs
+
+          Proses pembuatan sepasang kunci kriptografi menggunakan algoritma Elliptic
+          Curve Cryptography (ECC), yang menyediakan tingkat keamanan yang sangat tinggi
+          dengan ukuran kunci yang relatif kecil dibandingkan dengan sistem kriptografi
+          konvensional. Pemilihan parameter kurva eliptik dan proses pembangkitan kunci
+          dilakukan dengan mempertimbangkan aspek keamanan dan efisiensi komputasi.
+
+    \item Embedding Public Key into Stego Image
+
+          Proses penyisipan kunci publik ke dalam gambar stego dilakukan dengan
+          menggunakan teknik steganografi yang telah dioptimasi untuk menjaga kualitas
+          visual gambar. Penyisipan ini memungkinkan verifikasi dan dekripsi yang aman
+          oleh penerima yang berwenang, sekaligus menjamin integritas dan otentisitas
+          data yang tersembunyi. Proses ini dirancang untuk meminimalkan dampak visual
+          dari penyisipan kunci publik.
+
+    \item Private Key
+
+          Kunci pribadi yang dihasilkan dalam proses ECC disimpan secara terpisah dengan
+          menerapkan protokol keamanan berlapis dan enkripsi tambahan. Kunci ini memiliki
+          tingkat keamanan yang sangat tinggi karena perannya yang kritis dalam proses
+          dekripsi dan verifikasi data tersembunyi. Penyimpanan dan pengelolaan kunci
+          pribadi mengikuti standar keamanan industri untuk mencegah akses tidak sah.
+
+    \item Stego Image
+
+          Gambar hasil akhir setelah proses penyisipan data rahasia, yang dirancang untuk
+          mempertahankan karakteristik visual yang identik dengan gambar cover asli.
+          Meskipun mengandung informasi tersembunyi, gambar stego tidak menunjukkan
+          perbedaan yang dapat terdeteksi secara visual maupun statistik sederhana.
+          Kualitas gambar dijaga melalui optimasi algoritma penyisipan yang
+          mempertimbangkan karakteristik persepsi visual manusia.
+
+    \item Final Stego Image
+
+          Versi terakhir dari gambar stego yang telah dilengkapi dengan kunci publik dan
+          semua metadata yang diperlukan untuk proses ekstraksi dan verifikasi yang aman.
+          Gambar ini menyediakan mekanisme pemulihan data yang komprehensif namun tetap
+          mempertahankan aspek keamanan dan kerahasiaan informasi yang tersembunyi.
+          Struktur data tambahan diintegrasikan dengan cara yang tidak mengganggu
+          kualitas visual keseluruhan.
+\end{enumerate}
+
+\subsection{Proses Implementasi}
+
+Algoritma yang dirancang akan diimplementasikan menggunakan Python,
+memanfaatkan library seperti OpenCV untuk pemrosesan gambar dan NumPy untuk
+operasi numerik. Implementasi ini dapat mendukung gambar RGB maupun grayscale
+untuk memungkinkan analisis komparatif.
+
+\subsubsection{Persiapan Environment Development}
+
+Mulai dengan instalasi Python sebagai bahasa pemrograman utama. Instal library
+OpenCV yang akan digunakan untuk membaca, menulis, dan memanipulasi gambar
+digital. Tambahkan NumPy untuk mendukung operasi matematika dan array yang
+diperlukan dalam pemrosesan gambar.
+
+\subsubsection{Pengembangan Modul Utama}
+
+\begin{enumerate}
+    \item Implementasi fungsi pembacaan gambar:
+          \begin{enumerate}
+              \item Pembacaan gambar format RGB menggunakan OpenCV
+              \item Pembacaan gambar format grayscale menggunakan OpenCV
+              \item Validasi format input gambar
+          \end{enumerate}
+
+    \item Implementasi fungsi pemrosesan pixel:
+          \begin{enumerate}
+              \item Modifikasi nilai pixel untuk penyisipan data
+              \item Pengecekan kapasitas penyisipan
+              \item Validasi integritas data
+          \end{enumerate}
+
+    \item Implementasi fungsi ekstraksi data:
+          \begin{enumerate}
+              \item Pembacaan nilai pixel termodifikasi
+              \item Ekstraksi data tersembunyi
+              \item Rekonstruksi pesan asli
+          \end{enumerate}
+
+    \item Implementasi fungsi evaluasi kualitas:
+          \begin{enumerate}
+              \item Perhitungan PSNR (Peak Signal-to-Noise Ratio)
+              \item Perhitungan MSE (Mean Square Error)
+              \item Analisis imperceptibility hasil steganografi
+          \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Implementasi Algoritma Steganografi}
+
+Dalam implementasi algoritma steganografi, pengembangan sistem dimulai dengan
+implementasi mekanisme penyisipan ganda yang komprehensif. Proses ini mencakup
+identifikasi area potensial untuk penyisipan data, pengembangan metode
+penyisipan bertingkat, serta pengelolaan metadata untuk multiple embedding.
+Koordinasi antar layer penyisipan menjadi aspek krusial untuk memastikan
+integritas data yang disisipkan.
+
+Sistem yang dikembangkan dirancang untuk mendukung berbagai format gambar,
+dengan fokus utama pada penanganan gambar RGB (24-bit) dan grayscale (8-bit).
+Adaptasi algoritma dilakukan untuk mengakomodasi kedua format tersebut,
+disertai dengan optimasi performa yang memungkinkan sistem bekerja secara
+efisien pada berbagai jenis gambar carrier.
+
+Optimasi kapasitas penyisipan menjadi salah satu prioritas utama, dengan target
+minimal mencapai 50\% dari ukuran carrier. Hal ini dicapai melalui implementasi
+teknik bit-plane slicing yang efisien, didukung oleh mekanisme kompresi data
+payload, serta pemilihan pixel secara adaptif untuk memaksimalkan kapasitas
+penyimpanan tanpa mengorbankan kualitas visual.
+
+Preservasi kualitas visual menjadi aspek fundamental dalam pengembangan, dengan
+target PSNR yang ditetapkan di atas 40 dB. Sistem mengimplementasikan berbagai
+strategi untuk meminimalisasi distorsi visual, termasuk teknik penyebaran
+perubahan pixel dan adaptasi terhadap karakteristik spesifik dari gambar
+carrier.
+
+Implementasi dilengkapi dengan mekanisme validasi yang komprehensif, mencakup
+verifikasi integritas data, pengukuran kapasitas efektif, evaluasi kualitas
+visual, serta pengujian robustness. Serangkaian pengujian ini memastikan bahwa
+sistem yang dikembangkan memenuhi seluruh requirement yang telah ditetapkan,
+baik dari segi kapasitas, kualitas, maupun keamanan data.
+
+\subsubsection{Pengembangan Sistem Pengujian}
+
+Buat modul pengujian untuk:
+
+- Mengukur kapasitas maksimum penyisipan data
+- Mengevaluasi kualitas visual menggunakan PSNR dan SSIM
+- Menguji ketahanan terhadap teknik steganalisis
+- Membandingkan dengan metode LSB konvensional
+
+\subsubsection{Analisis dan Evaluasi}
+
+Lakukan analisis komprehensif meliputi:
+
+- Pengujian statistik menggunakan uji-t dan ANOVA
+- Evaluasi visual subjektif
+- Pengukuran metrik kinerja (kapasitas, PSNR, SSIM)
+- Evaluasi efisiensi komputasi
+
+\subsubsection{Dokumentasi}
+
+Siapkan dokumentasi lengkap yang mencakup:
+
+- Kode sumber dengan komentar yang jelas
+- Manual penggunaan sistem
+- Hasil pengujian dan analisis
+- Rekomendasi untuk pengembangan lebih lanjut
+
+\subsection{Desain Eksperimen dan Pengumpulan Data}
+
+Pengumpulan data akan melibatkan pembuatan dataset gambar cover yang beragam,
+termasuk berbagai resolusi, kompleksitas, dan skema warna. Kami juga akan
+menyiapkan berbagai pesan rahasia dengan ukuran dan jenis yang berbeda untuk
+penyisipan.
+
+\begin{enumerate}
+    \item Pengujian
+\end{enumerate}
+
+\subsection{Metode Analisis dan Evaluasi}
+
+Penelitian ini akan merancang serangkaian eksperimen untuk mengevaluasi kinerja
+metode yang diusulkan:
+\begin{enumerate}
+    \item Uji kapasitas: Mengukur jumlah maksimum data yang dapat disembunyikan
+    \item Uji kualitas visual: Menilai imperceptibility menggunakan metrik PSNR
+    \item Uji ketahanan: Mengevaluasi ketahanan terhadap teknik steganalisis umum
+    \item Analisis komparatif: Membandingkan dengan metode sebelumnya dan proposed method
+\end{enumerate}
+
+% Research method should contain brief description on fundamental knowledge related to the addressed problem. You should highlight that the concept is appropriate for your problem. Write down the mapping between the concept used and the problem solved.
+
+% Also, it defines the logic steps - What to do and how to solve the problem and achieve proposed objectives? Which research methods (e.g. survey, modeling, case study ...) will be used? 
+
+% More specifically, the section comprises the following components:
+% \begin{itemize}
+% \item[1.] Requirement identification
+% \item[2.] Design process (including general system architecture)
+% \item[3.] Implementation process
+% \item[4.] Experiment design and plan (including data collection process)
+% \item[5.] Analysis/Evaluation method which will be used for analyzing the experiment result
+% \end{itemize}
+
+% To complete this section, see the detail in the assignment form of assessment-4 and assessment-5.
+
+\section{Work Plan and Time Schedule}
+Write a work plan along with the schedule for completion. The following is the
+example. You may adjust the activities and time schedule according to the
+problem. \newline
+
+\begin{table}[h!]
+    \caption{Activity Schedule (\color{red}example) \label{tab:schedule}}
+    \noindent\begin{tabularx}{\linewidth}{|>{\bfseries}l|l|*{11}{>{\centering\arraybackslash}X|}>{\centering\arraybackslash}X<{\bigstrut}|}
+        \hline
+        \multicolumn{2}{|l|}{}                   & \multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}                                                                                                                                                                                      \\
+        \cline{3-14}
+        \multicolumn{2}{|c|}{\bfseries Activity} & \multicolumn{3}{c|}{\bfseries 1}                  & \multicolumn{3}{c|}{\bfseries 2} & \multicolumn{3}{c|}{\bfseries 3} & \multicolumn{3}{c|}{\bfseries 4\bigstrut}                                                                    \\
+        \hline
+
+        1                                        & Literature study                                  & \blue                            &                                  &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        2                                        & Problem identification                            & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        3                                        & Contribution formulation                          & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        4                                        & Hypothesis formulation                            & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &  &       &       &       &       &       &       &       \\
+        \hline
+        6                                        & Data collection                                   &                                  &                                  &                                           & \blue &  &       &       &       &       &       &       &       \\
+        \hline
+        7                                        & Requirement identification                        &                                  &                                  &                                           &       &  & \blue & \blue &       &       &       &       &       \\
+        \hline
+        8                                        & Design process                                    &                                  &                                  &                                           &       &  &       &       & \blue & \blue &       &       &       \\
+        \hline
+        9                                        & Implementation process                            &                                  &                                  &                                           &       &  &       &       &       & \blue &       &       &       \\
+        \hline
+        10                                       & Experiment design                                 &                                  &                                  &                                           &       &  &       &       &       & \blue &       &       &       \\
+        \hline
+        11                                       & Evaluation and analysis                           &                                  &                                  &                                           &       &  &       &       &       & \blue & \blue & \blue &       \\
+        \hline
+        12                                       & Thesis draft                                      &                                  &                                  &                                           &       &  &       &       &       &       &       &       & \blue \\
+        \hline
+
+    \end{tabularx}
+\end{table}
+
+%\section{Summary}
+\supervisorcomments
+
+\printbibliography
+
+\end{document}

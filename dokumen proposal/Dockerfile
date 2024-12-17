@@ -17,4 +17,4 @@ RUN apt-get update && \
 WORKDIR /root/shared/folder
 
 # Default command
-ENTRYPOINT ["pdflatex"]
+# ENTRYPOINT ["pdflatex"]
