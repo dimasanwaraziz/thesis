@@ -1,6 +1,7 @@
 \documentclass{ittelkom}
 \usepackage{graphicx}
 \usepackage{multirow}
+\usepackage{float} 
 \usepackage{tabularx, ragged2e, lmodern, bigstrut}
 \usepackage[sgvnames, table]{xcolor}
 \newcommand{\blue}{\cellcolor{blue!75}}
@@ -220,7 +221,7 @@ algoritma untuk steganografi berbasis kode dengan multiple embedding.
 Arsitektur sistem umum akan mencakup
 
 \begin{enumerate}
-    \item Secret Image
+    \item \textbf{Secret Image}
 
           Secret Image merupakan informasi rahasia yang akan disembunyikan dalam sistem
           steganografi, yang dapat mencakup gambar dalam berbagai format (JPG, PNG) yang
@@ -232,17 +233,143 @@ Arsitektur sistem umum akan mencakup
           image yang berwarna, dan nanti akan dicek terkait berapa kapasitas dan noise
           yang dihasilkan dari hasil penyisipan secret image ini.
 
-    \item Encoding Process
+    \item \textbf{Encoding Process}
 
-          Merupakan tahap transformasi image menjadi format yang sesuai untuk proses
-          penyisipan, melibatkan serangkaian konversi dari format asli menjadi
-          representasi biner. Proses ini mencakup analisis karakteristik data input,
-          pemilihan metode kompresi yang optimal untuk mengurangi ukuran data tanpa
-          mengorbankan integritas informasi, dan penyesuaian format keluaran untuk
-          memastikan kompatibilitas dengan algoritma penyisipan yang akan digunakan.
+          Proses \textit{encoding} bertujuan untuk menyisipkan pesan (teks) ke dalam
+          gambar dengan menggunakan \textbf{Least Significant Bit (LSB)} dari setiap
+          komponen warna pixel (R, G, B).
 
-          Tahap ini juga mempertimbangkan aspek efisiensi penyimpanan melalui
-          implementasi teknik kompresi yang sesuai dengan karakteristik data.
+          Berikut adalah penjelasan langkah-langkah proses encoding:
+
+          \begin{enumerate}
+              \item \textbf{Persiapan Data}
+
+                    \begin{itemize}
+                        \item \textbf{Input:}
+                              \begin{itemize}
+                                  \item Gambar yang akan digunakan sebagai media penyisipan.
+                                  \item Pesan teks yang ingin disembunyikan.
+                              \end{itemize}
+
+                        \item \textbf{Tambahan Terminator:}
+                              Pesan diberi terminator (\texttt{\textbackslash 000}) di akhir sebagai penanda bahwa pesan telah selesai.
+                              \begin{itemize}
+                                  \item Contoh:
+                                        \begin{quote}
+                                            \textbf{Pesan awal:} "Hello, World!"
+                                        \end{quote}
+                                        \begin{quote}
+                                            \textbf{Pesan yang akan diproses:} "Hello, World!\texttt{\textbackslash 000}"
+                                        \end{quote}
+                              \end{itemize}
+
+                        \item \textbf{Konversi ke Bit:}
+                              Setiap karakter diubah menjadi 8 bit (format byte).
+                              \begin{itemize}
+                                  \item Contoh huruf "H" (ASCII 72): 01001000.
+                              \end{itemize}
+                    \end{itemize}
+
+              \item \textbf{Iterasi Gambar Pixel-per-Pixel}
+
+                    Gambar diakses pixel-per-pixel, dan untuk setiap pixel:
+                    \begin{itemize}
+                        \item Komponen warna R (Red), G (Green), dan B (Blue) diekstrak.
+                        \item Setiap komponen warna memiliki nilai 8 bit (0-255).
+                    \end{itemize}
+
+              \item \textbf{Menyisipkan Bit ke LSB}
+
+                    Dari setiap byte pesan (8 bit), bit pesan disisipkan satu per satu ke dalam LSB
+                    (Least Significant Bit) dari komponen R, G, dan B. LSB adalah bit paling rendah
+                    dari nilai komponen warna. Mengubah LSB tidak akan mengubah warna secara
+                    signifikan.
+
+                    \begin{itemize}
+                        \item \textbf{Contoh Menyisipkan Bit:}
+                              Misalkan:
+                              \begin{itemize}
+                                  \item Nilai awal komponen warna:
+                                        \[
+                                            R = 10110011, \quad G = 11001001, \quad B = 11111110
+                                        \]
+                                  \item Bit pesan yang akan disisipkan: 0, 1, 1.
+                              \end{itemize}
+
+                        \item \textbf{Langkah Perubahan:}
+                              \begin{itemize}
+                                  \item R (Red):
+                                        \begin{itemize}
+                                            \item LSB sebelum: 1
+                                            \item Ganti dengan bit pesan 0.
+                                            \item Nilai R menjadi: 10110010.
+                                        \end{itemize}
+                                  \item G (Green):
+                                        \begin{itemize}
+                                            \item LSB sebelum: 1
+                                            \item Ganti dengan bit pesan 1.
+                                            \item Nilai G tetap: 11001001.
+                                        \end{itemize}
+                                  \item B (Blue):
+                                        \begin{itemize}
+                                            \item LSB sebelum: 0
+                                            \item Ganti dengan bit pesan 1.
+                                            \item Nilai B menjadi: 11111111.
+                                        \end{itemize}
+                              \end{itemize}
+
+                        \item \textbf{Hasil Pixel:}
+                              \[
+                                  R = 10110010, \quad G = 11001001, \quad B = 11111111.
+                              \]
+                    \end{itemize}
+
+                    Proses terus diulang untuk setiap pixel, bergerak dari kiri ke kanan, atas ke
+                    bawah. Jika semua bit pesan telah disisipkan, pixel sisanya tidak diubah.
+
+                    Encoding berhenti setelah semua bit dari pesan (termasuk terminator
+                    \texttt{\textbackslash 000}) berhasil disisipkan. Gambar baru (dengan pesan
+                    tersembunyi) disimpan dalam format PNG agar tidak terjadi kompresi lossy.
+              \item \textbf{Ilustrasi Sederhana}
+
+                    Misalkan gambar memiliki pixel sebagai berikut:
+
+                    \begin{quote}
+                        \texttt{Pixel (R, G, B) = (10110011, 11001001, 11111110)}
+                    \end{quote}
+
+                    Dan pesan yang akan disisipkan adalah huruf "A".
+
+                    \begin{quote}
+                        \texttt{"A" dalam ASCII = 65 $\rightarrow$ 01000001 (8 bit).}
+                    \end{quote}
+
+                    \textbf{Proses Iterasi:}
+
+                    \begin{table}[H]
+                        \centering
+                        \begin{tabular}{|c|c|c|c|c|}
+                            \hline
+                            \textbf{Bit Pesan} & \textbf{Komponen Warna} & \textbf{LSB Lama} & \textbf{LSB Baru} & \textbf{Hasil Akhir} \\ \hline
+                            0                  & R (Red)                 & 1                 & 0                 & 10110010             \\ \hline
+                            1                  & G (Green)               & 1                 & 1                 & 11001001             \\ \hline
+                            0                  & B (Blue)                & 0                 & 0                 & 11111110             \\ \hline
+                            0                  & R (Red)                 & 0                 & 0                 & 10110010             \\ \hline
+                            0                  & G (Green)               & 1                 & 0                 & 11001000             \\ \hline
+                            0                  & B (Blue)                & 0                 & 0                 & 11111110             \\ \hline
+                            1                  & R (Red)                 & 0                 & 1                 & 10110011             \\ \hline
+                            0                  & G (Green)               & 0                 & 0                 & 11001000             \\ \hline
+                        \end{tabular}
+                        \caption{Proses Penyisipan Bit Pesan ke dalam Komponen Warna}
+                    \end{table}
+
+                    \textbf{Output Gambar:}
+
+                    Gambar baru memiliki nilai komponen warna yang dimodifikasi pada LSB, tetapi
+                    perubahan warna tidak terlihat oleh mata manusia. Gambar ini berisi pesan yang
+                    telah disisipkan secara tersembunyi.
+
+          \end{enumerate}
 
     \item Generating Key Trace
 
