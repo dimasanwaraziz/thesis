@@ -330,7 +330,7 @@ Arsitektur sistem umum akan mencakup
                     Encoding berhenti setelah semua bit dari pesan (termasuk terminator
                     \texttt{\textbackslash 000}) berhasil disisipkan. Gambar baru (dengan pesan
                     tersembunyi) disimpan dalam format PNG agar tidak terjadi kompresi lossy.
-              \item \textbf{Ilustrasi Sederhana}
+              \item \textbf{Ilustrasi}
 
                     Misalkan gambar memiliki pixel sebagai berikut:
 
@@ -490,6 +490,90 @@ Arsitektur sistem umum akan mencakup
           mempertahankan aspek keamanan dan kerahasiaan informasi yang tersembunyi.
           Struktur data tambahan diintegrasikan dengan cara yang tidak mengganggu
           kualitas visual keseluruhan.
+    \item \textbf{Decoding Process}
+
+          Proses decoding bertujuan untuk mengekstrak pesan tersembunyi yang telah
+          disisipkan ke dalam gambar menggunakan metode \textbf{Least Significant Bit
+              (LSB)}. Berikut adalah langkah-langkah decoding:
+
+          \begin{enumerate}
+              \item \textbf{Persiapan Data}
+                    \begin{itemize}
+                        \item \textbf{Input:} Gambar yang telah di-encode dengan pesan tersembunyi.
+                        \item \textbf{Tujuan:} Mengekstrak bit dari komponen warna setiap piksel dan menyusun kembali menjadi karakter pesan.
+                    \end{itemize}
+
+              \item \textbf{Iterasi Gambar Pixel-per-Pixel} \\
+                    Gambar diakses pixel-per-pixel (dari kiri ke kanan, atas ke bawah), lalu dilakukan pembacaan bit dari komponen warna:
+                    \begin{itemize}
+                        \item Komponen warna \textbf{R (Red)}, \textbf{G (Green)}, dan \textbf{B (Blue)}
+                              diekstrak satu per satu.
+                        \item Dari setiap komponen warna, \textbf{Least Significant Bit (LSB)} dibaca karena
+                              LSB digunakan untuk menyisipkan bit pesan.
+                    \end{itemize}
+
+                    \noindent
+                    \textbf{Contoh:}
+                    \[
+                        \begin{array}{rl}
+                            R & = 10110010 \\
+                            G & = 11001001 \\
+                            B & = 11111111
+                        \end{array}
+                    \]
+                    % R = 10110011, \quad G = 11001001, \quad B = 11111110
+
+                    \noindent
+                    LSB dari setiap komponen warna:
+                    \begin{itemize}
+                        \item LSB $R = 0$
+                        \item LSB $G = 1$
+                        \item LSB $B = 1$
+                    \end{itemize}
+
+                    \noindent
+                    Bit yang diperoleh dari piksel tersebut adalah: $0, 1, 1$.
+
+              \item \textbf{Penyusunan Bit Menjadi Byte} \\
+                    Setiap 8 bit yang diperoleh dari LSB disusun kembali menjadi 1 byte.
+                    \begin{itemize}
+                        \item LSB pertama masuk ke bit paling kiri.
+                        \item LSB berikutnya diikuti hingga terbentuk 8 bit (1 byte).
+                    \end{itemize}
+
+                    \noindent
+                    \textbf{Contoh:}
+                    \begin{center}
+                        LSB yang dibaca: $0, 1, 0, 0, 1, 0, 0, 0$ \\
+                        Hasil: $01001000$, yang dalam ASCII adalah huruf \textbf{H}.
+                    \end{center}
+
+                    Proses pembacaan bit dari LSB dilanjutkan hingga menemukan \textbf{null
+                        terminator} ($\backslash 000$), yaitu byte dengan nilai \texttt{0x00}
+                    ($00000000$ dalam biner).
+
+                    \noindent
+                    \textbf{Contoh:}
+                    \[
+                        \texttt{H → e → l → l → o → , → W → o → r → l → d → !}
+                    \]
+
+                    Diikuti oleh null byte $\backslash 000$, proses decoding berhenti.
+
+                    Byte yang telah dibaca dikonversi kembali menjadi karakter ASCII dan disusun
+                    menjadi string pesan yang telah disembunyikan.
+
+          \end{enumerate}
+
+          \noindent
+          \textbf{Ringkasan Proses Decoding:}
+          \begin{itemize}
+              \item Baca LSB dari komponen warna $R$, $G$, dan $B$ secara berurutan.
+              \item Susun LSB menjadi 8 bit untuk membentuk 1 byte.
+              \item Ulangi proses hingga menemukan \textbf{null terminator} ($\backslash 000$).
+              \item Konversi byte yang terkumpul menjadi string pesan.
+              \item (Opsional) Validasi pesan dengan menghasilkan \textbf{key trace} menggunakan \textbf{SHA-256}.
+          \end{itemize}
 \end{enumerate}
 
 \subsection{Proses Implementasi}
