@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"image"
@@ -10,17 +12,63 @@ import (
 	"os"
 )
 
-// Fungsi utama untuk encoding pesan ke gambar
+// Fungsi untuk memuat gambar
+func loadImage(filePath string) (image.Image, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return nil, err
+	}
+	return img, nil
+}
+
+// Fungsi untuk menyimpan gambar
+func saveImage(img image.Image, filePath string) error {
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	return png.Encode(file, img)
+}
+
+// Fungsi untuk mengubah nilai RGBA ke uint8
+func rgbaToUint8(c color.Color) (r, g, b, a uint8) {
+	r32, g32, b32, a32 := c.RGBA()
+	return uint8(r32 >> 8), uint8(g32 >> 8), uint8(b32 >> 8), uint8(a32 >> 8)
+}
+
+// Fungsi untuk mengekstrak bit dari byte
+func extractBit(messageBits []byte, bitIndex int) byte {
+	byteIndex := bitIndex / 8
+	bitInByte := bitIndex % 8
+	return (messageBits[byteIndex] >> (7 - bitInByte)) & 1
+}
+
+// Fungsi untuk menyetel LSB pada nilai warna
+func setLSB(value uint8, bit byte) uint8 {
+	return (value & 0xFE) | bit
+}
+
+// Fungsi untuk menghasilkan key trace menggunakan hash SHA-256
+func generateKeyTrace(message string) string {
+	hash := sha256.New()
+	hash.Write([]byte(message))
+	return hex.EncodeToString(hash.Sum(nil))
+}
+
+// Fungsi untuk menyembunyikan pesan dalam gambar
 func hideMessageInImage(img image.Image, message string) *image.RGBA {
-	message += "\000" // Menambahkan terminator
+	message += "\000" // Menambahkan terminator null
 	messageBits := []byte(message)
 	bitIndex := 0
 	newImg := image.NewRGBA(img.Bounds())
 
-	fmt.Println("=== DEBUG ENCODING START ===")
-	fmt.Printf("Message to encode: %s\n", message)
-	fmt.Printf("Total bits to encode: %d\n", len(messageBits)*8)
-
+	// Menyembunyikan pesan dalam gambar
 	for y := 0; y < img.Bounds().Dy(); y++ {
 		for x := 0; x < img.Bounds().Dx(); x++ {
 			if bitIndex >= len(messageBits)*8 {
@@ -44,17 +92,36 @@ func hideMessageInImage(img image.Image, message string) *image.RGBA {
 			newImg.Set(x, y, color.RGBA{r, g, b, a})
 		}
 	}
-	fmt.Println("=== DEBUG ENCODING END ===")
+
+	// Menghasilkan key trace dari pesan yang disembunyikan
+	keyTrace := generateKeyTrace(message)
+	fmt.Println("Generated Key Trace (SHA-256):", keyTrace)
+
+	// Menyimpan key trace dalam file (opsional)
+	saveKeyTraceToFile(keyTrace)
+
 	return newImg
 }
 
-// Fungsi utama untuk decoding pesan dari gambar
+// Fungsi untuk menyimpan key trace ke file
+func saveKeyTraceToFile(keyTrace string) {
+	file, err := os.Create("key_trace.txt")
+	if err != nil {
+		fmt.Println("Error creating key trace file:", err)
+		return
+	}
+	defer file.Close()
+	file.WriteString(keyTrace)
+	fmt.Println("Key trace saved to file.")
+}
+
+// Fungsi untuk mengekstrak pesan dari gambar
 func extractMessageFromImage(img image.Image) string {
 	var messageBytes []byte
 	var currentByte byte
 	bitIndex := 0
 
-	fmt.Println("=== DEBUG DECODING START ===")
+	// Membaca pesan dari gambar
 	for y := 0; y < img.Bounds().Dy(); y++ {
 		for x := 0; x < img.Bounds().Dx(); x++ {
 			r, g, b, _ := rgbaToUint8(img.At(x, y))
@@ -63,7 +130,6 @@ func extractMessageFromImage(img image.Image) string {
 			bitIndex++
 			if bitIndex == 8 {
 				if currentByte == 0 {
-					fmt.Println("=== DEBUG DECODING END ===")
 					return string(messageBytes)
 				}
 				messageBytes = append(messageBytes, currentByte)
@@ -75,7 +141,6 @@ func extractMessageFromImage(img image.Image) string {
 			bitIndex++
 			if bitIndex == 8 {
 				if currentByte == 0 {
-					fmt.Println("=== DEBUG DECODING END ===")
 					return string(messageBytes)
 				}
 				messageBytes = append(messageBytes, currentByte)
@@ -87,7 +152,6 @@ func extractMessageFromImage(img image.Image) string {
 			bitIndex++
 			if bitIndex == 8 {
 				if currentByte == 0 {
-					fmt.Println("=== DEBUG DECODING END ===")
 					return string(messageBytes)
 				}
 				messageBytes = append(messageBytes, currentByte)
@@ -96,52 +160,16 @@ func extractMessageFromImage(img image.Image) string {
 			}
 		}
 	}
-	fmt.Println("=== DEBUG DECODING END ===")
-	return string(messageBytes)
+
+	// Generate key trace for the decoded message
+	decodedMessage := string(messageBytes)
+	keyTrace := generateKeyTrace(decodedMessage)
+	fmt.Println("Decoded Message Key Trace (SHA-256):", keyTrace)
+
+	return decodedMessage
 }
 
-// Helper untuk ekstrak bit dari array byte
-func extractBit(data []byte, index int) uint8 {
-	return (data[index/8] >> (7 - uint(index%8))) & 1
-}
-
-// Helper untuk mengatur LSB pada byte
-func setLSB(value, bit uint8) uint8 {
-	return (value & 0xFE) | bit
-}
-
-// Helper untuk mengubah nilai RGBA menjadi uint8
-func rgbaToUint8(c color.Color) (r, g, b, a uint8) {
-	r32, g32, b32, a32 := c.RGBA()
-	return uint8(r32 >> 8), uint8(g32 >> 8), uint8(b32 >> 8), uint8(a32 >> 8)
-}
-
-// Fungsi load gambar
-func loadImage(filename string) (image.Image, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	img, format, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("Loaded image format:", format)
-	return img, nil
-}
-
-// Fungsi save gambar
-func saveImage(img *image.RGBA, filename string) error {
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	return png.Encode(file, img)
-}
-
+// Fungsi utama
 func main() {
 	mode := flag.String("mode", "encode", "Mode: encode or decode")
 	inputImage := flag.String("input", "", "Input image file")
