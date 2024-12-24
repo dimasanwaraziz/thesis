@@ -684,13 +684,196 @@ Siapkan dokumentasi lengkap yang mencakup:
 
 \subsection{Desain Eksperimen dan Pengumpulan Data}
 
-Pengumpulan data akan melibatkan pembuatan dataset gambar cover yang beragam,
-termasuk berbagai resolusi, kompleksitas, dan skema warna. Kami juga akan
-menyiapkan berbagai pesan rahasia dengan ukuran dan jenis yang berbeda untuk
-penyisipan.
+Untuk mengevaluasi kinerja metode yang diusulkan dibandingkan dengan metode
+lain, sebuah eksperimen dilakukan berdasarkan empat ukuran kuantitatif utama.
+Gambar di bawah mengilustrasikan desain eksperimen yang disarankan untuk metode
+yang diusulkan.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{gambar/experiment.png}
+    \caption{Design experiment}
+    \label{fig:experiment}
+\end{figure}
+
+\subsubsection{Kapasitas}
+
+Pada bagian ini, kapasitas penyisipan dari metode yang diusulkan dan metode
+yang digunakan diperiksa. Rasio jumlah bit rahasia yang disematkan dalam gambar
+Cover terhadap jumlah piksel gambar Cover dievaluasi. Kapasitas penyisipan, EC
+kemudian ditentukan oleh persamaan berikut:
+
+\begin{equation}
+    EC = \frac{|S|}{H \cdot W}
+\end{equation}
+
+Di mana —S— adalah jumlah bit rahasia yang disematkan, H dan W masing-masing
+adalah tinggi dan panjang gambar. Muatan yang dihasilkan dinyatakan sebagai
+persentase. Untuk mengevaluasi kinerja metode yang diusulkan dalam hal
+kapasitas, dua skenario utama berikut dipertimbangkan:
 
 \begin{enumerate}
-    \item Pengujian
+    \item Variasi Nilai Piksel: Gambar sampul dan gambar rahasia dianalisa berdasarkan
+          histogram gambarnya.
+          \begin{itemize}
+              \item Digunakan 40 gambar sampul skala abu-abu berukuran 512x512 piksel.
+              \item Digunakan 40 gambar rahasia skala abu-abu dengan berbagai ukuran.
+              \item Setiap gambar rahasia dengan distribusi tonal unik disematkan pada setiap
+                    gambar sampul dengan tonal yang unik pula.
+          \end{itemize}
+    \item Ukuran Gambar Rahasia: Untuk setiap gambar rahasia, dilakukan 33 variasi ukuran
+          yang berbeda.
+          \begin{itemize}
+              \item Setiap variasi ukuran disematkan pada gambar sampul yang berbeda.
+              \item Kapasitas yang dihasilkan dari setiap penyematan dicatat.
+          \end{itemize}
+\end{enumerate}
+
+Hasil untuk setiap kelompok ditabulasi dan nilai PSNR ditentukan dan
+dibandingkan dengan Metode sebelumnya.
+
+\subsubsection{Imperceptibility}
+
+Skema steganografi tidak akan terlihat jika mata manusia tidak dapat membedakan
+antara sampul dan gambar stego. Yang menjadi perhatian dalam bagian ini adalah
+kualitas visual gambar stego yang dihasilkan. Kelompok gambar rahasia dengan
+ukuran gambar yang sama dan distribusi nada yang beragam terbentuk. Setiap
+gambar rahasia dalam kelompok tertentu disematkan di sampul menggunakan metode
+yang diusulkan dan metode A. M. Molaei.
+
+Ketidaksadaran kemudian diukur dengan Mean Square Error (MSE) dan Peak to
+Signal Noise Ratio (PSNR).
+
+Mean Square Error (MSE) adalah metrik yang digunakan untuk mengukur perbedaan
+antara dua gambar. MSE dihitung dengan rumus berikut:
+
+\begin{equation}
+    \text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} [I(i,j) - K(i,j)]^2
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $M$ dan $N$ adalah dimensi gambar.
+    \item $I(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar asli.
+    \item $K(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar stego.
+\end{itemize}
+
+MSE yang lebih rendah menunjukkan bahwa gambar stego lebih mirip dengan gambar
+asli, yang berarti kualitas visual lebih baik.
+
+Peak Signal-to-Noise Ratio (PSNR) adalah metrik yang digunakan untuk mengukur
+kualitas gambar stego dibandingkan dengan gambar asli. PSNR dihitung dengan
+rumus berikut:
+
+\begin{equation}
+    \text{PSNR} = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{\text{MSE}} \right)
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $MAX_I$ adalah nilai maksimum intensitas gambar (misalnya, 255 untuk gambar 8-bit).
+    \item $\text{MSE}$ adalah Mean Square Error antara gambar asli dan gambar stego.
+\end{itemize}
+
+PSNR yang lebih tinggi menunjukkan bahwa gambar stego lebih mirip dengan gambar
+asli, yang berarti kualitas visual lebih baik.
+
+\subsubsection{Robbustnes}
+
+Pada bagian ini kami menguji kemampuan metode yang diusulkan untuk mengatasi
+berbagai serangan. Hal ini memungkinkan penerima untuk mengambil kembali pesan
+rahasia yang telah dihancurkan jika terjadi penghancuran citra stego secara
+sengaja atau tidak sengaja. Ukuran kuantitatif yang akan ditentukan adalah PSNR
+dari citra rahasia yang dipulihkan. Hal ini ditentukan menggunakan persamaan
+(3.15) dan (3.15):
+
+Kode Reed Muller RM (1, 4) telah diterapkan dalam metode ini karena kemampuan
+koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan sebagai berikut:
+
+Karena r = 1 dan m = 4, maka ukuran pesan k dihitung sebagai berikut:
+\begin{equation}
+    k = \sum_{i=0}^{r} \binom{m}{i} = \binom{4}{0} + \binom{4}{1} = 5 \text{ bits}
+    \label{eq:rm}
+\end{equation}
+
+Dan kode berukuran N dihitung sebagai berikut:
+
+\begin{equation}
+    N = 2^m = 16 \text{ bits}
+    \label{eq:rm2}
+\end{equation}
+
+\begin{equation}
+    ECC = \frac{\text{number of correctable bits}}{\text{total bits}} = \frac{3}{16} = 18.75\%
+\end{equation}
+
+Setelah setiap skenario penyematan dilakukan seperti yang dijelaskan di bagian
+6.1.1, gambar stego yang dihasilkan diekspos di bawah serangan berikut
+
+\begin{enumerate}
+    \item Noise Attack: Gambar stego diserang dengan beberapa metode di bawah dengan
+          intensitas yang berbeda.
+          \begin{enumerate}
+              \item \textbf{Gaussian Noise}: Nama ini diambil dari Carl Friedrich Gauss
+                    \cite{selamistudy}.Gaussian Noise merupakan noise statistik yang memiliki
+                    fungsi kerapatan probabilitas (PDF) yang sama dengan distribusi normal, yang
+                    juga dikenal sebagai distribusi Gaussian. Dengan kata lain, nilai yang dapat
+                    diambil oleh noise tersebut berdistribusi Gaussian. Untuk Gaussian Noise, dua
+                    variasi varians dipertimbangkan dalam eksperimen, yaitu Gaussian noise: mean 0
+                    variance 0,01 dan Gaussian noise: mean 0 variance 0,1. Gambar 3.8 menunjukkan
+                    contoh gambar stego yang diserang oleh Gaussian noise.
+              \item \textbf{Salt and Pepper Noise}: Ini adalah bentuk noise yang juga terlihat pada
+                    gambar. Ini juga dikenal sebagai noise impuls. Noise ini dapat disebabkan oleh
+                    gangguan tajam dan tiba-tiba pada sinyal gambar. Noise ini muncul sebagai
+                    piksel putih dan hitam yang jarang muncul \cite{kaisar2008salt}. Noise Salt and Pepper hadir
+                    dalam berbagai bentuk dengan kepadatan yang berbeda. Dua variasi kepadatan
+                    dipertimbangkan dalam percobaan yaitu noise Salt and Pepper: kepadatan 0,05 dan
+                    noise Salt and Pepper: kepadatan 0,5. Gambar 3.9 menunjukkan contoh gambar
+                    stego yang diserang noise Salt and Pepper.
+              \item \textbf{Speckle Noise}: Speckle noise adalah noise yang muncul akibat pengaruh kondisi
+                    lingkungan terhadap sensor pencitraan selama akuisisi citra. Speckle noise
+                    paling banyak terdeteksi pada citra medis, citra Radar aktif, dan citra
+                    Synthetic Aperture Radar (SAR) \cite{mansourpour2006effects}. Dua variasi varians dipertimbangkan dalam
+                    eksperimen yaitu Speckle noise: varians 0,04 dan Speckle noise: varians 0,4.
+                    Gambar 3.9 menunjukkan contoh citra stego yang diserang Speckle noise.
+          \end{enumerate}
+
+          Setelah stego terkena serangan Noise ini, proses ekstraksi mengambil gambar
+          rahasia dan melakukan koreksi kesalahan. PSNR dari gambar rahasia yang diambil
+          ditentukan dan ditabulasi. PSNR dari semua gambar rahasia yang diambil
+          ditentukan dan dibandingkan dengan Metode A. M. Molaei.
+
+    \item Cropping Attack: Citra stego dengan rentang nilai PSNR yang sama dikelompokkan
+          dan diekspos ke dalam serangan pemotongan. Serangan pemotongan dilakukan
+          berdasarkan rasio pemotongan dan wilayah pemotongan yang berbeda. Setiap citra
+          stego dalam kelompok tertentu diekspos ke dalam rasio pemotongan dan wilayah
+          pemotongan yang sama dengan citra stego lain dalam kelompok yang sama. Citra
+          stego akan menjalani proses ekstraksi untuk mengambil citra rahasia dengan
+          melakukan koreksi kesalahan. Untuk setiap set atau kelompok, nilai PSNR dari
+          citra rahasia yang diambil ditentukan dan ditabulasi serta dibandingkan dengan
+          Metode A. M. Molaei.
+    \item Scratching Attack: Semua gambar stego dalam kelompok yang sama seperti yang
+          disebutkan dalam 6.1.2.2 terkena serangan goresan. Serangan goresan muncul
+          dalam dua bentuk berbeda yaitu perbedaan panjang, lebar sama dan perbedaan
+          lebar, panjang sama. Setelah setiap bentuk serangan goresan pada gambar stego
+          dilakukan, koreksi kesalahan digunakan untuk mengambil gambar rahasia. PSNR
+          dari gambar rahasia yang diambil ditentukan, ditabulasi dan dibandingkan dengan
+          metode sebelumnya.
+    \item JPEG Compression Attack: Singkatan dari Joint Photographic Experts Group. JPEG
+          adalah metode kompresi lossy yang umum digunakan untuk gambar digital, terutama
+          untuk gambar yang dihasilkan oleh fotografi digital. JPEG biasanya mencapai
+          kompresi 10:1 dengan sedikit kehilangan kualitas gambar yang
+          terlihat.\cite{ch2015medical} Kompresi JPEG digunakan dalam sejumlah format
+          berkas gambar. JPEG adalah format gambar yang paling umum digunakan oleh kamera
+          digital dan format yang paling umum untuk menyimpan dan mengirimkan gambar
+          fotografi di Web.
+
+          Untuk melakukan percobaan, semua gambar stego yang disematkan dengan ukuran
+          berbeda dari pesan rahasia yang sama diekspos ke serangan JPG. Setelah
+          mengekspos stego ke serangan kompresi JPEG, ekstraksi gambar rahasia dilakukan
+          dengan menerapkan koreksi kesalahan untuk memulihkan gambar rahasia. PSNR dari
+          gambar rahasia yang dipulihkan ditentukan, ditabulasi, dan dibandingkan dengan
+          Metode A. M. Molaei.
 \end{enumerate}
 
 \subsection{Metode Analisis dan Evaluasi}
