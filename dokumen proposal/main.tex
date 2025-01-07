@@ -688,51 +688,46 @@ Menyiapkan dokumentasi lengkap yang mencakup:
 
 Untuk mengevaluasi kinerja metode yang diusulkan dibandingkan dengan metode
 lain, sebuah eksperimen dilakukan berdasarkan empat ukuran kuantitatif utama.
-Gambar di bawah mengilustrasikan desain eksperimen yang disarankan untuk metode
-yang diusulkan.
+Gambar \ref{fig:experiment} mengilustrasikan desain eksperimen yang disarankan
+untuk metode yang diusulkan.
 
-\begin{figure}[h]
+% flowchart LR
+%     CDS["CDS Experiment"] --> SEC["SECURITY"]
+%     CDS --> IMP["IMPERCEPTIBILITY"]
+%     CDS --> ROB["ROBUSTNESS"]
+%     CDS --> CAP["CAPACITY"]
+
+%     SEC --> STEG["STEGANALYSIS"]
+%     SEC --> SECP["SECURITY PROTOCOL"]
+
+%     ROB --> NOISE["NOISE"]
+%     ROB --> JPG["JPG COMPRESSION"]
+%     ROB --> SCR["SCRATCHING"]
+%     ROB --> CROP["CROPPING"]
+
+%     CAP --> SIS["SECRET IMAGE SIZES"]
+%     CAP --> VIH["VARIATION IN HISTOGRAMS"]
+
+%     STEG --> TRIP["TRIPLES ANALYSIS"]
+
+%     SCR  --> SINGLE["SINGLE"]
+%     SCR  --> MULT["MULTIPLE"]
+%     CROP --> SIZE["SIZE"]
+%     CROP --> REG["REGION"]
+
+%     NOISE --> GAUSS["GAUSSIAN"]
+%     NOISE --> SP["SALT & PEPPER"]
+%     NOISE --> SPEC["SPECKLE"]
+
+%     VIH --> CI["COVER IMAGES"]
+%     VIH --> SI["SECRET IMAGES"]
+
+\begin{figure}[htb]
     \centering
     \includegraphics[width=0.8\textwidth]{gambar/experiment.png}
     \caption{Design experiment}
     \label{fig:experiment}
 \end{figure}
-
-\subsubsection{Kapasitas}
-
-Pada bagian ini, kapasitas penyisipan dari metode yang diusulkan dan metode
-yang digunakan diperiksa. Rasio jumlah bit rahasia yang disematkan dalam gambar
-Cover terhadap jumlah piksel gambar Cover dievaluasi. Kapasitas penyisipan, EC
-kemudian ditentukan oleh persamaan berikut:
-
-\begin{equation}
-    EC = \frac{|S|}{H \cdot W}
-\end{equation}
-
-Di mana —S— adalah jumlah bit rahasia yang disematkan, H dan W masing-masing
-adalah tinggi dan panjang gambar. Muatan yang dihasilkan dinyatakan sebagai
-persentase. Untuk mengevaluasi kinerja metode yang diusulkan dalam hal
-kapasitas, dua skenario utama berikut dipertimbangkan:
-
-\begin{enumerate}
-    \item Variasi Nilai Piksel: Gambar sampul dan gambar rahasia dianalisa berdasarkan
-          histogram gambarnya.
-          \begin{itemize}
-              \item Digunakan 40 gambar sampul skala berwarna berukuran 512x512 piksel.
-              \item Digunakan 40 gambar rahasia skala berwarna dengan berbagai ukuran.
-              \item Setiap gambar rahasia dengan distribusi tonal unik disematkan pada setiap
-                    gambar sampul dengan tonal yang unik pula.
-          \end{itemize}
-    \item Ukuran Secret Image: Untuk setiap gambar rahasia, dilakukan 33 variasi ukuran
-          yang berbeda.
-          \begin{itemize}
-              \item Setiap variasi ukuran disematkan pada gambar sampul yang berbeda.
-              \item Kapasitas yang dihasilkan dari setiap penyematan dicatat.
-          \end{itemize}
-\end{enumerate}
-
-Hasil untuk setiap kelompok ditabulasi dan nilai PSNR ditentukan dan
-dibandingkan dengan Metode sebelumnya.
 
 \subsubsection{Imperceptibility}
 
@@ -747,73 +742,24 @@ gambar rahasia dalam kelompok tertentu disematkan di sampul menggunakan metode
 yang diusulkan dan metode A. M. Molaei.
 
 Ketidaksadaran kemudian diukur dengan Mean Square Error (MSE) dan Peak to
-Signal Noise Ratio (PSNR).
-
-Mean Square Error (MSE) adalah metrik yang digunakan untuk mengukur perbedaan
-antara dua gambar. MSE dihitung dengan rumus berikut:
-
-\begin{equation}
-    \text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} [I(i,j) - K(i,j)]^2
-\end{equation}
-
-Di mana:
-\begin{itemize}
-    \item $M$ dan $N$ adalah dimensi gambar.
-    \item $I(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar asli.
-    \item $K(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar stego.
-\end{itemize}
-
-MSE yang lebih rendah menunjukkan bahwa gambar stego lebih mirip dengan gambar
-asli, yang berarti kualitas visual lebih baik.
-
-Peak Signal-to-Noise Ratio (PSNR) adalah metrik yang digunakan untuk mengukur
-kualitas gambar stego dibandingkan dengan gambar asli. PSNR dihitung dengan
-rumus berikut:
-
-\begin{equation}
-    \text{PSNR} = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{\text{MSE}} \right)
-\end{equation}
-
-Di mana:
-\begin{itemize}
-    \item $MAX_I$ adalah nilai maksimum intensitas gambar (misalnya, 255 untuk gambar 8-bit).
-    \item $\text{MSE}$ adalah Mean Square Error antara gambar asli dan gambar stego.
-\end{itemize}
-
-PSNR yang lebih tinggi menunjukkan bahwa gambar stego lebih mirip dengan gambar
-asli, yang berarti kualitas visual lebih baik.
+Signal Noise Ratio (PSNR). PSNR yang lebih tinggi menunjukkan bahwa gambar
+stego lebih mirip dengan gambar asli, yang berarti kualitas visual lebih baik.
 
 \subsubsection{Robbustnes}
 
-Pada bagian ini kami menguji kemampuan metode yang diusulkan untuk mengatasi
+Pada bagian ini menguji kemampuan metode yang diusulkan untuk mengatasi
 berbagai serangan. Hal ini memungkinkan penerima untuk mengambil kembali pesan
 rahasia yang telah dihancurkan jika terjadi penghancuran citra stego secara
 sengaja atau tidak sengaja. Ukuran kuantitatif yang akan ditentukan adalah PSNR
-dari citra rahasia yang dipulihkan. Hal ini ditentukan menggunakan persamaan
-(4) dan (5):
-
-Kode Reed Muller RM (1, 4) telah diterapkan dalam metode ini karena kemampuan
-koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan sebagai berikut:
-
-Karena r = 1 dan m = 4, maka ukuran pesan k dihitung sebagai berikut:
-\begin{equation}
-    k = \sum_{i=0}^{r} \binom{m}{i} = \binom{4}{0} + \binom{4}{1} = 5 \text{ bits}
-    \label{eq:rm}
-\end{equation}
-
-Dan kode berukuran N dihitung sebagai berikut:
-
-\begin{equation}
-    N = 2^m = 16 \text{ bits}
-    \label{eq:rm2}
-\end{equation}
-
-\begin{equation}
-    ECC = \frac{\text{number of correctable bits}}{\text{total bits}} = \frac{3}{16} = 18.75\%
-\end{equation}
+dari citra rahasia yang dipulihkan.
 
 Setelah setiap skenario penyematan dilakukan seperti yang dijelaskan, gambar
 stego yang dihasilkan diekspos di bawah serangan berikut
+
+% NOTES
+% jelaskan metode komparasinya
+% kasih warna lain untuk kontribusi
+% sebagai berikut = tidak formal
 
 \begin{enumerate}
     \item Noise Attack: Gambar stego diserang dengan beberapa metode di bawah dengan
@@ -854,13 +800,15 @@ stego yang dihasilkan diekspos di bawah serangan berikut
           melakukan koreksi kesalahan. Untuk setiap set atau kelompok, nilai PSNR dari
           citra rahasia yang diambil ditentukan dan ditabulasi serta dibandingkan dengan
           Metode A. M. Molaei.
-    \item Scratching Attack: Semua gambar stego dalam kelompok yang sama seperti yang
-          disebutkan dalam 6.1.2.2 terkena serangan goresan. Serangan goresan muncul
-          dalam dua bentuk berbeda yaitu perbedaan panjang, lebar sama dan perbedaan
-          lebar, panjang sama. Setelah setiap bentuk serangan goresan pada gambar stego
-          dilakukan, koreksi kesalahan digunakan untuk mengambil gambar rahasia. PSNR
-          dari gambar rahasia yang diambil ditentukan, ditabulasi dan dibandingkan dengan
-          metode sebelumnya.
+    \item Scratching Attack: Serangan goresan muncul dalam dua bentuk berbeda yaitu
+          perbedaan panjang, lebar sama dan perbedaan lebar, panjang sama. Setelah setiap
+          bentuk serangan goresan pada gambar stego dilakukan, koreksi kesalahan
+          digunakan untuk mengambil gambar rahasia. PSNR dari gambar rahasia yang diambil
+          ditentukan, ditabulasi dan dibandingkan dengan metode sebelumnya.
+
+          Scratching single merupakan Scratching yang dilakukan dengan cara menggores
+          satu garis pada gambar stego. Scratching multiple merupakan Scratching yang
+          dilakukan dengan cara menggores beberapa garis pada gambar stego.
     \item JPEG Compression Attack: Singkatan dari Joint Photographic Experts Group. JPEG
           adalah metode kompresi lossy yang umum digunakan untuk gambar digital, terutama
           untuk gambar yang dihasilkan oleh fotografi digital. JPEG biasanya mencapai
@@ -878,16 +826,127 @@ stego yang dihasilkan diekspos di bawah serangan berikut
           Metode A. M. Molaei.
 \end{enumerate}
 
+\subsubsection{Kapasitas}
+
+Pada bagian ini, kapasitas penyisipan dari metode yang diusulkan dan metode
+yang digunakan diperiksa. Rasio jumlah bit rahasia yang disematkan dalam gambar
+Cover terhadap jumlah piksel gambar Cover dievaluasi.
+
+Hasil untuk setiap kelompok ditabulasi dan nilai PSNR ditentukan dan
+dibandingkan dengan Metode sebelumnya.
+
 \subsection{Metode Analisis dan Evaluasi}
 
 Penelitian ini akan merancang serangkaian eksperimen untuk mengevaluasi kinerja
 metode yang diusulkan:
+
+\subsubsection{Imperceptibility}
+
+% apa yang mau divariasikan, untuk MSE & PSNR masuk ke analisis
+% Jelaskan single multi dll
+
+Mean Square Error (MSE) adalah metrik yang digunakan untuk mengukur perbedaan
+antara dua gambar. MSE dihitung dengan rumus berikut:
+
+\begin{equation}
+    \text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} [I(i,j) - K(i,j)]^2
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $M$ dan $N$ adalah dimensi gambar.
+    \item $I(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar asli.
+    \item $K(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar stego.
+\end{itemize}
+
+MSE yang lebih rendah menunjukkan bahwa gambar stego lebih mirip dengan gambar
+asli, yang berarti kualitas visual lebih baik.
+
+Peak Signal-to-Noise Ratio (PSNR) adalah metrik yang digunakan untuk mengukur
+kualitas gambar stego dibandingkan dengan gambar asli. PSNR dihitung dengan
+rumus berikut:
+
+\begin{equation}
+    \text{PSNR} = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{\text{MSE}} \right)
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $MAX_I$ adalah nilai maksimum intensitas gambar (misalnya, 255 untuk gambar 8-bit).
+    \item $\text{MSE}$ adalah Mean Square Error antara gambar asli dan gambar stego.
+\end{itemize}
+
+PSNR yang lebih tinggi menunjukkan bahwa gambar stego lebih mirip dengan gambar
+asli, yang berarti kualitas visual lebih baik.
+
+\subsubsection{Robbustnes}
+
+Ukuran kuantitatif yang akan ditentukan adalah PSNR dari citra rahasia yang
+dipulihkan. Hal ini ditentukan menggunakan persamaan \ref{eq:rm} dan
+\ref{eq:rm2}:
+
+Kode Reed Muller RM (1, 4) telah diterapkan dalam metode ini karena kemampuan
+koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan sebagai berikut:
+
+Karena r = 1 dan m = 4, maka ukuran pesan k dihitung sebagai berikut:
+\begin{equation}
+    k = \sum_{i=0}^{r} \binom{m}{i} = \binom{4}{0} + \binom{4}{1} = 5 \text{ bits}
+    \label{eq:rm}
+\end{equation}
+
+Dan kode berukuran N dihitung sebagai berikut:
+
+\begin{equation}
+    N = 2^m = 16 \text{ bits}
+    \label{eq:rm2}
+\end{equation}
+
+\begin{equation}
+    ECC = \frac{\text{number of correctable bits}}{\text{total bits}} = \frac{3}{16} = 18.75\%
+\end{equation}
+
+Setelah setiap skenario penyematan dilakukan seperti yang dijelaskan, gambar
+stego yang dihasilkan diekspos di bawah serangan berikut
+
 \begin{enumerate}
-    \item Uji kapasitas: Mengukur jumlah maksimum data yang dapat disembunyikan
-    \item Uji kualitas visual: Menilai imperceptibility menggunakan metrik PSNR
-    \item Uji ketahanan: Mengevaluasi ketahanan terhadap teknik steganalisis umum
-    \item Analisis komparatif: Membandingkan dengan metode sebelumnya dan proposed method
+    \item Noise Attack
+    \item Cropping Attack
+    \item Scratching Attack
+    \item JPEG Compression Attack
 \end{enumerate}
+
+\subsubsection{Kapasitas}
+
+Kapasitas penyisipan, EC kemudian ditentukan oleh persamaan berikut:
+
+\begin{equation}
+    EC = \frac{|S|}{H \cdot W}
+\end{equation}
+
+Di mana —S— adalah jumlah bit rahasia yang disematkan, H dan W masing-masing
+adalah tinggi dan panjang gambar. Muatan yang dihasilkan dinyatakan sebagai
+persentase. Untuk mengevaluasi kinerja metode yang diusulkan dalam hal
+kapasitas, dua skenario utama berikut dipertimbangkan:
+
+\begin{enumerate}
+    \item Variasi Nilai Piksel: Gambar sampul dan gambar rahasia dianalisa berdasarkan
+          histogram gambarnya.
+          \begin{itemize}
+              \item Digunakan 40 gambar sampul skala berwarna berukuran 512x512 piksel.
+              \item Digunakan 40 gambar rahasia skala berwarna dengan berbagai ukuran.
+              \item Setiap gambar rahasia dengan distribusi tonal unik disematkan pada setiap
+                    gambar sampul dengan tonal yang unik pula.
+          \end{itemize}
+    \item Ukuran Secret Image: Untuk setiap gambar rahasia, dilakukan 33 variasi ukuran
+          yang berbeda.
+          \begin{itemize}
+              \item Setiap variasi ukuran disematkan pada gambar sampul yang berbeda.
+              \item Kapasitas yang dihasilkan dari setiap penyematan dicatat.
+          \end{itemize}
+\end{enumerate}
+
+Hasil untuk setiap kelompok ditabulasi dan nilai PSNR ditentukan dan
+dibandingkan dengan Metode sebelumnya.
 
 % Research method should contain brief description on fundamental knowledge related to the addressed problem. You should highlight that the concept is appropriate for your problem. Write down the mapping between the concept used and the problem solved.
 
@@ -913,34 +972,32 @@ problem. \newline
     \caption{Activity Schedule (\color{red}example) \label{tab:schedule}}
     \noindent\begin{tabularx}{\linewidth}{|>{\bfseries}l|l|*{11}{>{\centering\arraybackslash}X|}>{\centering\arraybackslash}X<{\bigstrut}|}
         \hline
-        \multicolumn{2}{|l|}{}                   & \multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}                                                                                                                                                                                      \\
+        \multicolumn{2}{|l|}{}                   & \multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}                                                                                                                                                                                           \\
         \cline{3-14}
-        \multicolumn{2}{|c|}{\bfseries Activity} & \multicolumn{3}{c|}{\bfseries 1}                  & \multicolumn{3}{c|}{\bfseries 2} & \multicolumn{3}{c|}{\bfseries 3} & \multicolumn{3}{c|}{\bfseries 4\bigstrut}                                                                    \\
+        \multicolumn{2}{|c|}{\bfseries Activity} & \multicolumn{3}{c|}{\bfseries 1}                  & \multicolumn{3}{c|}{\bfseries 2} & \multicolumn{3}{c|}{\bfseries 3} & \multicolumn{3}{c|}{\bfseries 4\bigstrut}                                                                         \\
         \hline
 
-        1                                        & Literature study                                  & \blue                            &                                  &                                           &       &  &       &       &       &       &       &       &       \\
+        1                                        & Literature study                                  & \blue                            &                                  &                                           &       &       &       &       &       &       &       &       &       \\
         \hline
-        2                                        & Problem identification                            & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        2                                        & Problem identification                            & \blue                            & \blue                            &                                           &       &       &       &       &       &       &       &       &       \\
         \hline
-        3                                        & Contribution formulation                          & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        3                                        & Contribution formulation                          & \blue                            & \blue                            &                                           &       &       &       &       &       &       &       &       &       \\
         \hline
-        4                                        & Hypothesis formulation                            & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        4                                        & Hypothesis formulation                            & \blue                            & \blue                            &                                           &       &       &       &       &       &       &       &       &       \\
         \hline
-        5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &  &       &       &       &       &       &       &       \\
+        5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &       &       &       &       &       &       &       &       \\
         \hline
-        6                                        & Data collection                                   &                                  &                                  &                                           & \blue &  &       &       &       &       &       &       &       \\
+        6                                        & Encoding Process                                  &                                  &                                  &                                           & \blue & \blue &       &       &       &       &       &       &       \\
         \hline
-        7                                        & Requirement identification                        &                                  &                                  &                                           &       &  & \blue & \blue &       &       &       &       &       \\
+        7                                        & Decoding Process                                  &                                  &                                  &                                           &       & \blue & \blue &       &       &       &       &       &       \\
         \hline
-        8                                        & Design process                                    &                                  &                                  &                                           &       &  &       &       & \blue & \blue &       &       &       \\
+        8                                        & Implementation process                            &                                  &                                  &                                           &       &       &       & \blue & \blue & \blue &       &       &       \\
         \hline
-        9                                        & Implementation process                            &                                  &                                  &                                           &       &  &       &       &       & \blue &       &       &       \\
+        9                                        & Experiment design                                 &                                  &                                  &                                           &       &       &       &       &       & \blue &       &       &       \\
         \hline
-        10                                       & Experiment design                                 &                                  &                                  &                                           &       &  &       &       &       & \blue &       &       &       \\
+        10                                       & Evaluation and analysis                           &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
         \hline
-        11                                       & Evaluation and analysis                           &                                  &                                  &                                           &       &  &       &       &       & \blue & \blue & \blue &       \\
-        \hline
-        12                                       & Thesis draft                                      &                                  &                                  &                                           &       &  &       &       &       &       &       &       & \blue \\
+        11                                       & Thesis draft                                      &                                  &                                  &                                           &       &       &       &       &       &       & \blue & \blue & \blue \\
         \hline
 
     \end{tabularx}

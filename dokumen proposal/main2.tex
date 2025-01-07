@@ -1,0 +1,953 @@
+\documentclass{ittelkom}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{float} 
+\usepackage{tabularx, ragged2e, lmodern, bigstrut}
+\usepackage[sgvnames, table]{xcolor}
+\newcommand{\blue}{\cellcolor{blue!75}}
+\usepackage[style=numeric,sorting=none]{biblatex}
+\addbibresource{referensi.bib}
+
+\begin{document}
+
+\project{Steganography with Multiple Embedding in Color Images}
+% \project{Improving Data Hiding Capacity and Visual Quality in RGB Image Steganography Using Multiple Embedding Techniques}
+\submit{Dimas Anwar Aziz}
+\nim{203022410012}
+\concentration{Cyber Security}
+\email{dimasanwaraziz@student.telkomuniversity.ac.id}
+\supervisor{Prof.\ Ari Moesriami Barmawi, Ph.D.}
+\submitdate{08}{10}{2024}
+
+\summary{Topic Summary}
+{This is a summary and a word length of 300 words. Summary is written briefly from the entire contents of the thesis/proposal and so on until it is finished.}
+
+\newpage
+\section{INTRODUCTION \color{red} (assessment 1)}
+Steganografi merupakan teknik menyembunyikan pesan di dalam suatu media penyisipan pesan atau cover image,
+sehingga keberadaan pesan rahasia yang disisipkan tidak dapat dilihat secara langsung \cite{pujianto2021uji}. Steganografi
+memungkinkan pertukaran pesan rahasia melalui penyembunyian informasi pada berbagai media digital seperti gambar, video, dan audio,
+tanpa menimbulkan kecurigaan \cite{siaulhak2023sistem}. Steganografi dapat dipandang sebagai kelanjutan
+kriptografi dan dalam prakteknya pesan rahasia dienkripsi terlebih dahulu, kemudian
+cipherteks disembunyikan di dalam media lain sehingga pihak ketiga tidak menyadari
+keberadaannya. Pesan rahasia yang disembunyikan dapat diekstraksi kembali persis
+sama seperti aslinya \cite{soetarmono2012studi}.
+
+Di antara berbagai media digital yang dapat digunakan untuk steganografi,
+gambar menjadi pilihan yang populer karena beberapa alasan. Pertama, gambar
+digital tersedia secara luas dan pertukaran gambar di internet adalah hal yang
+umum, sehingga tidak menimbulkan kecurigaan. Kedua, gambar memiliki kapasitas
+untuk menyembunyikan informasi. Ketiga, manipulasi pixel pada gambar dapat
+dilakukan dengan berbagai teknik. Namun, tantangan utama dalam steganografi
+gambar adalah menemukan keseimbangan antara kapasitas penyembunyian data,
+kualitas gambar, dan ketahanan terhadap deteksi \cite{fikri2022optimasi}.
+
+Penelitian sebelumnya telah menunjukkan kemajuan signifikan dalam meningkatkan
+kapasitas penyembunyian data pada gambar grayscale. Kingsley et al.
+\cite{kingsley2020improving} berhasil meningkatkan kapasitas penyembunyian data
+hingga 450\% menggunakan metode code base. Meski begitu, penggunaan gambar
+grayscale membatasi aplikasi praktis karena hanya memiliki satu channel
+pencahayaan. Di sisi lain, Fikri et al. \cite{fikri2022optimasi}
+mendemonstrasikan bahwa penerapan steganografi pada gambar berwarna memiliki
+ketahanan yang baik, meskipun gambar dengan dominasi warna hitam menunjukkan
+kompatibilitas yang kurang optimal. Berdasarkan temuan-temuan tersebut,
+penelitian ini bertujuan untuk memperluas metode embedding ke gambar berwarna
+yang memiliki tiga channel warna (Merah, Hijau, dan Biru). Fokus utama adalah
+untuk meningkatkan kapasitas penyembunyian data sambil mempertahankan kualitas
+visual dan ketahanan terhadap deteksi. Penelitian ini juga akan mengevaluasi
+kompatibilitas metode yang diusulkan dengan berbagai jenis gambar berwarna,
+termasuk yang memiliki area gelap yang luas. Dengan mengoptimalkan penggunaan
+ketiga channel warna, diharapkan dapat dicapai peningkatan signifikan dalam
+kapasitas penyembunyian data dibandingkan dengan metode yang hanya menggunakan
+gambar grayscale, sambil tetap mempertahankan kealamiahan gambar yang
+dihasilkan.
+
+Penelitian ini mencakup empat aspek utama: pengetahuan, pengguna, kegunaan, dan
+infrastruktur. Aspek pengetahuan meliputi teknik steganografi gambar berwarna,
+metode berbasis kode, dan analisis kualitas gambar digital, termasuk manipulasi
+channel warna RGB. Pengguna potensial meliputi profesional keamanan informasi,
+peneliti, dan pengembang aplikasi keamanan data. Kegunaan mencakup implementasi
+dalam sistem data hiding, perlindungan hak cipta, dan watermarking, dengan
+fokus pada integrasi yang mudah, efisiensi, dan keseimbangan antara kapasitas
+penyembunyian data, kualitas gambar, dan ketahanan terhadap deteksi. Aspek
+infrastruktur melibatkan penggunaan Mac mini M2 dengan spesifikasi prosesor
+Apple M2 chip dengan 8-core CPU dan 10-core GPU, memori 8GB, penyimpanan SSD
+256GB, dan sistem operasi macOS.
+
+\section{Preliminary Literature Review \color{red}(assessment 2)}
+Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap serangan seperti kebisingan dan kompresi JPEG. Namun, penelitian ini masih diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
+
+Pada penelitian yang dilakukan oleh Dwi Andika et al (2020), mereka membahas
+keterbatasan kapasitas penyimpanan dalam teknik steganografi menggunakan
+algoritma GifShuffle pada citra GIF. Tantangan utama yang dihadapi adalah
+kesulitan dalam menyisipkan pesan teks dengan ukuran besar. Untuk mengatasi
+masalah ini, mereka memodifikasi nilai bit dalam penyimpanan pesan, yang
+bertujuan meningkatkan kapasitas tanpa mengorbankan kualitas visual gambar. Uji
+coba menggunakan parameter seperti ukuran data yang dapat disisipkan serta
+kualitas gambar menunjukkan bahwa metode ini berhasil meningkatkan kapasitas
+penyimpanan hingga lebih dari 256 KB tanpa mengurangi kualitas gambar secara
+signifikan. Namun, metode ini memerlukan modifikasi tambahan pada algoritma
+GifShuffle yang dapat meningkatkan kompleksitas implementasi dan pemrosesan
+\cite{andika2020modifikasi}.
+
+Susanto et al (2020) dalam penelitiannya menggabungkan metode steganografi
+Least Significant Bit (LSB) dengan algoritma enkripsi RSA untuk meningkatkan
+keamanan dalam penyisipan pesan terenkripsi pada gambar. Parameter yang
+digunakan untuk mengukur kualitas gambar setelah penyisipan adalah Peak
+Signal-to-Noise Ratio (PSNR), dengan hasil yang menunjukkan PSNR tertinggi
+sebesar 78 dB untuk pesan berukuran 1024 bit. Kelebihan metode ini adalah
+perubahan kualitas gambar yang hampir tidak terlihat, namun kekurangannya
+adalah kompleksitas yang meningkat seiring dengan ukuran pesan dan besarnya
+kunci RSA yang digunakan, yang memengaruhi performa
+\cite{susanto2020kombinasi}.
+
+Basri et al (2021) meneliti penggunaan metode steganografi dengan teknik Least
+Significant Bit (LSB) untuk menyembunyikan gambar di dalam gambar lainnya,
+khususnya dalam konteks interaksi sosial melalui media digital. Penelitian ini
+mengukur rasio ukuran gambar tersembunyi terhadap gambar cover serta kemampuan
+gambar cover mempertahankan kualitas visualnya. Hasilnya menunjukkan bahwa
+metode ini efektif menyembunyikan informasi tanpa perubahan signifikan pada
+gambar cover. Namun, metode ini memiliki keterbatasan dalam menangani gambar
+dengan transparansi, karena hanya memperhitungkan komponen warna merah, hijau,
+dan biru (RGB), tanpa memperhitungkan komponen alpha \cite{basri2021penerapan}.
+
+Penelitian Wiranata et al (2021) berfokus pada penyisipan pesan rahasia dalam
+gambar dan audio menggunakan metode Least Significant Bit (LSB) yang
+dikombinasikan dengan enkripsi Caesar Chipper dan Rivest Code 4 untuk menjaga
+kerahasiaan data. Penelitian ini menguji kemampuan aplikasi untuk
+menyembunyikan dan mengambil pesan secara utuh, serta perubahan ukuran file
+gambar dan audio setelah proses penyisipan. Kelebihan metode ini adalah
+kemampuannya menjaga kerahasiaan tanpa perubahan signifikan pada kualitas
+gambar atau suara. Namun, ada perubahan ukuran file yang diakibatkan oleh
+proses enkripsi dan penyisipan pesan \cite{wiranata2021aplikasi}.
+
+% fasilitas belum, terkait perangkat simulasi. Masukan perangkat yang digunakan.
+
+Penelitian yang dilakukan oleh Abdillah et al (2023) membahas tentang
+perlindungan data dan akses dengan menggunakan steganografi melalui teknik
+Least Significant Bit (LSB), di mana teks disisipkan dalam gambar melalui
+perubahan nilai pixel terkecil. Parameter yang diukur mencakup akurasi
+penyisipan teks dan kualitas gambar yang tetap terjaga setelah proses encoding
+dan decoding. Kelebihan utama metode ini adalah kemampuannya menyembunyikan
+informasi tanpa mengubah kualitas visual gambar secara signifikan. Namun,
+metode ini memiliki keterbatasan dalam kapasitas penyisipan teks dan rentan
+terhadap serangan manipulasi gambar yang dapat merusak data tersembunyi
+\cite{abdillah2023implementasi}.
+
+\section{Problem Statement \textcolor{red}{(Assessment 2)}} \label{request}
+
+Penelitian sebelumnya dalam steganografi berbasis kode telah menunjukkan
+kemajuan signifikan. Kingsley et al. \cite{kingsley2020improving} berhasil
+meningkatkan kapasitas penyembunyian data dari sekitar 150\% menjadi 450\%,
+yang merupakan peningkatan substansial untuk case yang membutuhkan kapasitas
+tinggi. Meskipun demikian, penelitian pada gambar grayscale
+\cite{soetarmono2012studi} masih membatasi pengaplikasiannya karena kurangnya
+fleksibilitas dalam penggunaan channel warna.
+
+Sementara itu, penerapan steganografi pada gambar berwarna (RGB) membuka
+peluang untuk peningkatan kapasitas, namun juga menghadirkan tantangan baru.
+Fikri et al. \cite{fikri2022optimasi} menemukan bahwa meskipun gambar RGB
+menawarkan robbustnes yang baik, terdapat masalah kompatibilitas pada gambar
+dengan dominasi warna gelap. Selain itu, penggunaan multiple embedding pada
+gambar RGB berpotensi meningkatkan kompleksitas komputasi
+\cite{juneja2013improved}.
+
+\section{Objective and Hypothesis \color{red}(assessment 3)} \label{hyp}
+
+Penelitian ini memiliki dua tujuan utama beserta hipotesis terkait. Pertama,
+mengembangkan teknik steganografi berbasis kode dengan multiple embedding untuk
+gambar RGB dan meningkatkan kapasitas penyembunyian data minimal 50\%
+dibandingkan dengan metode sebelumnya, dengan harapan bahwa metode ini akan
+meningkatkan kapasitas penyembunyian data secara signifikan dan penerapan pada
+gambar RGB akan menghasilkan peningkatan kapasitas lebih besar dibandingkan
+pada gambar grayscale. Kedua, mempertahankan PSNR di atas 40 dB untuk gambar
+stego, dengan hipotesis bahwa peningkatan kapasitas melalui multiple embedding
+tidak akan menurunkan kualitas visual secara signifikan
+\cite{nasution2018image}.
+
+% \subsection{Tujuan Utama Penelitian}
+% \begin{enumerate}
+%     \item Mengembangkan teknik steganografi berbasis kode dengan multiple embedding untuk gambar RGB.
+%     \item Meningkatkan kapasitas penyembunyian data minimal 50\% dibanding metode konvensional.
+%     \item Mempertahankan PSNR di atas 40 dB untuk gambar stego.
+%     \item Mengevaluasi ketahanan metode terhadap serangan steganalisis.
+% \end{enumerate}
+
+% \subsection{Hipotesis yang Diajukan}
+% \begin{itemize}
+%     \item H1: Multiple embedding akan meningkatkan kapasitas penyembunyian data secara signifikan dibanding metode steganografi berbasis kode konvensional.
+%     \item H2: Peningkatan kapasitas melalui multiple embedding tidak akan menurunkan kualitas visual (PSNR $>$ 40 dB) secara signifikan.
+%     \item H3: Metode yang diusulkan akan lebih tahan terhadap steganalisis dibanding steganografi LSB konvensional.
+%     \item H4: Penerapan pada gambar RGB akan menghasilkan peningkatan kapasitas lebih besar dibanding pada gambar grayscale.
+% \end{itemize}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.4\textwidth]{TelU_1.jpg}
+%%\caption{Logo University}
+%\end{figure}
+
+\section{Research Method \color{red}(assessment 4,5)}
+Penelitian ini akan menggunakan pendekatan eksperimental untuk menguji hipotesis yang diajukan. Metode penelitian mencakup beberapa tahap utama, mengintegrasikan konsep dasar steganografi dan mengatasi tantangan khusus steganografi berbasis kode dengan teknik penyisipan ganda.
+
+\subsection{Identifikasi Kebutuhan}
+
+Berdasarkan analisis literatur dan tujuan penelitian, kebutuhan utama untuk
+pengembangan metode steganografi berbasis kode dengan penyisipan ganda:
+
+\begin{enumerate}
+    \item Algoritma penyisipan dengan multiple embedding pada gambar RGB
+    \item Peningkatan kapasitas penyembunyian data minimal 50\%
+    \item Teknik mempertahankan kualitas visual (PSNR $>$ 40 dB)
+\end{enumerate}
+
+Identifikasi kebutuhan ini akan menjadi dasar untuk proses desain dan
+implementasi sistem steganografi yang diusulkan.
+
+\subsection{Proses Desain}
+Berdasarkan kebutuhan yang diidentifikasi, penelitian ini akan merancang
+algoritma untuk steganografi berbasis kode dengan multiple embedding.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{gambar/proposed.png}
+    \caption{Design method}
+    \label{fig:flow}
+\end{figure}
+
+% jelaskan juga metode di bab ini
+% Cari metode untuk handle gambar berwarna ini
+% Rencana metodenya apa, tulis lagi per prosesnya. Cari reasoning, problemnya harus disolusikan.
+
+Arsitektur sistem umum akan mencakup
+
+\begin{enumerate}
+    \item \textbf{Secret Image}
+
+          Secret Image merupakan informasi rahasia yang akan disembunyikan dalam sistem
+          steganografi, yang dapat mencakup gambar dalam berbagai format (JPG, PNG) yang
+          akan dilindungan keamanan dan kerahasiaan. Pemilihan jenis data rahasia ini
+          akan mempengaruhi kapasitas penyimpanan yang diperlukan dan metode penyisipan
+          yang digunakan dalam proses steganografi.
+
+          Gambar ini merupakan inputan dinamis user untuk nanti disisipkan pada cover
+          image yang berwarna, dan nanti akan dicek terkait berapa kapasitas dan noise
+          yang dihasilkan dari hasil penyisipan secret image ini.
+
+    \item \textbf{Encoding Process}
+
+          Proses \textit{encoding} bertujuan untuk menyisipkan pesan (teks) ke dalam
+          gambar dengan menggunakan \textbf{Least Significant Bit (LSB)} dari setiap
+          komponen warna pixel (R, G, B).
+
+          Berikut adalah penjelasan langkah-langkah proses encoding:
+
+          \begin{enumerate}
+              \item \textbf{Persiapan Data}
+
+                    \begin{itemize}
+                        \item \textbf{Input:}
+                              \begin{itemize}
+                                  \item Gambar yang akan digunakan sebagai media penyisipan.
+                                  \item Pesan teks yang ingin disembunyikan.
+                              \end{itemize}
+
+                        \item \textbf{Tambahan Terminator:}
+                              Pesan diberi terminator (\texttt{\textbackslash 000}) di akhir sebagai penanda bahwa pesan telah selesai.
+                              \begin{itemize}
+                                  \item Contoh:
+                                        \begin{quote}
+                                            \textbf{Pesan awal:} "Hello, World!"
+                                        \end{quote}
+                                        \begin{quote}
+                                            \textbf{Pesan yang akan diproses:} "Hello, World!\texttt{\textbackslash 000}"
+                                        \end{quote}
+                              \end{itemize}
+
+                        \item \textbf{Konversi ke Bit:}
+                              Setiap karakter diubah menjadi 8 bit (format byte).
+                              \begin{itemize}
+                                  \item Contoh huruf "H" (ASCII 72): 01001000.
+                              \end{itemize}
+                    \end{itemize}
+
+              \item \textbf{Iterasi Gambar Pixel-per-Pixel}
+
+                    Gambar diakses pixel-per-pixel, dan untuk setiap pixel:
+                    \begin{itemize}
+                        \item Komponen warna R (Red), G (Green), dan B (Blue) diekstrak.
+                        \item Setiap komponen warna memiliki nilai 8 bit (0-255).
+                    \end{itemize}
+
+              \item \textbf{Menyisipkan Bit ke LSB}
+
+                    Dari setiap byte pesan (8 bit), bit pesan disisipkan satu per satu ke dalam LSB
+                    (Least Significant Bit) dari komponen R, G, dan B. LSB adalah bit paling rendah
+                    dari nilai komponen warna. Mengubah LSB tidak akan mengubah warna secara
+                    signifikan.
+
+                    \begin{itemize}
+                        \item \textbf{Contoh Menyisipkan Bit:}
+                              Misalkan:
+                              \begin{itemize}
+                                  \item Nilai awal komponen warna:
+                                        \[
+                                            R = 10110011, \quad G = 11001001, \quad B = 11111110
+                                        \]
+                                  \item Bit pesan yang akan disisipkan: 0, 1, 1.
+                              \end{itemize}
+
+                        \item \textbf{Langkah Perubahan:}
+                              \begin{itemize}
+                                  \item R (Red):
+                                        \begin{itemize}
+                                            \item LSB sebelum: 1
+                                            \item Ganti dengan bit pesan 0.
+                                            \item Nilai R menjadi: 10110010.
+                                        \end{itemize}
+                                  \item G (Green):
+                                        \begin{itemize}
+                                            \item LSB sebelum: 1
+                                            \item Ganti dengan bit pesan 1.
+                                            \item Nilai G tetap: 11001001.
+                                        \end{itemize}
+                                  \item B (Blue):
+                                        \begin{itemize}
+                                            \item LSB sebelum: 0
+                                            \item Ganti dengan bit pesan 1.
+                                            \item Nilai B menjadi: 11111111.
+                                        \end{itemize}
+                              \end{itemize}
+
+                        \item \textbf{Hasil Pixel:}
+                              \[
+                                  R = 10110010, \quad G = 11001001, \quad B = 11111111.
+                              \]
+                    \end{itemize}
+
+                    Proses terus diulang untuk setiap pixel, bergerak dari kiri ke kanan, atas ke
+                    bawah. Jika semua bit pesan telah disisipkan, pixel sisanya tidak diubah.
+
+                    Encoding berhenti setelah semua bit dari pesan (termasuk terminator
+                    \texttt{\textbackslash 000}) berhasil disisipkan. Gambar baru (dengan pesan
+                    tersembunyi) disimpan dalam format PNG agar tidak terjadi kompresi lossy.
+              \item \textbf{Ilustrasi}
+
+                    Misalkan gambar memiliki pixel sebagai berikut:
+
+                    \begin{quote}
+                        \texttt{Pixel (R, G, B) = (10110011, 11001001, 11111110)}
+                    \end{quote}
+
+                    Dan pesan yang akan disisipkan adalah huruf "A".
+
+                    \begin{quote}
+                        \texttt{"A" dalam ASCII = 65 $\rightarrow$ 01000001 (8 bit).}
+                    \end{quote}
+
+                    \textbf{Proses Iterasi:}
+
+                    \begin{table}[H]
+                        \centering
+                        \begin{tabular}{|c|c|c|c|c|}
+                            \hline
+                            \textbf{Bit Pesan} & \textbf{Komponen Warna} & \textbf{LSB Lama} & \textbf{LSB Baru} & \textbf{Hasil Akhir} \\ \hline
+                            0                  & R (Red)                 & 1                 & 0                 & 10110010             \\ \hline
+                            1                  & G (Green)               & 1                 & 1                 & 11001001             \\ \hline
+                            0                  & B (Blue)                & 0                 & 0                 & 11111110             \\ \hline
+                            0                  & R (Red)                 & 0                 & 0                 & 10110010             \\ \hline
+                            0                  & G (Green)               & 1                 & 0                 & 11001000             \\ \hline
+                            0                  & B (Blue)                & 0                 & 0                 & 11111110             \\ \hline
+                            1                  & R (Red)                 & 0                 & 1                 & 10110011             \\ \hline
+                            0                  & G (Green)               & 0                 & 0                 & 11001000             \\ \hline
+                        \end{tabular}
+                        \caption{Proses Penyisipan Bit Pesan ke dalam Komponen Warna}
+                    \end{table}
+
+                    \textbf{Output Gambar:}
+
+                    Gambar baru memiliki nilai komponen warna yang dimodifikasi pada LSB, tetapi
+                    perubahan warna tidak terlihat oleh mata manusia. Gambar ini berisi pesan yang
+                    telah disisipkan secara tersembunyi.
+
+          \end{enumerate}
+
+    \item Generating Key Trace
+
+          Proses pembuatan kunci yang akan menentukan di mana dan bagaimana data akan
+          disembunyikan dalam gambar. Sistem menggunakan cara khusus untuk membuat pola
+          acak yang memastikan data tersebar merata dalam gambar. Cara ini membuat sistem
+          lebih aman karena menambah lapisan pengamanan, sekaligus memudahkan pengambilan
+          data kembali tanpa merusak gambar. Jika terjadi masalah atau ada yang mencoba
+          mengambil data secara ilegal, sistem ini juga membantu mengelola dan memulihkan
+          data dengan lebih baik.
+
+    \item Agreed Image
+
+          Gambar yang telah ditentukan bersama antara pengirim dan penerima sebagai media
+          penyimpanan jejak kunci steganografi. Pemilihan gambar ini dilakukan dengan
+          mempertimbangkan berbagai karakteristik teknis seperti kompleksitas tekstur,
+          distribusi warna, dan noise level yang optimal untuk mendukung proses
+          penyembunyian informasi tanpa menimbulkan kecurigaan. Gambar yang dipilih juga
+          harus memiliki kapasitas yang memadai untuk menampung jejak kunci sambil tetap
+          mempertahankan kualitas visual yang baik setelah proses penyisipan.
+
+    \item Embedding Key Trace into Agreed Image
+
+          Tahap kritis dimana key trace disisipkan ke dalam gambar yang telah disepakati
+          sebelumnya menggunakan teknik steganografi. Proses ini memerlukan presisi untuk
+          memastikan integritas data dan imperceptibility optimal. Penyisipan dilakukan
+          dengan mempertimbangkan karakteristik gambar dan distribusi nilai pixel untuk
+          mengoptimalkan keseimbangan antara kapasitas penyimpanan dan kualitas visual.
+          Teknik steganografi yang digunakan juga mempertimbangkan aspek keamanan untuk
+          mencegah deteksi dan ekstraksi unauthorized.
+
+    \item Agreed Stego
+
+          Hasil akhir dari proses penyisipan jejak kunci ke dalam gambar yang telah
+          disepakati bersama. Gambar ini memiliki karakteristik visual yang identik
+          dengan gambar asli untuk menghindari kecurigaan, namun di dalamnya telah
+          tertanam informasi rahasia dalam bentuk jejak kunci yang akan digunakan untuk
+          proses ekstraksi data. Kualitas gambar tetap terjaga meskipun telah melalui
+          proses penyisipan, dengan perubahan nilai pixel yang minimal dan tidak
+          terdeteksi oleh mata manusia. Gambar ini berperan penting sebagai pembawa
+          informasi kontrol yang diperlukan untuk proses steganografi selanjutnya.
+
+    \item Embedding secret bits into Cover Image
+
+          Embedding secret bits into cover image merupakan proses penyisipan bit-bit data
+          rahasia ke dalam gambar cover dilakukan dengan memanfaatkan algoritma
+          steganografi yang canggih dan teroptimasi. Proses ini melibatkan analisis
+          karakteristik gambar cover untuk menentukan lokasi optimal penyisipan data,
+          kemudian menggunakan teknik transformasi yang presisi untuk menyisipkan bit-bit
+          informasi rahasia. Algoritma yang digunakan dirancang khusus untuk
+          memaksimalkan kapasitas penyimpanan data sambil tetap mempertahankan kualitas
+          visual gambar, dengan fokus khusus pada minimalisasi distorsi yang dapat
+          terdeteksi baik secara visual maupun statistik. Proses ini juga
+          mempertimbangkan aspek keseimbangan antara efisiensi penyisipan dan ketahanan
+          terhadap berbagai teknik steganalisis.
+
+    \item Cover Image
+
+          Cover image merupakan gambar yang berfungsi sebagai media utama untuk
+          penyembunyian data rahasia, dipilih dengan pertimbangan khusus berdasarkan
+          kompleksitas tekstur, distribusi warna, dan karakteristik statistik yang
+          optimal untuk mendukung proses penyisipan informasi. Pemilihan cover image yang
+          tepat sangat kritis karena akan mempengaruhi kapasitas penyimpanan data,
+          ketahanan terhadap deteksi, dan kualitas visual hasil akhir steganografi.
+          Gambar dengan area tekstur yang kompleks dan variasi nilai pixel yang tinggi
+          umumnya lebih ideal karena dapat menyembunyikan perubahan yang diakibatkan oleh
+          proses penyisipan data dengan lebih efektif.
+
+    \item Generate random pixels positions
+
+          Algoritma untuk menghasilkan posisi piksel secara acak namun tetap
+          deterministik berdasarkan seed value yang ditentukan. Proses ini menggunakan
+          pembangkit bilangan pseudo-random yang telah terverifikasi untuk menghasilkan
+          sekuens posisi piksel yang terdistribusi merata di seluruh gambar. Pendekatan
+          deterministik ini penting untuk memastikan konsistensi dalam proses penyisipan
+          dan ekstraksi data, sekaligus meningkatkan keamanan dengan menciptakan pola
+          penyebaran data yang sulit diprediksi oleh pihak yang tidak berwenang.
+
+    \item Generating ECC Key Pairs
+
+          Proses pembuatan sepasang kunci kriptografi menggunakan algoritma Elliptic
+          Curve Cryptography (ECC), yang menyediakan tingkat keamanan yang sangat tinggi
+          dengan ukuran kunci yang relatif kecil dibandingkan dengan sistem kriptografi
+          konvensional. Pemilihan parameter kurva eliptik dan proses pembangkitan kunci
+          dilakukan dengan mempertimbangkan aspek keamanan dan efisiensi komputasi.
+
+    \item Embedding Public Key into Stego Image
+
+          Proses penyisipan kunci publik ke dalam gambar stego dilakukan dengan
+          menggunakan teknik steganografi yang telah dioptimasi untuk menjaga kualitas
+          visual gambar. Penyisipan ini memungkinkan verifikasi dan dekripsi yang aman
+          oleh penerima yang berwenang, sekaligus menjamin integritas dan otentisitas
+          data yang tersembunyi. Proses ini dirancang untuk meminimalkan dampak visual
+          dari penyisipan kunci publik.
+
+    \item Private Key
+
+          Kunci pribadi yang dihasilkan dalam proses ECC disimpan secara terpisah dengan
+          menerapkan protokol keamanan berlapis dan enkripsi tambahan. Kunci ini memiliki
+          tingkat keamanan yang sangat tinggi karena perannya yang kritis dalam proses
+          dekripsi dan verifikasi data tersembunyi. Penyimpanan dan pengelolaan kunci
+          pribadi mengikuti standar keamanan industri untuk mencegah akses tidak sah.
+
+    \item Stego Image
+
+          Gambar hasil akhir setelah proses penyisipan data rahasia, yang dirancang untuk
+          mempertahankan karakteristik visual yang identik dengan gambar cover asli.
+          Meskipun mengandung informasi tersembunyi, gambar stego tidak menunjukkan
+          perbedaan yang dapat terdeteksi secara visual maupun statistik sederhana.
+          Kualitas gambar dijaga melalui optimasi algoritma penyisipan yang
+          mempertimbangkan karakteristik persepsi visual manusia.
+
+    \item Final Stego Image
+
+          Versi terakhir dari gambar stego yang telah dilengkapi dengan kunci publik dan
+          semua metadata yang diperlukan untuk proses ekstraksi dan verifikasi yang aman.
+          Gambar ini menyediakan mekanisme pemulihan data yang komprehensif namun tetap
+          mempertahankan aspek keamanan dan kerahasiaan informasi yang tersembunyi.
+          Struktur data tambahan diintegrasikan dengan cara yang tidak mengganggu
+          kualitas visual keseluruhan.
+    \item \textbf{Decoding Process}
+
+          Proses decoding bertujuan untuk mengekstrak pesan tersembunyi yang telah
+          disisipkan ke dalam gambar menggunakan metode \textbf{Least Significant Bit
+              (LSB)}. Berikut adalah langkah-langkah decoding:
+
+          \begin{enumerate}
+              \item \textbf{Persiapan Data}
+                    \begin{itemize}
+                        \item \textbf{Input:} Gambar yang telah di-encode dengan pesan tersembunyi.
+                        \item \textbf{Tujuan:} Mengekstrak bit dari komponen warna setiap piksel dan menyusun kembali menjadi karakter pesan.
+                    \end{itemize}
+
+              \item \textbf{Iterasi Gambar Pixel-per-Pixel} \\
+                    Gambar diakses pixel-per-pixel (dari kiri ke kanan, atas ke bawah), lalu dilakukan pembacaan bit dari komponen warna:
+                    \begin{itemize}
+                        \item Komponen warna \textbf{R (Red)}, \textbf{G (Green)}, dan \textbf{B (Blue)}
+                              diekstrak satu per satu.
+                        \item Dari setiap komponen warna, \textbf{Least Significant Bit (LSB)} dibaca karena
+                              LSB digunakan untuk menyisipkan bit pesan.
+                    \end{itemize}
+
+                    \noindent
+                    \textbf{Contoh:}
+                    \[
+                        \begin{array}{rl}
+                            R & = 10110010 \\
+                            G & = 11001001 \\
+                            B & = 11111111
+                        \end{array}
+                    \]
+                    % R = 10110011, \quad G = 11001001, \quad B = 11111110
+
+                    \noindent
+                    LSB dari setiap komponen warna:
+                    \begin{itemize}
+                        \item LSB $R = 0$
+                        \item LSB $G = 1$
+                        \item LSB $B = 1$
+                    \end{itemize}
+
+                    \noindent
+                    Bit yang diperoleh dari piksel tersebut adalah: $0, 1, 1$.
+
+              \item \textbf{Penyusunan Bit Menjadi Byte} \\
+                    Setiap 8 bit yang diperoleh dari LSB disusun kembali menjadi 1 byte.
+                    \begin{itemize}
+                        \item LSB pertama masuk ke bit paling kiri.
+                        \item LSB berikutnya diikuti hingga terbentuk 8 bit (1 byte).
+                    \end{itemize}
+
+                    \noindent
+                    \textbf{Contoh:}
+                    \begin{center}
+                        LSB yang dibaca: $0, 1, 0, 0, 1, 0, 0, 0$ \\
+                        Hasil: $01001000$, yang dalam ASCII adalah huruf \textbf{H}.
+                    \end{center}
+
+                    Proses pembacaan bit dari LSB dilanjutkan hingga menemukan \textbf{null
+                        terminator} ($\backslash 000$), yaitu byte dengan nilai \texttt{0x00}
+                    ($00000000$ dalam biner).
+
+                    \noindent
+                    \textbf{Contoh:}
+                    \[
+                        \texttt{H → e → l → l → o → , → W → o → r → l → d → !}
+                    \]
+
+                    Diikuti oleh null byte $\backslash 000$, proses decoding berhenti.
+
+                    Byte yang telah dibaca dikonversi kembali menjadi karakter ASCII dan disusun
+                    menjadi string pesan yang telah disembunyikan.
+
+          \end{enumerate}
+
+          \noindent
+          \textbf{Ringkasan Proses Decoding:}
+          \begin{itemize}
+              \item Baca LSB dari komponen warna $R$, $G$, dan $B$ secara berurutan.
+              \item Susun LSB menjadi 8 bit untuk membentuk 1 byte.
+              \item Ulangi proses hingga menemukan \textbf{null terminator} ($\backslash 000$).
+              \item Konversi byte yang terkumpul menjadi string pesan.
+              \item (Opsional) Validasi pesan dengan menghasilkan \textbf{key trace} menggunakan \textbf{SHA-256}.
+          \end{itemize}
+\end{enumerate}
+
+\subsection{Proses Implementasi}
+
+Algoritma yang dirancang akan diimplementasikan menggunakan Python,
+memanfaatkan library seperti OpenCV untuk pemrosesan gambar dan NumPy untuk
+operasi numerik. Implementasi ini dapat mendukung gambar RGB maupun grayscale
+untuk memungkinkan analisis komparatif.
+
+\subsubsection{Persiapan Environment Development}
+
+Mulai dengan instalasi Python sebagai bahasa pemrograman utama. Instal library
+OpenCV yang akan digunakan untuk membaca, menulis, dan memanipulasi gambar
+digital. Tambahkan NumPy untuk mendukung operasi matematika dan array yang
+diperlukan dalam pemrosesan gambar.
+
+\subsubsection{Pengembangan Modul Utama}
+
+\begin{enumerate}
+    \item Implementasi fungsi pembacaan gambar:
+          \begin{enumerate}
+              \item Pembacaan gambar format RGB menggunakan OpenCV
+              \item Pembacaan gambar format grayscale menggunakan OpenCV
+              \item Validasi format input gambar
+          \end{enumerate}
+
+    \item Implementasi fungsi pemrosesan pixel:
+          \begin{enumerate}
+              \item Modifikasi nilai pixel untuk penyisipan data
+              \item Pengecekan kapasitas penyisipan
+              \item Validasi integritas data
+          \end{enumerate}
+
+    \item Implementasi fungsi ekstraksi data:
+          \begin{enumerate}
+              \item Pembacaan nilai pixel termodifikasi
+              \item Ekstraksi data tersembunyi
+              \item Rekonstruksi pesan asli
+          \end{enumerate}
+
+    \item Implementasi fungsi evaluasi kualitas:
+          \begin{enumerate}
+              \item Perhitungan PSNR (Peak Signal-to-Noise Ratio)
+              \item Perhitungan MSE (Mean Square Error)
+              \item Analisis imperceptibility hasil steganografi
+          \end{enumerate}
+\end{enumerate}
+
+\subsubsection{Implementasi Algoritma Steganografi}
+
+Dalam implementasi algoritma steganografi, pengembangan sistem dimulai dengan
+implementasi mekanisme penyisipan ganda yang komprehensif. Proses ini mencakup
+identifikasi area potensial untuk penyisipan data, pengembangan metode
+penyisipan bertingkat, serta pengelolaan metadata untuk multiple embedding.
+Koordinasi antar layer penyisipan menjadi aspek krusial untuk memastikan
+integritas data yang disisipkan.
+
+Sistem yang dikembangkan dirancang untuk mendukung berbagai format gambar,
+dengan fokus utama pada penanganan gambar RGB (24-bit) dan grayscale (8-bit).
+Adaptasi algoritma dilakukan untuk mengakomodasi kedua format tersebut,
+disertai dengan optimasi performa yang memungkinkan sistem bekerja secara
+efisien pada berbagai jenis gambar carrier.
+
+Optimasi kapasitas penyisipan menjadi salah satu prioritas utama, dengan target
+minimal mencapai 50\% dari ukuran carrier. Hal ini dicapai melalui implementasi
+teknik bit-plane slicing yang efisien, didukung oleh mekanisme kompresi data
+payload, serta pemilihan pixel secara adaptif untuk memaksimalkan kapasitas
+penyimpanan tanpa mengorbankan kualitas visual.
+
+Preservasi kualitas visual menjadi aspek fundamental dalam pengembangan, dengan
+target PSNR yang ditetapkan di atas 40 dB. Sistem mengimplementasikan berbagai
+strategi untuk meminimalisasi distorsi visual, termasuk teknik penyebaran
+perubahan pixel dan adaptasi terhadap karakteristik spesifik dari gambar
+carrier.
+
+Implementasi dilengkapi dengan mekanisme validasi yang komprehensif, mencakup
+verifikasi integritas data, pengukuran kapasitas efektif, evaluasi kualitas
+visual, serta pengujian robustness. Serangkaian pengujian ini memastikan bahwa
+sistem yang dikembangkan memenuhi seluruh requirement yang telah ditetapkan,
+baik dari segi kapasitas, kualitas, maupun keamanan data.
+
+\subsubsection{Pengembangan Sistem Pengujian}
+
+Buat modul pengujian untuk:
+
+- Mengukur kapasitas maksimum penyisipan data
+- Mengevaluasi kualitas visual menggunakan PSNR dan SSIM
+- Menguji ketahanan terhadap teknik steganalisis
+- Membandingkan dengan metode LSB konvensional
+
+\subsubsection{Analisis dan Evaluasi}
+
+Lakukan analisis komprehensif meliputi:
+
+- Pengujian statistik menggunakan uji-t dan ANOVA
+- Evaluasi visual subjektif
+- Pengukuran metrik kinerja (kapasitas, PSNR, SSIM)
+- Evaluasi efisiensi komputasi
+
+\subsubsection{Dokumentasi}
+
+Siapkan dokumentasi lengkap yang mencakup:
+
+- Kode sumber dengan komentar yang jelas
+- Manual penggunaan sistem
+- Hasil pengujian dan analisis
+- Rekomendasi untuk pengembangan lebih lanjut
+
+\subsection{Desain Eksperimen dan Pengumpulan Data}
+
+Untuk mengevaluasi kinerja metode yang diusulkan dibandingkan dengan metode
+lain, sebuah eksperimen dilakukan berdasarkan empat ukuran kuantitatif utama.
+Gambar di bawah mengilustrasikan desain eksperimen yang disarankan untuk metode
+yang diusulkan.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{gambar/experiment.png}
+    \caption{Design experiment}
+    \label{fig:experiment}
+\end{figure}
+
+\subsubsection{Kapasitas}
+
+Pada bagian ini, kapasitas penyisipan dari metode yang diusulkan dan metode
+yang digunakan diperiksa. Rasio jumlah bit rahasia yang disematkan dalam gambar
+Cover terhadap jumlah piksel gambar Cover dievaluasi. Kapasitas penyisipan, EC
+kemudian ditentukan oleh persamaan berikut:
+
+\begin{equation}
+    EC = \frac{|S|}{H \cdot W}
+\end{equation}
+
+Di mana —S— adalah jumlah bit rahasia yang disematkan, H dan W masing-masing
+adalah tinggi dan panjang gambar. Muatan yang dihasilkan dinyatakan sebagai
+persentase. Untuk mengevaluasi kinerja metode yang diusulkan dalam hal
+kapasitas, dua skenario utama berikut dipertimbangkan:
+
+\begin{enumerate}
+    \item Variasi Nilai Piksel: Gambar sampul dan gambar rahasia dianalisa berdasarkan
+          histogram gambarnya.
+          \begin{itemize}
+              \item Digunakan 40 gambar sampul skala abu-abu berukuran 512x512 piksel.
+              \item Digunakan 40 gambar rahasia skala abu-abu dengan berbagai ukuran.
+              \item Setiap gambar rahasia dengan distribusi tonal unik disematkan pada setiap
+                    gambar sampul dengan tonal yang unik pula.
+          \end{itemize}
+    \item Ukuran Gambar Rahasia: Untuk setiap gambar rahasia, dilakukan 33 variasi ukuran
+          yang berbeda.
+          \begin{itemize}
+              \item Setiap variasi ukuran disematkan pada gambar sampul yang berbeda.
+              \item Kapasitas yang dihasilkan dari setiap penyematan dicatat.
+          \end{itemize}
+\end{enumerate}
+
+Hasil untuk setiap kelompok ditabulasi dan nilai PSNR ditentukan dan
+dibandingkan dengan Metode sebelumnya.
+
+\subsubsection{Imperceptibility}
+
+Skema steganografi tidak akan terlihat jika mata manusia tidak dapat membedakan
+antara sampul dan gambar stego. Yang menjadi perhatian dalam bagian ini adalah
+kualitas visual gambar stego yang dihasilkan. Kelompok gambar rahasia dengan
+ukuran gambar yang sama dan distribusi nada yang beragam terbentuk. Setiap
+gambar rahasia dalam kelompok tertentu disematkan di sampul menggunakan metode
+yang diusulkan dan metode A. M. Molaei.
+
+Ketidaksadaran kemudian diukur dengan Mean Square Error (MSE) dan Peak to
+Signal Noise Ratio (PSNR).
+
+Mean Square Error (MSE) adalah metrik yang digunakan untuk mengukur perbedaan
+antara dua gambar. MSE dihitung dengan rumus berikut:
+
+\begin{equation}
+    \text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} [I(i,j) - K(i,j)]^2
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $M$ dan $N$ adalah dimensi gambar.
+    \item $I(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar asli.
+    \item $K(i,j)$ adalah nilai piksel pada posisi $(i,j)$ dari gambar stego.
+\end{itemize}
+
+MSE yang lebih rendah menunjukkan bahwa gambar stego lebih mirip dengan gambar
+asli, yang berarti kualitas visual lebih baik.
+
+Peak Signal-to-Noise Ratio (PSNR) adalah metrik yang digunakan untuk mengukur
+kualitas gambar stego dibandingkan dengan gambar asli. PSNR dihitung dengan
+rumus berikut:
+
+\begin{equation}
+    \text{PSNR} = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{\text{MSE}} \right)
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $MAX_I$ adalah nilai maksimum intensitas gambar (misalnya, 255 untuk gambar 8-bit).
+    \item $\text{MSE}$ adalah Mean Square Error antara gambar asli dan gambar stego.
+\end{itemize}
+
+PSNR yang lebih tinggi menunjukkan bahwa gambar stego lebih mirip dengan gambar
+asli, yang berarti kualitas visual lebih baik.
+
+\subsubsection{Robbustnes}
+
+Pada bagian ini kami menguji kemampuan metode yang diusulkan untuk mengatasi
+berbagai serangan. Hal ini memungkinkan penerima untuk mengambil kembali pesan
+rahasia yang telah dihancurkan jika terjadi penghancuran citra stego secara
+sengaja atau tidak sengaja. Ukuran kuantitatif yang akan ditentukan adalah PSNR
+dari citra rahasia yang dipulihkan. Hal ini ditentukan menggunakan persamaan
+(3.15) dan (3.15):
+
+Kode Reed Muller RM (1, 4) telah diterapkan dalam metode ini karena kemampuan
+koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan sebagai berikut:
+
+Karena r = 1 dan m = 4, maka ukuran pesan k dihitung sebagai berikut:
+\begin{equation}
+    k = \sum_{i=0}^{r} \binom{m}{i} = \binom{4}{0} + \binom{4}{1} = 5 \text{ bits}
+    \label{eq:rm}
+\end{equation}
+
+Dan kode berukuran N dihitung sebagai berikut:
+
+\begin{equation}
+    N = 2^m = 16 \text{ bits}
+    \label{eq:rm2}
+\end{equation}
+
+\begin{equation}
+    ECC = \frac{\text{number of correctable bits}}{\text{total bits}} = \frac{3}{16} = 18.75\%
+\end{equation}
+
+Setelah setiap skenario penyematan dilakukan seperti yang dijelaskan di bagian
+6.1.1, gambar stego yang dihasilkan diekspos di bawah serangan berikut
+
+\begin{enumerate}
+    \item Noise Attack: Gambar stego diserang dengan beberapa metode di bawah dengan
+          intensitas yang berbeda.
+          \begin{enumerate}
+              \item \textbf{Gaussian Noise}: Nama ini diambil dari Carl Friedrich Gauss
+                    \cite{selamistudy}.Gaussian Noise merupakan noise statistik yang memiliki
+                    fungsi kerapatan probabilitas (PDF) yang sama dengan distribusi normal, yang
+                    juga dikenal sebagai distribusi Gaussian. Dengan kata lain, nilai yang dapat
+                    diambil oleh noise tersebut berdistribusi Gaussian. Untuk Gaussian Noise, dua
+                    variasi varians dipertimbangkan dalam eksperimen, yaitu Gaussian noise: mean 0
+                    variance 0,01 dan Gaussian noise: mean 0 variance 0,1. Gambar 3.8 menunjukkan
+                    contoh gambar stego yang diserang oleh Gaussian noise.
+              \item \textbf{Salt and Pepper Noise}: Ini adalah bentuk noise yang juga terlihat pada
+                    gambar. Ini juga dikenal sebagai noise impuls. Noise ini dapat disebabkan oleh
+                    gangguan tajam dan tiba-tiba pada sinyal gambar. Noise ini muncul sebagai
+                    piksel putih dan hitam yang jarang muncul \cite{kaisar2008salt}. Noise Salt and Pepper hadir
+                    dalam berbagai bentuk dengan kepadatan yang berbeda. Dua variasi kepadatan
+                    dipertimbangkan dalam percobaan yaitu noise Salt and Pepper: kepadatan 0,05 dan
+                    noise Salt and Pepper: kepadatan 0,5. Gambar 3.9 menunjukkan contoh gambar
+                    stego yang diserang noise Salt and Pepper.
+              \item \textbf{Speckle Noise}: Speckle noise adalah noise yang muncul akibat pengaruh kondisi
+                    lingkungan terhadap sensor pencitraan selama akuisisi citra. Speckle noise
+                    paling banyak terdeteksi pada citra medis, citra Radar aktif, dan citra
+                    Synthetic Aperture Radar (SAR) \cite{mansourpour2006effects}. Dua variasi varians dipertimbangkan dalam
+                    eksperimen yaitu Speckle noise: varians 0,04 dan Speckle noise: varians 0,4.
+                    Gambar 3.9 menunjukkan contoh citra stego yang diserang Speckle noise.
+          \end{enumerate}
+
+          Setelah stego terkena serangan Noise ini, proses ekstraksi mengambil gambar
+          rahasia dan melakukan koreksi kesalahan. PSNR dari gambar rahasia yang diambil
+          ditentukan dan ditabulasi. PSNR dari semua gambar rahasia yang diambil
+          ditentukan dan dibandingkan dengan Metode A. M. Molaei.
+
+    \item Cropping Attack: Citra stego dengan rentang nilai PSNR yang sama dikelompokkan
+          dan diekspos ke dalam serangan pemotongan. Serangan pemotongan dilakukan
+          berdasarkan rasio pemotongan dan wilayah pemotongan yang berbeda. Setiap citra
+          stego dalam kelompok tertentu diekspos ke dalam rasio pemotongan dan wilayah
+          pemotongan yang sama dengan citra stego lain dalam kelompok yang sama. Citra
+          stego akan menjalani proses ekstraksi untuk mengambil citra rahasia dengan
+          melakukan koreksi kesalahan. Untuk setiap set atau kelompok, nilai PSNR dari
+          citra rahasia yang diambil ditentukan dan ditabulasi serta dibandingkan dengan
+          Metode A. M. Molaei.
+    \item Scratching Attack: Semua gambar stego dalam kelompok yang sama seperti yang
+          disebutkan dalam 6.1.2.2 terkena serangan goresan. Serangan goresan muncul
+          dalam dua bentuk berbeda yaitu perbedaan panjang, lebar sama dan perbedaan
+          lebar, panjang sama. Setelah setiap bentuk serangan goresan pada gambar stego
+          dilakukan, koreksi kesalahan digunakan untuk mengambil gambar rahasia. PSNR
+          dari gambar rahasia yang diambil ditentukan, ditabulasi dan dibandingkan dengan
+          metode sebelumnya.
+    \item JPEG Compression Attack: Singkatan dari Joint Photographic Experts Group. JPEG
+          adalah metode kompresi lossy yang umum digunakan untuk gambar digital, terutama
+          untuk gambar yang dihasilkan oleh fotografi digital. JPEG biasanya mencapai
+          kompresi 10:1 dengan sedikit kehilangan kualitas gambar yang
+          terlihat.\cite{ch2015medical} Kompresi JPEG digunakan dalam sejumlah format
+          berkas gambar. JPEG adalah format gambar yang paling umum digunakan oleh kamera
+          digital dan format yang paling umum untuk menyimpan dan mengirimkan gambar
+          fotografi di Web.
+
+          Untuk melakukan percobaan, semua gambar stego yang disematkan dengan ukuran
+          berbeda dari pesan rahasia yang sama diekspos ke serangan JPG. Setelah
+          mengekspos stego ke serangan kompresi JPEG, ekstraksi gambar rahasia dilakukan
+          dengan menerapkan koreksi kesalahan untuk memulihkan gambar rahasia. PSNR dari
+          gambar rahasia yang dipulihkan ditentukan, ditabulasi, dan dibandingkan dengan
+          Metode A. M. Molaei.
+\end{enumerate}
+
+\subsection{Metode Analisis dan Evaluasi}
+
+Penelitian ini akan merancang serangkaian eksperimen untuk mengevaluasi kinerja
+metode yang diusulkan:
+\begin{enumerate}
+    \item Uji kapasitas: Mengukur jumlah maksimum data yang dapat disembunyikan
+    \item Uji kualitas visual: Menilai imperceptibility menggunakan metrik PSNR
+    \item Uji ketahanan: Mengevaluasi ketahanan terhadap teknik steganalisis umum
+    \item Analisis komparatif: Membandingkan dengan metode sebelumnya dan proposed method
+\end{enumerate}
+
+% Research method should contain brief description on fundamental knowledge related to the addressed problem. You should highlight that the concept is appropriate for your problem. Write down the mapping between the concept used and the problem solved.
+
+% Also, it defines the logic steps - What to do and how to solve the problem and achieve proposed objectives? Which research methods (e.g. survey, modeling, case study ...) will be used? 
+
+% More specifically, the section comprises the following components:
+% \begin{itemize}
+% \item[1.] Requirement identification
+% \item[2.] Design process (including general system architecture)
+% \item[3.] Implementation process
+% \item[4.] Experiment design and plan (including data collection process)
+% \item[5.] Analysis/Evaluation method which will be used for analyzing the experiment result
+% \end{itemize}
+
+% To complete this section, see the detail in the assignment form of assessment-4 and assessment-5.
+
+\section{Work Plan and Time Schedule}
+Write a work plan along with the schedule for completion. The following is the
+example. You may adjust the activities and time schedule according to the
+problem. \newline
+
+\begin{table}[h!]
+    \caption{Activity Schedule (\color{red}example) \label{tab:schedule}}
+    \noindent\begin{tabularx}{\linewidth}{|>{\bfseries}l|l|*{11}{>{\centering\arraybackslash}X|}>{\centering\arraybackslash}X<{\bigstrut}|}
+        \hline
+        \multicolumn{2}{|l|}{}                   & \multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}                                                                                                                                                                                      \\
+        \cline{3-14}
+        \multicolumn{2}{|c|}{\bfseries Activity} & \multicolumn{3}{c|}{\bfseries 1}                  & \multicolumn{3}{c|}{\bfseries 2} & \multicolumn{3}{c|}{\bfseries 3} & \multicolumn{3}{c|}{\bfseries 4\bigstrut}                                                                    \\
+        \hline
+
+        1                                        & Literature study                                  & \blue                            &                                  &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        2                                        & Problem identification                            & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        3                                        & Contribution formulation                          & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        4                                        & Hypothesis formulation                            & \blue                            & \blue                            &                                           &       &  &       &       &       &       &       &       &       \\
+        \hline
+        5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &  &       &       &       &       &       &       &       \\
+        \hline
+        6                                        & Data collection                                   &                                  &                                  &                                           & \blue &  &       &       &       &       &       &       &       \\
+        \hline
+        7                                        & Requirement identification                        &                                  &                                  &                                           &       &  & \blue & \blue &       &       &       &       &       \\
+        \hline
+        8                                        & Design process                                    &                                  &                                  &                                           &       &  &       &       & \blue & \blue &       &       &       \\
+        \hline
+        9                                        & Implementation process                            &                                  &                                  &                                           &       &  &       &       &       & \blue &       &       &       \\
+        \hline
+        10                                       & Experiment design                                 &                                  &                                  &                                           &       &  &       &       &       & \blue &       &       &       \\
+        \hline
+        11                                       & Evaluation and analysis                           &                                  &                                  &                                           &       &  &       &       &       & \blue & \blue & \blue &       \\
+        \hline
+        12                                       & Thesis draft                                      &                                  &                                  &                                           &       &  &       &       &       &       &       &       & \blue \\
+        \hline
+
+    \end{tabularx}
+\end{table}
+
+%\section{Summary}
+\supervisorcomments
+
+\printbibliography
+
+\end{document}
