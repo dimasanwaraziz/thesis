@@ -417,15 +417,32 @@ Arsitektur sistem umum akan mencakup
 
           Embedding secret bits into cover image merupakan proses penyisipan bit-bit data
           rahasia ke dalam gambar cover dilakukan dengan memanfaatkan algoritma
-          steganografi yang canggih dan teroptimasi. Proses ini melibatkan analisis
+          steganografi yang canggih dan teroptimasi, dikombinasikan dengan polar codes
+          untuk meningkatkan reliabilitas transmisi data. Proses ini melibatkan analisis
           karakteristik gambar cover untuk menentukan lokasi optimal penyisipan data,
           kemudian menggunakan teknik transformasi yang presisi untuk menyisipkan bit-bit
-          informasi rahasia. Algoritma yang digunakan dirancang khusus untuk
-          memaksimalkan kapasitas penyimpanan data sambil tetap mempertahankan kualitas
-          visual gambar, dengan fokus khusus pada minimalisasi distorsi yang dapat
-          terdeteksi baik secara visual maupun statistik. Proses ini juga
-          mempertimbangkan aspek keseimbangan antara efisiensi penyisipan dan ketahanan
-          terhadap berbagai teknik steganalisis.
+          informasi rahasia.
+
+          Polar codes, yang diperkenalkan oleh Arikan, digunakan untuk mengkodekan data
+          rahasia sebelum penyisipan. Teknik ini memanfaatkan fenomena polarisasi
+          channel untuk mencapai kapasitas Shannon dengan kompleksitas encoding dan
+          decoding yang rendah ($O(N \log N)$). Proses encoding dengan polar codes
+          melibatkan:
+
+          \begin{equation}
+              x_N^1 = u_N^1 G_N
+          \end{equation}
+
+          di mana $u_N^1$ adalah vektor input, $G_N$ adalah generator matrix, dan
+          $x_N^1$ adalah codeword yang dihasilkan.
+
+          Algoritma yang digunakan dirancang khusus untuk memaksimalkan kapasitas
+          penyimpanan data sambil tetap mempertahankan kualitas visual gambar, dengan
+          fokus khusus pada minimalisasi distorsi yang dapat terdeteksi baik secara
+          visual maupun statistik. Penggunaan polar codes memberikan keuntungan tambahan
+          dalam hal error correction dan ketahanan terhadap noise channel. Proses ini
+          juga mempertimbangkan aspek keseimbangan antara efisiensi penyisipan dan
+          ketahanan terhadap berbagai teknik steganalisis.
 
     \item Cover Image
 

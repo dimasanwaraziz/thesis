@@ -74,7 +74,7 @@ Apple M2 chip dengan 8-core CPU dan 10-core GPU, memori 8GB, penyimpanan SSD
 256GB, dan sistem operasi macOS.
 
 \section{Preliminary Literature Review \color{red}(assessment 2)}
-Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap serangan seperti kebisingan dan kompresi JPEG. Namun, penelitian ini masih diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
+Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap serangan seperti scratching dan kompresi JPEG. Namun, penelitian ini masih diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
 
 Pada penelitian yang dilakukan oleh Dwi Andika et al (2020), mereka membahas
 keterbatasan kapasitas penyimpanan dalam teknik steganografi menggunakan
@@ -195,9 +195,9 @@ Berdasarkan analisis literatur dan tujuan penelitian, kebutuhan utama untuk
 pengembangan metode steganografi berbasis kode dengan penyisipan ganda:
 
 \begin{enumerate}
-    \item Algoritma penyisipan dengan multiple embedding pada gambar RGB
     \item Peningkatan kapasitas penyembunyian data minimal 50\%
     \item Teknik mempertahankan kualitas visual (PSNR $>$ 40 dB)
+    \item Algoritma penyisipan dengan multiple embedding pada gambar RGB
 \end{enumerate}
 
 Identifikasi kebutuhan ini akan menjadi dasar untuk proses desain dan
@@ -213,6 +213,25 @@ algoritma untuk steganografi berbasis kode dengan multiple embedding.
     \caption{Design method}
     \label{fig:flow}
 \end{figure}
+
+% flowchart TD
+%     A@{ shape: doc, label: "Secret Image" } --> B[Encoding Process]
+%     B --> |Encoded bits| C[Generating Key Trace]
+%     C --> |Key Trace| D[Embedding Key Trace into Agreed Image]
+%     E@{ shape: doc, label: "Agreed Image" } --> D
+%     D --> F[Agreed Stego]@{shape: doc}
+%     C --> |Secret bits| G[Embedding secret bits into Cover Image with Polar Codes]
+%     H@{ shape: doc, label: "Cover Color Image" } --> I[Generate random pixels positions]
+%     I --> |Random pixel positions| G
+%     J[Generating Secret Shares from Key] --> |Share 2| K[Embedding Share 2 into Stego Image]
+%     J --> |Share 1| L[Share 1]@{shape: doc}
+%     G --> M[Stego Image]@{shape: doc}
+%     K --> N[Stego Image]@{shape: doc}
+%     G --> |Seed, Stego, Number of Cycles| J
+
+%     classDef highlighted fill:#ffcccc,stroke:#ff0000,stroke-width:2px;
+%     class H highlighted;
+%     class G highlighted;
 
 % jelaskan juga metode di bab ini
 % Cari metode untuk handle gambar berwarna ini
@@ -231,7 +250,7 @@ Arsitektur sistem umum akan mencakup
 
           Gambar ini merupakan inputan dinamis user untuk nanti disisipkan pada cover
           image yang berwarna, dan nanti akan dicek terkait berapa kapasitas dan noise
-          yang dihasilkan dari hasil penyisipan secret image ini.
+          (kualitas) yang dihasilkan dari hasil penyisipan secret image ini.
 
     \item \textbf{Encoding Process}
 
@@ -332,7 +351,7 @@ Arsitektur sistem umum akan mencakup
                     tersembunyi) disimpan dalam format PNG agar tidak terjadi kompresi lossy.
               \item \textbf{Ilustrasi}
 
-                    Misalkan gambar memiliki pixel sebagai berikut:
+                    Misalkan gambar memiliki pixel dengan:
 
                     \begin{quote}
                         \texttt{Pixel (R, G, B) = (10110011, 11001001, 11111110)}
@@ -416,15 +435,24 @@ Arsitektur sistem umum akan mencakup
 
           Embedding secret bits into cover image merupakan proses penyisipan bit-bit data
           rahasia ke dalam gambar cover dilakukan dengan memanfaatkan algoritma
-          steganografi yang canggih dan teroptimasi. Proses ini melibatkan analisis
+          steganografi yang canggih dan teroptimasi, dikombinasikan dengan polar codes
+          untuk meningkatkan reliabilitas transmisi data. Proses ini melibatkan analisis
           karakteristik gambar cover untuk menentukan lokasi optimal penyisipan data,
           kemudian menggunakan teknik transformasi yang presisi untuk menyisipkan bit-bit
-          informasi rahasia. Algoritma yang digunakan dirancang khusus untuk
-          memaksimalkan kapasitas penyimpanan data sambil tetap mempertahankan kualitas
-          visual gambar, dengan fokus khusus pada minimalisasi distorsi yang dapat
-          terdeteksi baik secara visual maupun statistik. Proses ini juga
-          mempertimbangkan aspek keseimbangan antara efisiensi penyisipan dan ketahanan
-          terhadap berbagai teknik steganalisis.
+          informasi rahasia.
+
+          Polar codes, yang diperkenalkan oleh Arikan, digunakan untuk mengkodekan data
+          rahasia sebelum penyisipan. Teknik ini memanfaatkan fenomena polarisasi channel
+          untuk mencapai kapasitas Shannon dengan kompleksitas encoding dan decoding yang
+          rendah ($O(N \log N)$).
+
+          Algoritma yang digunakan dirancang khusus untuk memaksimalkan kapasitas
+          penyimpanan data sambil tetap mempertahankan kualitas visual gambar, dengan
+          fokus khusus pada minimalisasi distorsi yang dapat terdeteksi baik secara
+          visual maupun statistik. Penggunaan polar codes memberikan keuntungan tambahan
+          dalam hal error correction dan ketahanan terhadap noise channel. Proses ini
+          juga mempertimbangkan aspek keseimbangan antara efisiensi penyisipan dan
+          ketahanan terhadap berbagai teknik steganalisis.
 
     \item Cover Image
 
@@ -448,30 +476,31 @@ Arsitektur sistem umum akan mencakup
           dan ekstraksi data, sekaligus meningkatkan keamanan dengan menciptakan pola
           penyebaran data yang sulit diprediksi oleh pihak yang tidak berwenang.
 
-    \item Generating ECC Key Pairs
+    \item Generating Secret Shares from Key
 
-          Proses pembuatan sepasang kunci kriptografi menggunakan algoritma Elliptic
-          Curve Cryptography (ECC), yang menyediakan tingkat keamanan yang sangat tinggi
-          dengan ukuran kunci yang relatif kecil dibandingkan dengan sistem kriptografi
-          konvensional. Pemilihan parameter kurva eliptik dan proses pembangkitan kunci
-          dilakukan dengan mempertimbangkan aspek keamanan dan efisiensi komputasi.
+          Proses pembagian kunci rahasia menjadi beberapa bagian (shares) menggunakan
+          skema Shamir's Secret Sharing. Teknik ini memungkinkan pembagian kunci menjadi
+          n bagian dengan threshold k, di mana kunci asli hanya dapat direkonstruksi jika
+          minimal k bagian tersedia. Proses ini meningkatkan keamanan dengan
+          mendistribusikan risiko dan mencegah single point of failure dalam pengelolaan
+          kunci.
 
-    \item Embedding Public Key into Stego Image
+    \item Embedding Share 2 into Stego Image
 
-          Proses penyisipan kunci publik ke dalam gambar stego dilakukan dengan
-          menggunakan teknik steganografi yang telah dioptimasi untuk menjaga kualitas
-          visual gambar. Penyisipan ini memungkinkan verifikasi dan dekripsi yang aman
-          oleh penerima yang berwenang, sekaligus menjamin integritas dan otentisitas
-          data yang tersembunyi. Proses ini dirancang untuk meminimalkan dampak visual
-          dari penyisipan kunci publik.
+          Proses penyisipan bagian kedua (share 2) dari kunci yang telah dibagi ke dalam
+          gambar stego menggunakan teknik steganografi yang telah dioptimasi. Penyisipan
+          dilakukan dengan mempertimbangkan aspek keseimbangan antara keamanan data dan
+          kualitas visual gambar. Proses ini dirancang untuk memastikan share dapat
+          diekstrak kembali dengan akurat tanpa merusak informasi yang tersembunyi
+          lainnya di dalam gambar stego.
 
-    \item Private Key
+    \item Share 1
 
-          Kunci pribadi yang dihasilkan dalam proses ECC disimpan secara terpisah dengan
-          menerapkan protokol keamanan berlapis dan enkripsi tambahan. Kunci ini memiliki
-          tingkat keamanan yang sangat tinggi karena perannya yang kritis dalam proses
-          dekripsi dan verifikasi data tersembunyi. Penyimpanan dan pengelolaan kunci
-          pribadi mengikuti standar keamanan industri untuk mencegah akses tidak sah.
+          Bagian pertama (share 1) dari kunci yang telah dibagi disimpan secara terpisah
+          dengan menerapkan protokol keamanan berlapis. Share 1 memiliki peran penting
+          karena diperlukan bersama dengan share 2 untuk merekonstruksi kunci asli.
+          Penyimpanan dan pengelolaan share 1 mengikuti standar keamanan yang ketat untuk
+          mencegah akses tidak sah.
 
     \item Stego Image
 
@@ -886,15 +915,15 @@ dipulihkan. Hal ini ditentukan menggunakan persamaan \ref{eq:rm} dan
 \ref{eq:rm2}:
 
 Kode Reed Muller RM (1, 4) telah diterapkan dalam metode ini karena kemampuan
-koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan sebagai berikut:
+koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan dengan:
 
-Karena r = 1 dan m = 4, maka ukuran pesan k dihitung sebagai berikut:
+Karena r = 1 dan m = 4, maka ukuran pesan k dihitung dengan:
 \begin{equation}
     k = \sum_{i=0}^{r} \binom{m}{i} = \binom{4}{0} + \binom{4}{1} = 5 \text{ bits}
     \label{eq:rm}
 \end{equation}
 
-Dan kode berukuran N dihitung sebagai berikut:
+Dan kode berukuran N dihitung dengan:
 
 \begin{equation}
     N = 2^m = 16 \text{ bits}
@@ -969,7 +998,7 @@ example. You may adjust the activities and time schedule according to the
 problem. \newline
 
 \begin{table}[h!]
-    \caption{Activity Schedule (\color{red}example) \label{tab:schedule}}
+    \caption{Activity Schedule \label{tab:schedule}}
     \noindent\begin{tabularx}{\linewidth}{|>{\bfseries}l|l|*{11}{>{\centering\arraybackslash}X|}>{\centering\arraybackslash}X<{\bigstrut}|}
         \hline
         \multicolumn{2}{|l|}{}                   & \multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}                                                                                                                                                                                           \\
@@ -987,21 +1016,64 @@ problem. \newline
         \hline
         5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &       &       &       &       &       &       &       &       \\
         \hline
-        6                                        & Encoding Process                                  &                                  &                                  &                                           & \blue & \blue &       &       &       &       &       &       &       \\
+        6                                        & Design Encoding Process                           &                                  &                                  &                                           & \blue & \blue &       &       &       &       &       &       &       \\
         \hline
-        7                                        & Decoding Process                                  &                                  &                                  &                                           &       & \blue & \blue &       &       &       &       &       &       \\
+        7                                        & Implement embedding schema                        &                                  &                                  &                                           &       & \blue & \blue & \blue & \blue &       &       &       &       \\
         \hline
-        8                                        & Implementation process                            &                                  &                                  &                                           &       &       &       & \blue & \blue & \blue &       &       &       \\
+        8                                        & Design decoding process                           &                                  &                                  &                                           &       &       &       & \blue & \blue & \blue &       &       &       \\
         \hline
-        9                                        & Experiment design                                 &                                  &                                  &                                           &       &       &       &       &       & \blue &       &       &       \\
+        9                                        & Design sharing schema                             &                                  &                                  &                                           &       &       &       &       & \blue & \blue &       &       &       \\
         \hline
-        10                                       & Evaluation and analysis                           &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
+        10                                       & Imperceptibility testing                          &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
         \hline
-        11                                       & Thesis draft                                      &                                  &                                  &                                           &       &       &       &       &       &       & \blue & \blue & \blue \\
+        11                                       & Robbustnes testing                                &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
+        \hline
+        12                                       & Capacity testing                                  &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
+        \hline
+        13                                       & Thesis draft                                      &                                  &                                  &                                           &       &       &       &       &       &       & \blue & \blue & \blue \\
         \hline
 
     \end{tabularx}
 \end{table}
+
+% \begin{table}[h!]
+%     \caption{Activity Schedule \label{tab:schedule}}
+%     \noindent\begin{tabularx}{\linewidth}{|>{\bfseries}l|l|*{11}{>{\centering\arraybackslash}X|}>{\centering\arraybackslash}X<{\bigstrut}|}
+%         \hline
+%         \multicolumn{2}{|l|}{}                   & \multicolumn{12}{c|}{\bfseries SEMESTER\bigstrut}                                                                                                                                                                                           \\
+%         \cline{3-14}
+%         \multicolumn{2}{|c|}{\bfseries Activity} & \multicolumn{3}{c|}{\bfseries 1}                  & \multicolumn{3}{c|}{\bfseries 2} & \multicolumn{3}{c|}{\bfseries 3} & \multicolumn{3}{c|}{\bfseries 4\bigstrut}                                                                         \\
+%         \hline
+
+%         1                                        & Literature study                                  & \blue                            &                                  &                                           &       &       &       &       &       &       &       &       &       \\
+%         \hline
+%         2                                        & Problem identification                            & \blue                            & \blue                            &                                           &       &       &       &       &       &       &       &       &       \\
+%         \hline
+%         3                                        & Contribution formulation                          & \blue                            & \blue                            &                                           &       &       &       &       &       &       &       &       &       \\
+%         \hline
+%         4                                        & Hypothesis formulation                            & \blue                            & \blue                            &                                           &       &       &       &       &       &       &       &       &       \\
+%         \hline
+%         5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &       &       &       &       &       &       &       &       \\
+%         \hline
+%         6                                        & Design encoding process                           &                                  &                                  &                                           & \blue &       &       &       &       &       &       &       &       \\
+%         \hline 
+%         7                                        & Design key generation and embedding               &                                  &                                  &                                           &       & \blue &       &       &       &       &       &       &       \\
+%         \hline
+%         8                                        & Design secret bits embedding                      &                                  &                                  &                                           &       &       & \blue &       &       &       &       &       &       \\
+%         \hline
+%         9                                        & Design decoding process                           &                                  &                                  &                                           &       &       &       & \blue &       &       &       &       &       \\
+%         \hline
+%         10                                       & Imperceptibility analysis                         &                                  &                                  &                                           &       &       &       &       & \blue &       &       &       &       \\
+%         \hline
+%         11                                       & Robustness analysis                              &                                  &                                  &                                           &       &       &       &       &       & \blue &       &       &       \\
+%         \hline
+%         12                                       & Capacity analysis                                 &                                  &                                  &                                           &       &       &       &       &       &       & \blue &       &       \\
+%         \hline
+%         13                                       & Thesis draft                                      &                                  &                                  &                                           &       &       &       &       &       &       &       & \blue & \blue \\
+%         \hline
+
+%     \end{tabularx}
+% \end{table}
 
 %\section{Summary}
 \supervisorcomments
