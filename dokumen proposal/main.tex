@@ -23,14 +23,23 @@
 
 \newpage
 \section{INTRODUCTION \color{red} (assessment 1)}
-Steganografi merupakan teknik menyembunyikan pesan di dalam suatu media penyisipan pesan atau cover image,
-sehingga keberadaan pesan rahasia yang disisipkan tidak dapat dilihat secara langsung \cite{pujianto2021uji}. Steganografi
-memungkinkan pertukaran pesan rahasia melalui penyembunyian informasi pada berbagai media digital seperti gambar, video, dan audio,
-tanpa menimbulkan kecurigaan \cite{siaulhak2023sistem}. Steganografi dapat dipandang sebagai kelanjutan
-kriptografi dan dalam prakteknya pesan rahasia dienkripsi terlebih dahulu, kemudian
-cipherteks disembunyikan di dalam media lain sehingga pihak ketiga tidak menyadari
-keberadaannya. Pesan rahasia yang disembunyikan dapat diekstraksi kembali persis
-sama seperti aslinya \cite{soetarmono2012studi}.
+Dalam era digital yang semakin berkembang, keamanan data digital menjadi
+prioritas utama. Informasi pribadi, data bisnis, dan data kritikal lainnya
+harus dilindungi dari ancaman kebocoran atau akses yang tidak sah. Dalam
+menghadapi tantangan ini, kriptografi dan steganografi muncul sebagai solusi
+penting untuk meningkatkan keamanan data digital.
+
+Steganografi merupakan teknik menyembunyikan pesan di dalam suatu media
+penyisipan pesan atau cover image, sehingga keberadaan pesan rahasia yang
+disisipkan tidak dapat dilihat secara langsung \cite{pujianto2021uji}.
+Steganografi memungkinkan pertukaran pesan rahasia melalui penyembunyian
+informasi pada berbagai media digital seperti gambar, video, dan audio, tanpa
+menimbulkan kecurigaan \cite{siaulhak2023sistem}. Steganografi dapat dipandang
+sebagai kelanjutan kriptografi dan dalam prakteknya pesan rahasia dienkripsi
+terlebih dahulu, kemudian cipherteks disembunyikan di dalam media lain sehingga
+pihak ketiga tidak menyadari keberadaannya. Pesan rahasia yang disembunyikan
+dapat diekstraksi kembali persis sama seperti aslinya
+\cite{soetarmono2012studi}.
 
 Di antara berbagai media digital yang dapat digunakan untuk steganografi,
 gambar menjadi pilihan yang populer karena beberapa alasan. Pertama, gambar
@@ -61,20 +70,50 @@ kapasitas penyembunyian data dibandingkan dengan metode yang hanya menggunakan
 gambar grayscale, sambil tetap mempertahankan kealamiahan gambar yang
 dihasilkan.
 
-Penelitian ini mencakup empat aspek utama: pengetahuan, pengguna, kegunaan, dan
-infrastruktur. Aspek pengetahuan meliputi teknik steganografi gambar berwarna,
-metode berbasis kode, dan analisis kualitas gambar digital, termasuk manipulasi
-channel warna RGB. Pengguna potensial meliputi profesional keamanan informasi,
-peneliti, dan pengembang aplikasi keamanan data. Kegunaan mencakup implementasi
-dalam sistem data hiding, perlindungan hak cipta, dan watermarking, dengan
-fokus pada integrasi yang mudah, efisiensi, dan keseimbangan antara kapasitas
-penyembunyian data, kualitas gambar, dan ketahanan terhadap deteksi. Aspek
-infrastruktur melibatkan penggunaan Mac mini M2 dengan spesifikasi prosesor
-Apple M2 chip dengan 8-core CPU dan 10-core GPU, memori 8GB, penyimpanan SSD
-256GB, dan sistem operasi macOS.
+Aspek pengetahuan dalam penelitian ini berfokus pada teknik steganografi untuk
+gambar berwarna, metode steganografi berbasis kode, dan analisis kualitas
+gambar digital. Hal ini mencakup pemahaman mendalam tentang manipulasi channel
+warna RGB, teknik penyisipan data yang efektif, serta metode evaluasi kualitas
+gambar stego yang dihasilkan. Penekanan khusus diberikan pada optimasi
+penggunaan ketiga channel warna untuk memaksimalkan kapasitas penyimpanan data
+sambil mempertahankan kualitas visual.
+
+Dari sisi pengguna, penelitian ini ditujukan untuk beberapa kelompok utama.
+Pertama, profesional keamanan informasi yang membutuhkan solusi penyembunyian
+data yang andal dan aman. Kedua, peneliti di bidang steganografi dan keamanan
+data yang dapat memanfaatkan metode ini untuk pengembangan lebih lanjut.
+Ketiga, pengembang aplikasi keamanan data yang memerlukan komponen steganografi
+yang efisien dan mudah diintegrasikan.
+
+Aspek kegunaan penelitian mencakup berbagai aplikasi praktis dalam sistem data
+hiding, perlindungan hak cipta, dan watermarking digital. Metode yang
+dikembangkan dirancang dengan mempertimbangkan kemudahan implementasi,
+efisiensi komputasi, dan fleksibilitas penggunaan. Fokus utama adalah mencapai
+keseimbangan optimal antara kapasitas penyembunyian data, kualitas gambar
+hasil, dan ketahanan terhadap berbagai teknik deteksi steganografi.
+
+Infrastruktur yang digunakan dalam penelitian ini berbasis Mac mini M2 dengan
+spesifikasi teknis yang mendukung pemrosesan gambar yang efisien. Sistem
+dilengkapi dengan prosesor Apple M2 chip yang memiliki 8-core CPU dan 10-core
+GPU, didukung oleh 8GB memori dan penyimpanan SSD 256GB. Penggunaan sistem
+operasi macOS memberikan platform yang stabil untuk pengembangan dan pengujian
+metode steganografi yang diusulkan.
 
 \section{Preliminary Literature Review \color{red}(assessment 2)}
-Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap serangan seperti scratching dan kompresi JPEG. Namun, penelitian ini masih diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
+
+Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas
+penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi
+berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas
+visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan
+adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk
+menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari
+piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk
+mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR
+dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan
+untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai
+PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap
+serangan seperti scratching dan kompresi JPEG. Namun, penelitian ini masih
+diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
 
 Pada penelitian yang dilakukan oleh Dwi Andika et al (2020), mereka membahas
 keterbatasan kapasitas penyimpanan dalam teknik steganografi menggunakan
@@ -120,8 +159,6 @@ kemampuannya menjaga kerahasiaan tanpa perubahan signifikan pada kualitas
 gambar atau suara. Namun, ada perubahan ukuran file yang diakibatkan oleh
 proses enkripsi dan penyisipan pesan \cite{wiranata2021aplikasi}.
 
-% fasilitas belum, terkait perangkat simulasi. Masukan perangkat yang digunakan.
-
 Penelitian yang dilakukan oleh Abdillah et al (2023) membahas tentang
 perlindungan data dan akses dengan menggunakan steganografi melalui teknik
 Least Significant Bit (LSB), di mana teks disisipkan dalam gambar melalui
@@ -132,6 +169,30 @@ informasi tanpa mengubah kualitas visual gambar secara signifikan. Namun,
 metode ini memiliki keterbatasan dalam kapasitas penyisipan teks dan rentan
 terhadap serangan manipulasi gambar yang dapat merusak data tersembunyi
 \cite{abdillah2023implementasi}.
+
+Tabel \ref{tab:comparison} menunjukkan perbandingan hasil penelitian terdahulu.
+
+\begin{table}[h!]
+    \caption{Comparison of Previous Research}
+    \begin{tabularx}{\textwidth}{|p{2cm}|X|p{2.5cm}|p{2.5cm}|}
+        \hline
+        \textbf{Author}        & \textbf{Method}                                                    & \textbf{Advantages}                                      & \textbf{Disadvantages}                                  \\
+        \hline
+        Kingsley et al. (2020) & Multiple embedding technique with secret key-based pixel selection & Increased capacity up to 450\%, PSNR improved to 51dB    & Limited to grayscale images only                        \\
+        \hline
+        Andika et al. (2020)   & Modified GifShuffle algorithm for GIF images                       & Increased storage capacity over 256KB                    & Complex implementation, limited to GIF format           \\
+        \hline
+        Susanto et al. (2020)  & Combined LSB with RSA encryption                                   & High PSNR (78dB) for 1024-bit messages                   & Increased complexity with larger messages and RSA keys  \\
+        \hline
+        Basri et al. (2021)    & LSB technique for image-in-image hiding                            & Effective information hiding with minimal visual changes & Limited handling of transparency (alpha channel)        \\
+        \hline
+        Wiranata et al. (2021) & LSB combined with Caesar Cipher and RC4                            & Good security with dual encryption                       & File size increases after embedding                     \\
+        \hline
+        Abdillah et al. (2023) & LSB technique for text embedding                                   & Maintains visual quality effectively                     & Limited text capacity, vulnerable to image manipulation \\
+        \hline
+    \end{tabularx}
+    \label{tab:comparison}
+\end{table}
 
 \section{Problem Statement \textcolor{red}{(Assessment 2)}} \label{request}
 
@@ -147,9 +208,7 @@ Sementara itu, penerapan steganografi pada gambar berwarna (RGB) membuka
 peluang untuk peningkatan kapasitas, namun juga menghadirkan tantangan baru.
 Fikri et al. \cite{fikri2022optimasi} menemukan bahwa meskipun gambar RGB
 menawarkan robbustnes yang baik, terdapat masalah kompatibilitas pada gambar
-dengan dominasi warna gelap. Selain itu, penggunaan multiple embedding pada
-gambar RGB berpotensi meningkatkan kompleksitas komputasi
-\cite{juneja2013improved}.
+dengan dominasi warna gelap \cite{juneja2013improved}.
 
 \section{Objective and Hypothesis \color{red}(assessment 3)} \label{hyp}
 
@@ -195,7 +254,8 @@ Berdasarkan analisis literatur dan tujuan penelitian, kebutuhan utama untuk
 pengembangan metode steganografi berbasis kode dengan penyisipan ganda:
 
 \begin{enumerate}
-    \item Peningkatan kapasitas penyembunyian data minimal 50\%
+    \item Peningkatan kapasitas penyembunyian data minimal 50\% dari metode yang
+          diusulkan oleh Kingsley et al. (2020)
     \item Teknik mempertahankan kualitas visual (PSNR $>$ 40 dB)
     \item Algoritma penyisipan dengan multiple embedding pada gambar RGB
 \end{enumerate}
@@ -645,7 +705,7 @@ diperlukan dalam pemrosesan gambar.
 
     \item Implementasi fungsi evaluasi kualitas:
           \begin{enumerate}
-              \item Perhitungan PSNR (Peak Signal-to-Noise Ratio)
+              \item Perhitungan eSNR (Peak Signal-to-Noise Ratio)
               \item Perhitungan MSE (Mean Square Error)
               \item Analisis imperceptibility hasil steganografi
           \end{enumerate}
@@ -915,7 +975,8 @@ dipulihkan. Hal ini ditentukan menggunakan persamaan \ref{eq:rm} dan
 \ref{eq:rm2}:
 
 Kode Reed Muller RM (1, 4) telah diterapkan dalam metode ini karena kemampuan
-koreksi kesalahannya yang lebih tinggi. Hal ini ditunjukkan dengan:
+koreksi kesalahannya yang lebih tinggi. Angka 1 menunjukkan order/tingkat dari
+kode Reed-Muller Angka 4 menunjukkan dimensi atau jumlah variabel input.
 
 Karena r = 1 dan m = 4, maka ukuran pesan k dihitung dengan:
 \begin{equation}
@@ -947,9 +1008,8 @@ stego yang dihasilkan diekspos di bawah serangan berikut
 \subsubsection{Kapasitas}
 
 Kapasitas penyisipan, EC kemudian ditentukan oleh persamaan berikut:
-
 \begin{equation}
-    EC = \frac{|S|}{H \cdot W}
+    EC = \frac{|S|}{H \cdot W} \text{ (bpp)}
 \end{equation}
 
 Di mana —S— adalah jumlah bit rahasia yang disematkan, H dan W masing-masing
@@ -1016,19 +1076,19 @@ problem. \newline
         \hline
         5                                        & Proposal                                          &                                  &                                  & \blue                                     &       &       &       &       &       &       &       &       &       \\
         \hline
-        6                                        & Design Encoding Process                           &                                  &                                  &                                           & \blue & \blue &       &       &       &       &       &       &       \\
+        6                                        & Design Encoding Process                           &                                  &                                  &                                           & \blue & \blue & \blue & \blue &       &       &       &       &       \\
         \hline
         7                                        & Implement embedding schema                        &                                  &                                  &                                           &       & \blue & \blue & \blue & \blue &       &       &       &       \\
         \hline
-        8                                        & Design decoding process                           &                                  &                                  &                                           &       &       &       & \blue & \blue & \blue &       &       &       \\
+        8                                        & Design decoding process                           &                                  &                                  &                                           &       &       &       & \blue & \blue & \blue & \blue &       &       \\
         \hline
-        9                                        & Design sharing schema                             &                                  &                                  &                                           &       &       &       &       & \blue & \blue &       &       &       \\
+        9                                        & Design sharing schema                             &                                  &                                  &                                           &       &       &       &       & \blue & \blue & \blue & \blue &       \\
         \hline
-        10                                       & Imperceptibility testing                          &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
+        10                                       & Imperceptibility testing                          &                                  &                                  &                                           &       &       &       &       &       &       &       & \blue &       \\
         \hline
-        11                                       & Robbustnes testing                                &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
+        11                                       & Robbustnes testing                                &                                  &                                  &                                           &       &       &       &       &       &       &       & \blue &       \\
         \hline
-        12                                       & Capacity testing                                  &                                  &                                  &                                           &       &       &       &       &       & \blue & \blue & \blue &       \\
+        12                                       & Capacity testing                                  &                                  &                                  &                                           &       &       &       &       &       &       &       & \blue &       \\
         \hline
         13                                       & Thesis draft                                      &                                  &                                  &                                           &       &       &       &       &       &       & \blue & \blue & \blue \\
         \hline
