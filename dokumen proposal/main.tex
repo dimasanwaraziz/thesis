@@ -10,7 +10,7 @@
 
 \begin{document}
 
-\project{Multiple Embedding Steganography for RGB Image}
+\project{Modified Multiple Embedding Steganography for RGB Image}
 \submit{Dimas Anwar Aziz}
 \nim{203022410012}
 \concentration{Cyber Security}
@@ -194,6 +194,22 @@ Tabel \ref{tab:comparison} menunjukkan perbandingan hasil penelitian terdahulu.
     \label{tab:comparison}
 \end{table}
 
+Berdasarkan tabel \ref{tab:comparison}, dapat disimpulkan bahwa berbagai metode
+steganografi telah menunjukkan kelebihan dan kekurangan masing-masing. Metode
+multiple embedding oleh Kingsley et al. (2020) berhasil meningkatkan kapasitas
+penyembunyian data secara signifikan hingga 450\% dengan kualitas visual yang
+baik (PSNR 51 dB), namun terbatas pada gambar grayscale. Metode GifShuffle yang
+dimodifikasi oleh Andika et al. (2020) meningkatkan kapasitas penyimpanan pada
+gambar GIF, tetapi kompleksitas implementasinya tinggi. Kombinasi LSB dan
+enkripsi RSA oleh Susanto et al. (2020) menghasilkan PSNR tinggi (78 dB) namun
+dengan peningkatan kompleksitas. Metode LSB oleh Basri et al. (2021) efektif
+untuk menyembunyikan gambar dalam gambar lain dengan perubahan visual minimal,
+tetapi kurang optimal untuk gambar dengan transparansi. Kombinasi LSB dengan
+Caesar Cipher dan RC4 oleh Wiranata et al. (2021) memberikan keamanan yang baik
+namun meningkatkan ukuran file. Terakhir, metode LSB oleh Abdillah et al.
+(2023) efektif dalam menjaga kualitas visual namun memiliki keterbatasan
+kapasitas teks dan rentan terhadap manipulasi gambar.
+
 \section{Problem Statement \textcolor{red}{(Assessment 2)}} \label{request}
 
 Penelitian sebelumnya dalam steganografi berbasis kode telah menunjukkan
@@ -204,11 +220,14 @@ tinggi. Meskipun demikian, penelitian pada gambar grayscale
 \cite{soetarmono2012studi} masih membatasi pengaplikasiannya karena kurangnya
 fleksibilitas dalam penggunaan channel warna.
 
-Sementara itu, penerapan steganografi pada gambar berwarna (RGB) membuka
-peluang untuk peningkatan kapasitas, namun juga menghadirkan tantangan baru.
-Fikri et al. \cite{fikri2022optimasi} menemukan bahwa meskipun gambar RGB
-menawarkan robbustnes yang baik, terdapat masalah kompatibilitas pada gambar
-dengan dominasi warna gelap \cite{juneja2013improved}.
+Sementara penerapan steganografi pada gambar berwarna (RGB) membuka peluang
+untuk peningkatan kapasitas, juga menghadirkan tantangan baru. Fikri et al.
+\cite{fikri2022optimasi} menemukan bahwa meskipun gambar RGB menawarkan
+robbustnes yang baik, terdapat masalah kompatibilitas pada gambar dengan
+dominasi warna gelap. cover image dengan berbagai warna memiliki uji ketahanan
+yang lebih baik dibandingkan cover image dengan warna dominan hitam. Sebagai
+tambahan, kategori citra (abstrak, buah, hewan, dan pemandangan) sebagai cover
+image juga tidak memiliki peran dalam mempengaruhi nilai uji ketahanan.
 
 \section{Objective and Hypothesis \color{red}(assessment 3)} \label{hyp}
 
@@ -285,7 +304,6 @@ algoritma untuk steganografi berbasis kode dengan multiple embedding.
 %     I --> |Random pixel positions| G
 %     J[Generating Secret Shares from Key] --> |Share 2| K[Embedding Share 2 into Stego Image]
 %     J --> |Share 1| L[Share 1]@{shape: doc}
-%     G --> M[Stego Image]@{shape: doc}
 %     K --> N[Stego Image]@{shape: doc}
 %     G --> |Seed, Stego, Number of Cycles| J
 
@@ -921,8 +939,14 @@ Pada bagian ini, kapasitas penyisipan dari metode yang diusulkan dan metode
 yang digunakan diperiksa. Rasio jumlah bit rahasia yang disematkan dalam gambar
 Cover terhadap jumlah piksel gambar Cover dievaluasi.
 
-Hasil untuk setiap kelompok ditabulasi dan nilai PSNR ditentukan dan
-dibandingkan dengan Metode sebelumnya.
+Pada pengujian ini, eksperimen yang dilakukan di atas akan membandingkan 2
+metode polar codes dengan multiple embedding steganografi dengan metode yang
+digunakan sebelumnya (red muller code dengan multiple embedding). Setiap metode
+akan diuji dengan menggunakan 30 cover image dan 30 secret image yang berbeda.
+
+Karena metode sebelumnya menggunakan gambar hitam putih sedangkan metode yang
+diusulkan menggunakan gambar berwarna, akan terdapat 30 gambar tersebut yang
+
 
 \subsection{Metode Analisis dan Evaluasi}
 
