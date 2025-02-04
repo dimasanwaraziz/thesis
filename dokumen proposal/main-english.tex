@@ -216,6 +216,22 @@ Table \ref{tab:comparison} shows the comparison of previous research results.
     \label{tab:comparison}
 \end{table}
 
+Based on Table \ref{tab:comparison}, it can be concluded that various
+steganography methods have shown their respective advantages and disadvantages.
+The multiple embedding method by Kingsley et al. (2020) successfully increased
+data hiding capacity significantly up to 450\% with good visual quality (PSNR
+51 dB), but it is limited to grayscale images. The modified GifShuffle method
+by Andika et al. (2020) increased storage capacity in GIF images, but its
+implementation complexity is high. The combination of LSB and RSA encryption by
+Susanto et al. (2020) resulted in high PSNR (78 dB) but with increased
+complexity. The LSB method by Basri et al. (2021) is effective for hiding
+images within other images with minimal visual changes, but it is less optimal
+for images with transparency. The combination of LSB with Caesar Cipher and RC4
+by Wiranata et al. (2021) provides good security but increases file size.
+Finally, the LSB method by Abdillah et al. (2023) is effective in maintaining
+visual quality but has limitations in text capacity and is vulnerable to image
+manipulation.
+
 \section{Problem Statement \textcolor{red}{(Assessment 2)}} \label{request}
 
 Previous research in code-based steganography has shown significant progress.
@@ -224,12 +240,6 @@ capacity from around 150\% to 450\%, which is a substantial improvement for
 cases requiring high capacity. However, research on grayscale images
 \cite{soetarmono2012studi} still limits its application due to lack of
 flexibility in using color channels.
-
-Meanwhile, applying steganography to color (RGB) images opens opportunities for
-increased capacity, but also presents new challenges. Fikri et al.
-\cite{fikri2022optimasi} found that although RGB images offer good robustness,
-there are compatibility issues with images dominated by dark colors
-\cite{juneja2013improved}.
 
 \section{Objective and Hypothesis \color{red}(assessment 3)} \label{hyp}
 
@@ -929,11 +939,16 @@ images are exposed under the following attacks
 \subsubsection{Capacity}
 
 In this section, the embedding capacity of the proposed method and the method
-used is examined. The ratio of the number of secret bits embedded in the Cover
-image to the number of Cover image pixels is evaluated.
+used is examined. The ratio of the number of secret bits embedded in the cover
+image to the number of pixels in the cover image is evaluated.
 
-Results for each group are tabulated and PSNR values are determined and
-compared with the previous Method.
+In this test, the experiments conducted above will compare 2 methods: polar
+codes with multiple embedding steganography and the previously used method
+(Reed-Muller code with multiple embedding). Each method will be tested using 30
+different cover images and 30 different secret images.
+
+Since the previous method used grayscale images while the proposed method uses
+color images, there will be 30 of those images that
 
 \subsection{Analysis and Evaluation Method}
 
