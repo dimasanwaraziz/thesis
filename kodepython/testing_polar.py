@@ -2,10 +2,17 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
+import sys
 
-# Load secret image dan hasil ekstraksi
-secret = cv2.imread("secret_image.png", cv2.IMREAD_GRAYSCALE)
-extracted = cv2.imread("extracted_polar_code.png", cv2.IMREAD_GRAYSCALE)
+# Load secret image dan hasil ekstraksi dari parameter input
+if len(sys.argv) != 3:
+    raise ValueError("Gunakan: python testing_polar.py <path_secret_image> <path_extracted_image>")
+
+secret_path = sys.argv[1]
+extracted_path = sys.argv[2]
+
+secret = cv2.imread(secret_path, cv2.IMREAD_GRAYSCALE)
+extracted = cv2.imread(extracted_path, cv2.IMREAD_GRAYSCALE)
 
 if secret is None or extracted is None:
     raise ValueError("Gambar secret atau extracted tidak ditemukan!")

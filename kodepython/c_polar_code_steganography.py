@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from scipy.special import expit
 from skimage.metrics import peak_signal_noise_ratio, structural_similarity
+import sys
 
 
 def polar_encode(data):
@@ -74,8 +75,15 @@ def compute_capacity(secret_img, host_img):
 
 
 # ---- Contoh Penggunaan ----
-host = cv2.imread("host_image.png")
-secret = cv2.imread("secret_image.png", cv2.IMREAD_GRAYSCALE)
+if len(sys.argv) != 3:
+    print("Usage: python c_polar_code_steganography.py <host_image_path> <secret_image_path>")
+    sys.exit(1)
+
+host_image_path = sys.argv[1]
+secret_image_path = sys.argv[2]
+
+host = cv2.imread(host_image_path)
+secret = cv2.imread(secret_image_path, cv2.IMREAD_GRAYSCALE)
 
 capacity_before = compute_capacity(secret, host)
 print(f"Kapasitas sebelum embedding: {capacity_before:.4f} bpp")
