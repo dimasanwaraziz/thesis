@@ -1,0 +1,88 @@
+\documentclass{ittelkom}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tabularx, ragged2e, lmodern, bigstrut}
+\usepackage[sgvnames, table]{xcolor}
+\newcommand{\blue}{\cellcolor{blue!75}}
+
+
+
+
+\begin{document}
+
+\laporancapstonecover{January, 12}{2022}{Research Title}{ANNA}{113041021}{supervisor1}{supervisor2}{email address}
+
+\newpage
+\normalsize
+\tableofcontents
+
+\newpage
+\section*{Progress Summary: (max 500 words)}
+ \label{summary}
+\justify{Write the status of your thesis work. How do you address the comments from both supervisor and examiners. Identify the difficulties of completing the work.
+
+}
+
+
+\section{Background} \label{background}
+Background section provides a description of the basic facts and importance of the research area - What is your research area, the motivation of research, and how important is it for the industry practice/knowledge advancement?
+
+
+\justify{Starting with providing reasons of why phenomenon is chosen as the research topic; possibility that the phenomenon will give new concepts as a result;  }
+
+Afterward, provide a brief outline of the most important studies that have been conducted so far related to above mentioned phenomenon.
+
+At the end of the section, provide brief statement stating {\bf the importance of this phenomenon to be discussed} by showing the gap of existing condition and the future condition.
+
+\section{Literature Review}
+This section provides a summary of previous related research on the research problem and their strength and weakness and a justification of your research - What is known/what have been done by others? And, why your research is still necessary?
+
+If necessary, describe the existing software/system/method which is usually used for solving related problems.
+
+\section{Problem Statement}
+Problem statement concludes the challenge issues/open problems based on {\bf the strength} and limitation emerged on the previous section. It provides a clear and concise description of the issues that need to be addressed - What is the specific problem in that research area that you will address (e.g. lack of understanding of a subject, low performance ...)?
+
+\section{Objective and Hypotheses}
+
+This section should contain objective research direction (sharp and measurable) and the hypotheses (The explanation of method, concept which will be used to solve the problem as well as the reason why they will be used in the research; the explanation about the difference between method, concept, and theorem which will be used and the method, concept method, concept which were used previously ).
+
+\section{Research Method}
+
+This section should contain the following procedure
+
+\subsection{Software/system/method requirement specification }
+Describe the software/system/method requirement which has to be fulfilled by the the developed software/system/method (e.g.describing the scope of work: knowledge, facility, user, and usability).
+
+\subsection{Design and Implementation of the proposed software/system/method }
+Explain the design of the software/system/method and its implementation based on the method which was proposed in the thesis proposal. 
+
+It is better to put the diagram to illustrate the scope of your work (e.g. the input, process and output as well as the environment).
+
+\subsection{Experimental results }
+Explain in detail the experiment strategy and insert all experimental results in the form of table/data/picture. Describe the meaning of the indicated table/data/picture.  
+
+\subsection{Analysis of the experimental results}
+Analysis the experimental results using methods which were proposed in the thesis proposal.
+
+\section{Schedule Realization}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+\begin{table}[h]
+\begin{tabular}{|l|ll|ll|l|l|}
+\hline
+\multicolumn{1}{|c|}{\multirow{2}{*}{Activity}}                       & \multicolumn{2}{c|}{Schedule}                         & \multicolumn{2}{c|}{Realization}                      & \multicolumn{1}{c|}{\multirow{2}{*}{Output Target}} & \multicolumn{1}{c|}{\multirow{2}{*}{Realization}} \\ \cline{2-5}
+\multicolumn{1}{|c|}{}                                                & \multicolumn{1}{c|}{Start} & \multicolumn{1}{c|}{End} & \multicolumn{1}{c|}{Start} & \multicolumn{1}{c|}{End} & \multicolumn{1}{c|}{}                               & \multicolumn{1}{c|}{}                             \\ \hline
+Reference tracing                                                     & \multicolumn{1}{l|}{}      &                          & \multicolumn{1}{l|}{}      &                          &                                                     &                                                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}Requirement \\ identification\end{tabular} & \multicolumn{1}{l|}{}      &                          & \multicolumn{1}{l|}{}      &                          &                                                     &                                                   \\ \hline
+Design process                                                        & \multicolumn{1}{l|}{}      &                          & \multicolumn{1}{l|}{}      &                          &                                                     &                                                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}Implementation \\ process\end{tabular}     & \multicolumn{1}{l|}{}      &                          & \multicolumn{1}{l|}{}      &                          &                                                     &                                                   \\ \hline
+\begin{tabular}[c]{@{}l@{}}Experiment design \\ and plan\end{tabular} & \multicolumn{1}{l|}{}      &                          & \multicolumn{1}{l|}{}      &                          &                                                     &                                                   \\ \hline
+Analysis / Evaluation                                                 & \multicolumn{1}{l|}{}      &                          & \multicolumn{1}{l|}{}      &                          &                                                     &                                                   \\ \hline
+\end{tabular}
+\end{table}
+
+
+%\section{Summary}
+%\supervisorcomments
+\end{document} 
