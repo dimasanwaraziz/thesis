@@ -9,7 +9,8 @@
 
 \begin{document}
 
-\laporancapstonecover{April, 18}{2025}{Multiple Embedding steganography for RGB Image}{Dimas Anwar Aziz}{203022410012}{Prof. Ari Moesriami Barmawi, Ph.D.}{-}{dimasanwaraziz@student.telkomuniversity.ac.id}
+\laporancapstonecover{April, 18}{2025}{RGB Image Steganography Using Multiple Embedding}{Dimas Anwar Aziz}{203022410012}{Prof. Ari Moesriami Barmawi, Ph.D.}{-}{dimasanwaraziz@student.telkomuniversity.ac.id}
+% \laporancapstonecover{April, 18}{2025}{Multiple Embedding steganography for RGB Image}{Dimas Anwar Aziz}{203022410012}{Prof. Ari Moesriami Barmawi, Ph.D.}{-}{dimasanwaraziz@student.telkomuniversity.ac.id}
 
 \newpage
 \normalsize
@@ -38,18 +39,220 @@
 
 \section{Background} \label{background}
 \justify{
-    Keamanan data digital menjadi sangat penting di era digital saat ini untuk melindungi informasi sensitif \cite{pujianto2021uji, siaulhak2023sistem}. Kriptografi dan steganografi adalah dua solusi utama untuk tujuan ini. Steganografi menyembunyikan keberadaan pesan rahasia di dalam media lain, seperti gambar, tanpa terdeteksi \cite{pujianto2021uji}. Umumnya, pesan dienkripsi terlebih dahulu sebelum disembunyikan \cite{soetarmono2012studi}. Gambar digital populer digunakan sebagai media penyembunyian karena ketersediaannya yang luas, kapasitas penyembunyian yang inheren, dan kemudahan manipulasi piksel. Namun, tantangan utamanya adalah menyeimbangkan kapasitas, kualitas gambar, dan ketahanan terhadap deteksi \cite{fikri2022optimasi}. Penelitian ini berfokus pada peningkatan kapasitas steganografi pada gambar berwarna (RGB) yang memiliki tiga channel, melampaui keterbatasan metode sebelumnya yang seringkali fokus pada gambar grayscale. Dengan mengoptimalkan ketiga channel warna, diharapkan kapasitas dapat ditingkatkan signifikan sambil menjaga kualitas visual dan ketahanan.
-}
+    % Keamanan data digital menjadi sangat penting di era digital saat ini untuk melindungi informasi sensitif \cite{pujianto2021uji, siaulhak2023sistem}. Kriptografi dan steganografi adalah dua solusi utama untuk tujuan ini. Steganografi menyembunyikan keberadaan pesan rahasia di dalam media lain, seperti gambar, tanpa terdeteksi \cite{pujianto2021uji}. Umumnya, pesan dienkripsi terlebih dahulu sebelum disembunyikan \cite{soetarmono2012studi}. Gambar digital populer digunakan sebagai media penyembunyian karena ketersediaannya yang luas, kapasitas penyembunyian yang inheren, dan kemudahan manipulasi piksel. Namun, tantangan utamanya adalah menyeimbangkan kapasitas, kualitas gambar, dan ketahanan terhadap deteksi \cite{fikri2022optimasi}. Penelitian ini berfokus pada peningkatan kapasitas steganografi pada gambar berwarna (RGB) yang memiliki tiga channel, melampaui keterbatasan metode sebelumnya yang seringkali fokus pada gambar grayscale. Dengan mengoptimalkan ketiga channel warna, diharapkan kapasitas dapat ditingkatkan signifikan sambil menjaga kualitas visual dan ketahanan.
+
+    Dalam era digital yang semakin berkembang, keamanan data digital menjadi
+    prioritas utama. Informasi pribadi, data bisnis, dan data kritikal lainnya
+    harus dilindungi dari ancaman kebocoran atau akses yang tidak sah. Dalam
+    menghadapi tantangan ini, kriptografi dan steganografi muncul sebagai solusi
+    penting untuk meningkatkan keamanan data digital.
+
+    Steganografi merupakan teknik menyembunyikan pesan di dalam suatu media
+    penyisipan pesan atau cover image, sehingga keberadaan pesan rahasia yang
+    disisipkan tidak dapat dilihat secara langsung \cite{pujianto2021uji}.
+    Steganografi memungkinkan pertukaran pesan rahasia melalui penyembunyian
+    informasi pada berbagai media digital seperti gambar, video, dan audio, tanpa
+    menimbulkan kecurigaan \cite{siaulhak2023sistem}. Steganografi dapat dipandang
+    sebagai kelanjutan kriptografi dan dalam prakteknya pesan rahasia dienkripsi
+    terlebih dahulu, kemudian cipherteks disembunyikan di dalam media lain sehingga
+    pihak ketiga tidak menyadari keberadaannya. Pesan rahasia yang disembunyikan
+    dapat diekstraksi kembali persis sama seperti aslinya
+    \cite{soetarmono2012studi}.
+
+    Di antara berbagai media digital yang dapat digunakan untuk steganografi,
+    gambar menjadi pilihan yang populer karena beberapa alasan. Pertama, gambar
+    digital tersedia secara luas dan pertukaran gambar di internet adalah hal yang
+    umum, sehingga tidak menimbulkan kecurigaan. Kedua, gambar memiliki kapasitas
+    untuk menyembunyikan informasi. Ketiga, manipulasi pixel pada gambar dapat
+    dilakukan dengan berbagai teknik. Namun, tantangan utama dalam steganografi
+    gambar adalah menemukan keseimbangan antara kapasitas penyembunyian data,
+    kualitas gambar, dan ketahanan terhadap deteksi \cite{fikri2022optimasi}.
+
+    Penelitian sebelumnya telah menunjukkan kemajuan signifikan dalam meningkatkan
+    kapasitas penyembunyian data pada gambar grayscale. Kingsley et al.
+    \cite{kingsley2020improving} berhasil meningkatkan kapasitas penyembunyian data
+    hingga 450\% menggunakan metode code base. Meski begitu, penggunaan gambar
+    grayscale membatasi aplikasi praktis karena hanya memiliki satu channel
+    pencahayaan. Di sisi lain, Fikri et al. \cite{fikri2022optimasi}
+    mendemonstrasikan bahwa penerapan steganografi pada gambar berwarna memiliki
+    ketahanan yang baik, meskipun gambar dengan dominasi warna hitam menunjukkan
+    kompatibilitas yang kurang optimal. Berdasarkan temuan-temuan tersebut,
+    penelitian ini bertujuan untuk memperluas metode embedding ke gambar berwarna
+    yang memiliki tiga channel warna (Merah, Hijau, dan Biru). Fokus utama adalah
+    untuk meningkatkan kapasitas penyembunyian data sambil mempertahankan kualitas
+    visual dan ketahanan terhadap deteksi. Penelitian ini juga akan mengevaluasi
+    kompatibilitas metode yang diusulkan dengan berbagai jenis gambar berwarna,
+    termasuk yang memiliki area gelap yang luas. Dengan mengoptimalkan penggunaan
+    ketiga channel warna, diharapkan dapat dicapai peningkatan signifikan dalam
+    kapasitas penyembunyian data dibandingkan dengan metode yang hanya menggunakan
+    gambar grayscale, sambil tetap mempertahankan kealamiahan gambar yang
+    dihasilkan.
+
+    Aspek pengetahuan dalam penelitian ini berfokus pada teknik steganografi untuk
+    gambar berwarna, metode steganografi berbasis kode, dan analisis kualitas
+    gambar digital. Hal ini mencakup pemahaman mendalam tentang manipulasi channel
+    warna RGB, teknik penyisipan data yang efektif, serta metode evaluasi kualitas
+    gambar stego yang dihasilkan. Penekanan khusus diberikan pada optimasi
+    penggunaan ketiga channel warna untuk memaksimalkan kapasitas penyimpanan data
+    sambil mempertahankan kualitas visual.
+
+    Dari sisi pengguna, penelitian ini ditujukan untuk beberapa kelompok utama.
+    Pertama, profesional keamanan informasi yang membutuhkan solusi penyembunyian
+    data yang andal dan aman. Kedua, peneliti di bidang steganografi dan keamanan
+    data yang dapat memanfaatkan metode ini untuk pengembangan lebih lanjut.
+    Ketiga, pengembang aplikasi keamanan data yang memerlukan komponen steganografi
+    yang efisien dan mudah diintegrasikan.
+
+    Aspek kegunaan penelitian mencakup berbagai aplikasi praktis dalam sistem data
+    hiding, perlindungan hak cipta, dan watermarking digital. Metode yang
+    dikembangkan dirancang dengan mempertimbangkan kemudahan implementasi,
+    efisiensi komputasi, dan fleksibilitas penggunaan. Fokus utama adalah mencapai
+    keseimbangan optimal antara kapasitas penyembunyian data, kualitas gambar
+    hasil, dan ketahanan terhadap berbagai teknik deteksi steganografi.
+
+    Infrastruktur yang digunakan dalam penelitian ini berbasis Mac mini M2 dengan
+    spesifikasi teknis yang mendukung pemrosesan gambar yang efisien. Sistem
+    dilengkapi dengan prosesor Apple M2 chip yang memiliki 8-core CPU dan 10-core
+    GPU, didukung oleh 8GB memori dan penyimpanan SSD 256GB. Penggunaan sistem
+    operasi macOS memberikan platform yang stabil untuk pengembangan dan pengujian
+    metode steganografi yang diusulkan. }
 
 \section{Literature Review}
 \justify{
-    Penelitian sebelumnya telah mengeksplorasi berbagai metode steganografi. Kingsley et al. \cite{kingsley2020improving} menggunakan teknik multiple embedding berbasis kode pada gambar grayscale dan berhasil meningkatkan kapasitas hingga 450\% dengan PSNR 51 dB, namun terbatas pada grayscale. Penelitian lain seperti modifikasi GifShuffle oleh Andika et al. \cite{andika2020modifikasi} meningkatkan kapasitas pada GIF tetapi kompleks. Kombinasi LSB dengan RSA oleh Susanto et al. \cite{susanto2020kombinasi} atau dengan Caesar Cipher dan RC4 oleh Wiranata et al. \cite{wiranata2021aplikasi} meningkatkan keamanan namun menambah kompleksitas atau ukuran file. Metode LSB standar, seperti yang diteliti Basri et al. \cite{basri2021penerapan} dan Abdillah et al. \cite{abdillah2023implementasi}, efektif menjaga kualitas visual tetapi terbatas kapasitasnya dan rentan manipulasi. Secara umum, metode yang ada menunjukkan trade-off antara kapasitas, kualitas visual (PSNR), dan ketahanan, serta seringkali terbatas pada format gambar tertentu (misalnya grayscale atau GIF). Penelitian ini mencoba mengatasi keterbatasan kapasitas pada metode berbasis kode sebelumnya dengan menerapkan multiple embedding dan Polar Codes pada gambar RGB.
+    % Penelitian sebelumnya telah mengeksplorasi berbagai metode steganografi. Kingsley et al. \cite{kingsley2020improving} menggunakan teknik multiple embedding berbasis kode pada gambar grayscale dan berhasil meningkatkan kapasitas hingga 450\% dengan PSNR 51 dB, namun terbatas pada grayscale. Penelitian lain seperti modifikasi GifShuffle oleh Andika et al. \cite{andika2020modifikasi} meningkatkan kapasitas pada GIF tetapi kompleks. Kombinasi LSB dengan RSA oleh Susanto et al. \cite{susanto2020kombinasi} atau dengan Caesar Cipher dan RC4 oleh Wiranata et al. \cite{wiranata2021aplikasi} meningkatkan keamanan namun menambah kompleksitas atau ukuran file. Metode LSB standar, seperti yang diteliti Basri et al. \cite{basri2021penerapan} dan Abdillah et al. \cite{abdillah2023implementasi}, efektif menjaga kualitas visual tetapi terbatas kapasitasnya dan rentan manipulasi. Secara umum, metode yang ada menunjukkan trade-off antara kapasitas, kualitas visual (PSNR), dan ketahanan, serta seringkali terbatas pada format gambar tertentu (misalnya grayscale atau GIF). Penelitian ini mencoba mengatasi keterbatasan kapasitas pada metode berbasis kode sebelumnya dengan menerapkan multiple embedding dan Polar Codes pada gambar RGB.
+
+    Kingsley et al (2020) pada papernya membahas tentang rendahnya kapasitas
+    penyisipan dan nilai PSNR (Peak Signal-to-Noise Ratio) pada skema steganografi
+    berbasis kode yang ada, yang hanya mencapai 150\% kapasitas dan 48 dB kualitas
+    visual gambar stegano. Untuk mengatasi masalah ini, metode yang diusulkan
+    adalah teknik penyisipan ganda (multiple embedding), yang bertujuan untuk
+    menyisipkan bit rahasia lebih dari sekali pada LSB (Least Significant Bit) dari
+    piksel yang dipilih berdasarkan kunci rahasia. Parameter yang digunakan untuk
+    mengukur keberhasilan metode ini meliputi kapasitas penyisipan dan nilai PSNR
+    dari gambar stego yang dihasilkan. Kelebihan dari metode ini adalah kemampuan
+    untuk mencapai kapasitas penyisipan yang lebih tinggi hingga 450\% dan nilai
+    PSNR yang meningkat menjadi 51 dB, serta meningkatkan ketahanan terhadap
+    serangan seperti scratching dan kompresi JPEG. Namun, penelitian ini masih
+    diterapkan pada gambar hitam putih \cite{kingsley2020improving}.
+
+    Pada penelitian yang dilakukan oleh Dwi Andika et al (2020), mereka membahas
+    keterbatasan kapasitas penyimpanan dalam teknik steganografi menggunakan
+    algoritma GifShuffle pada citra GIF. Tantangan utama yang dihadapi adalah
+    kesulitan dalam menyisipkan pesan teks dengan ukuran besar. Untuk mengatasi
+    masalah ini, mereka memodifikasi nilai bit dalam penyimpanan pesan, yang
+    bertujuan meningkatkan kapasitas tanpa mengorbankan kualitas visual gambar. Uji
+    coba menggunakan parameter seperti ukuran data yang dapat disisipkan serta
+    kualitas gambar menunjukkan bahwa metode ini berhasil meningkatkan kapasitas
+    penyimpanan hingga lebih dari 256 KB tanpa mengurangi kualitas gambar secara
+    signifikan. Namun, metode ini memerlukan modifikasi tambahan pada algoritma
+    GifShuffle yang dapat meningkatkan kompleksitas implementasi dan pemrosesan
+    \cite{andika2020modifikasi}.
+
+    Susanto et al (2020) dalam penelitiannya menggabungkan metode steganografi
+    Least Significant Bit (LSB) dengan algoritma enkripsi RSA untuk meningkatkan
+    keamanan dalam penyisipan pesan terenkripsi pada gambar. Parameter yang
+    digunakan untuk mengukur kualitas gambar setelah penyisipan adalah Peak
+    Signal-to-Noise Ratio (PSNR), dengan hasil yang menunjukkan PSNR tertinggi
+    sebesar 78 dB untuk pesan berukuran 1024 bit. Kelebihan metode ini adalah
+    perubahan kualitas gambar yang hampir tidak terlihat, namun kekurangannya
+    adalah kompleksitas yang meningkat seiring dengan ukuran pesan dan besarnya
+    kunci RSA yang digunakan, yang memengaruhi performa
+    \cite{susanto2020kombinasi}.
+
+    Basri et al (2021) meneliti penggunaan metode steganografi dengan teknik Least
+    Significant Bit (LSB) untuk menyembunyikan gambar di dalam gambar lainnya,
+    khususnya dalam konteks interaksi sosial melalui media digital. Penelitian ini
+    mengukur rasio ukuran gambar tersembunyi terhadap gambar cover serta kemampuan
+    gambar cover mempertahankan kualitas visualnya. Hasilnya menunjukkan bahwa
+    metode ini efektif menyembunyikan informasi tanpa perubahan signifikan pada
+    gambar cover. Namun, metode ini memiliki keterbatasan dalam menangani gambar
+    dengan transparansi, karena hanya memperhitungkan komponen warna merah, hijau,
+    dan biru (RGB), tanpa memperhitungkan komponen alpha \cite{basri2021penerapan}.
+
+    Penelitian Wiranata et al (2021) berfokus pada penyisipan pesan rahasia dalam
+    gambar dan audio menggunakan metode Least Significant Bit (LSB) yang
+    dikombinasikan dengan enkripsi Caesar Chipper dan Rivest Code 4 untuk menjaga
+    kerahasiaan data. Penelitian ini menguji kemampuan aplikasi untuk
+    menyembunyikan dan mengambil pesan secara utuh, serta perubahan ukuran file
+    gambar dan audio setelah proses penyisipan. Kelebihan metode ini adalah
+    kemampuannya menjaga kerahasiaan tanpa perubahan signifikan pada kualitas
+    gambar atau suara. Namun, ada perubahan ukuran file yang diakibatkan oleh
+    proses enkripsi dan penyisipan pesan \cite{wiranata2021aplikasi}.
+
+    Penelitian yang dilakukan oleh Abdillah et al (2023) membahas tentang
+    perlindungan data dan akses dengan menggunakan steganografi melalui teknik
+    Least Significant Bit (LSB), di mana teks disisipkan dalam gambar melalui
+    perubahan nilai pixel terkecil. Parameter yang diukur mencakup akurasi
+    penyisipan teks dan kualitas gambar yang tetap terjaga setelah proses encoding
+    dan decoding. Kelebihan utama metode ini adalah kemampuannya menyembunyikan
+    informasi tanpa mengubah kualitas visual gambar secara signifikan. Namun,
+    metode ini memiliki keterbatasan dalam kapasitas penyisipan teks dan rentan
+    terhadap serangan manipulasi gambar yang dapat merusak data tersembunyi
+    \cite{abdillah2023implementasi}.
+
+    Tabel \ref{tab:comparison} menunjukkan perbandingan hasil penelitian terdahulu.
+
+    \begin{table}[h!]
+        \caption{Comparison of Previous Research}
+        \begin{tabularx}{\textwidth}{|p{2cm}|X|p{2.5cm}|p{2.5cm}|}
+            \hline
+            \textbf{Author}        & \textbf{Method}                                                    & \textbf{Advantages}                                      & \textbf{Disadvantages}                                  \\
+            \hline
+            Kingsley et al. (2020) & Multiple embedding technique with secret key-based pixel selection & Increased capacity up to 450\%, PSNR improved to 51dB    & Limited to grayscale images only                        \\
+            \hline
+            Andika et al. (2020)   & Modified GifShuffle algorithm for GIF images                       & Increased storage capacity over 256KB                    & Complex implementation, limited to GIF format           \\
+            \hline
+            Susanto et al. (2020)  & Combined LSB with RSA encryption                                   & High PSNR (78dB) for 1024-bit messages                   & Increased complexity with larger messages and RSA keys  \\
+            \hline
+            Basri et al. (2021)    & LSB technique for image-in-image hiding                            & Effective information hiding with minimal visual changes & Limited handling of transparency (alpha channel)        \\
+            \hline
+            Wiranata et al. (2021) & LSB combined with Caesar Cipher and RC4                            & Good security with dual encryption                       & File size increases after embedding                     \\
+            \hline
+            Abdillah et al. (2023) & LSB technique for text embedding                                   & Maintains visual quality effectively                     & Limited text capacity, vulnerable to image manipulation \\
+            \hline
+        \end{tabularx}
+        \label{tab:comparison}
+    \end{table}
+
+    Berdasarkan tabel \ref{tab:comparison}, dapat disimpulkan bahwa berbagai metode
+    steganografi telah menunjukkan kelebihan dan kekurangan masing-masing. Metode
+    multiple embedding oleh Kingsley et al. (2020) berhasil meningkatkan kapasitas
+    penyembunyian data secara signifikan hingga 450\% dengan kualitas visual yang
+    baik (PSNR 51 dB), namun terbatas pada gambar grayscale. Metode GifShuffle yang
+    dimodifikasi oleh Andika et al. (2020) meningkatkan kapasitas penyimpanan pada
+    gambar GIF, tetapi kompleksitas implementasinya tinggi. Kombinasi LSB dan
+    enkripsi RSA oleh Susanto et al. (2020) menghasilkan PSNR tinggi (78 dB) namun
+    dengan peningkatan kompleksitas. Metode LSB oleh Basri et al. (2021) efektif
+    untuk menyembunyikan gambar dalam gambar lain dengan perubahan visual minimal,
+    tetapi kurang optimal untuk gambar dengan transparansi. Kombinasi LSB dengan
+    Caesar Cipher dan RC4 oleh Wiranata et al. (2021) memberikan keamanan yang baik
+    namun meningkatkan ukuran file. Terakhir, metode LSB oleh Abdillah et al.
+    (2023) efektif dalam menjaga kualitas visual namun memiliki keterbatasan
+    kapasitas teks dan rentan terhadap manipulasi gambar.
+
+    Artikel ini memperkenalkan skema steganografi kuantum yang menyembunyikan citra
+    abu-abu di dalam citra berwarna. Keamanan ditingkatkan dengan menggunakan
+    pengacakan Arnold dan menyematkan citra rahasia dalam tiga cara berbeda: DWT di
+    saluran R, DCT di saluran G, dan LSB di saluran B. Pendekatan ini meningkatkan
+    ketidaktampakan, keamanan, dan ketahanan steganografi. PSNR rata-rata adalah
+    54,33 dB, menunjukkan kualitas visual yang tinggi, dan skema ini dapat
+    menangani citra rahasia hingga setengah ukuran citra sampul. Namun, artikel
+    tersebut mengakui kurangnya dukungan perangkat keras untuk komputer kuantum dan
+    bergantung pada simulasi komputer klasik untuk pengujian.\cite{dong2024new}
+
 }
 
 \section{Problem Statement}
 \justify{
-    Metode steganografi berbasis kode sebelumnya, seperti yang dikembangkan oleh Kingsley et al. \cite{kingsley2020improving}, telah berhasil meningkatkan kapasitas penyembunyian data secara signifikan hingga 450\%. Namun, implementasinya pada gambar grayscale membatasi aplikasinya secara luas \cite{soetarmono2012studi} karena sebagian besar gambar digital yang digunakan saat ini adalah gambar berwarna (RGB) yang memiliki tiga channel warna. Terdapat kebutuhan untuk mengembangkan metode steganografi berbasis kode yang dapat memanfaatkan potensi penuh gambar RGB untuk mencapai kapasitas penyembunyian yang lebih tinggi sambil tetap menjaga kualitas visual yang baik dan ketahanan terhadap deteksi.
-}
+    % Metode steganografi berbasis kode sebelumnya, seperti yang dikembangkan oleh Kingsley et al. \cite{kingsley2020improving}, telah berhasil meningkatkan kapasitas penyembunyian data secara signifikan hingga 450\%. Namun, implementasinya pada gambar grayscale membatasi aplikasinya secara luas \cite{soetarmono2012studi} karena sebagian besar gambar digital yang digunakan saat ini adalah gambar berwarna (RGB) yang memiliki tiga channel warna. Terdapat kebutuhan untuk mengembangkan metode steganografi berbasis kode yang dapat memanfaatkan potensi penuh gambar RGB untuk mencapai kapasitas penyembunyian yang lebih tinggi sambil tetap menjaga kualitas visual yang baik dan ketahanan terhadap deteksi.
+
+    Penelitian sebelumnya dalam steganografi berbasis kode telah menunjukkan
+    kemajuan signifikan. Kingsley et al. \cite{kingsley2020improving} berhasil
+    meningkatkan kapasitas penyembunyian data dari sekitar 150\% menjadi 450\%,
+    yang merupakan peningkatan substansial untuk case yang membutuhkan kapasitas
+    tinggi. Meskipun demikian, penelitian pada gambar grayscale
+    \cite{soetarmono2012studi} masih membatasi pengaplikasiannya karena kurangnya
+    fleksibilitas dalam penggunaan channel warna. }
 
 \section{Objective and Hypotheses}
 \justify{
@@ -85,8 +288,28 @@
 
 \subsection{Design and Implementation of the proposed method }
 \justify{
-    Desain metode yang diusulkan melibatkan beberapa tahapan kunci seperti yang diilustrasikan pada Gambar 1 dalam proposal. Proses utamanya adalah menyisipkan bit-bit rahasia dari 'Secret Image' ke dalam 'Cover Color Image' menggunakan Polar Codes. Polar Codes digunakan untuk mengkodekan data rahasia sebelum penyisipan untuk meningkatkan reliabilitas dan mencapai kapasitas yang tinggi dengan kompleksitas $O(N \log N)$. Posisi piksel untuk penyisipan ditentukan secara acak namun deterministik berdasarkan seed. Selain itu, digunakan mekanisme Key Trace yang disisipkan ke dalam 'Agreed Image' untuk menghasilkan 'Agreed Stego', serta skema pembagian kunci (Shamir's Secret Sharing) di mana 'Share 2' disisipkan ke 'Stego Image' dan 'Share 1' disimpan terpisah. Implementasi dilakukan menggunakan Python dengan library OpenCV dan NumPy, mendukung gambar RGB dan grayscale untuk perbandingan. Fokus implementasi adalah pada mekanisme multiple embedding, adaptasi Polar Codes untuk RGB, optimasi kapasitas ($>$50\%), dan preservasi kualitas (PSNR $>$ 40 dB).
-}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{gambar/proposed.png}
+        \caption{Design method}
+        \label{fig:flow}
+    \end{figure}
+
+    Desain metode yang diusulkan melibatkan beberapa tahapan kunci seperti yang
+    diilustrasikan pada Gambar 1. Proses utamanya adalah menyisipkan bit-bit
+    rahasia dari 'Secret Image' ke dalam 'Cover Color Image' menggunakan Polar
+    Codes. Polar Codes digunakan untuk mengkodekan data rahasia sebelum penyisipan
+    untuk meningkatkan reliabilitas dan mencapai kapasitas yang tinggi dengan
+    kompleksitas $O(N \log N)$. Posisi piksel untuk penyisipan ditentukan secara
+    acak namun deterministik berdasarkan seed. Selain itu, digunakan mekanisme Key
+    Trace yang disisipkan ke dalam 'Agreed Image' untuk menghasilkan 'Agreed
+    Stego', serta skema pembagian kunci (Shamir's Secret Sharing) di mana 'Share 2'
+    disisipkan ke 'Stego Image' dan 'Share 1' disimpan terpisah. Implementasi
+    dilakukan menggunakan Python dengan library OpenCV dan NumPy, mendukung gambar
+    RGB dan grayscale untuk perbandingan. Fokus implementasi adalah pada mekanisme
+    multiple embedding, adaptasi Polar Codes untuk RGB, optimasi kapasitas
+    ($>$50\%), dan preservasi kualitas (PSNR $>$ 40 dB). }
 
 \subsection{Experimental results }
 \justify{
