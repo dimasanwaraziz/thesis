@@ -3,14 +3,13 @@
 \usepackage{multirow}
 \usepackage{tabularx, ragged2e, lmodern, bigstrut}
 \usepackage[sgvnames, table]{xcolor}
+\usepackage{cite} % Tambahkan paket cite untuk penanganan sitasi yang lebih baik
+
 \newcommand{\blue}{\cellcolor{blue!75}}
-
-
-
 
 \begin{document}
 
-\laporancapstonecover{April, 17}{2025}{Multiple Embedding steganography for RGB Image}{Dimas Anwar Aziz}{203022410012}{Prof. Ari Moesriami Barmawi, Ph.D.}{-}{dimasanwaraziz@student.telkomuniversity.ac.id}
+\laporancapstonecover{April, 18}{2025}{Multiple Embedding steganography for RGB Image}{Dimas Anwar Aziz}{203022410012}{Prof. Ari Moesriami Barmawi, Ph.D.}{-}{dimasanwaraziz@student.telkomuniversity.ac.id}
 
 \newpage
 \normalsize
@@ -19,91 +18,186 @@
 \newpage
 \section*{Progress Summary: (max 500 words)}
 \label{summary}
-\justify{Write the status of your thesis work. How do you address the comments from both supervisor and examiners. Identify the difficulties of completing the work.
+\justify{
+    Penelitian mengenai steganografi Multiple Embedding untuk gambar RGB telah mencapai sekitar 50\% kemajuan. Tahapan studi literatur, identifikasi masalah, formulasi kontribusi, dan penyusunan proposal telah diselesaikan. Saat ini, fokus penelitian berada pada tahap desain dan implementasi metode yang diusulkan. Berdasarkan studi awal dan tinjauan literatur, teridentifikasi bahwa metode sebelumnya yang menggunakan pendekatan berbasis kode seperti Reed-Muller memiliki keterbatasan, terutama dalam hal kapasitas pada gambar grayscale \cite{kingsley2020improving}. Oleh karena itu, penelitian ini mengusulkan penggunaan Polar Codes yang dikombinasikan dengan teknik multiple embedding untuk gambar RGB. Tujuannya adalah meningkatkan kapasitas penyembunyian data secara signifikan (target minimal 50\% lebih tinggi dari metode Kingsley et al. \cite{kingsley2020improving}) sambil mempertahankan kualitas visual gambar stego (PSNR $>$ 40 dB).
 
-}
+    Proses desain metode, termasuk alur kerja encoding, pembangkitan jejak kunci,
+    penyisipan kunci dan data rahasia menggunakan Polar Codes, serta skema
+    pembagian kunci (secret sharing) telah dirancang. Tahap implementasi awal
+    sedang berjalan, mencakup pengembangan fungsi-fungsi inti dalam Python
+    menggunakan library seperti OpenCV dan NumPy. Tantangan utama saat ini adalah
+    mengoptimalkan algoritma Polar Codes untuk penyisipan pada ketiga channel warna
+    RGB secara efisien dan memastikan integrasi yang mulus dengan mekanisme
+    multiple embedding. Tahap selanjutnya adalah pengujian awal imperceptibility
+    dan kapasitas, diikuti dengan pengujian robustness terhadap berbagai serangan.
+    Kesulitan yang dihadapi terutama berkaitan dengan kompleksitas matematis Polar
+    Codes dan penyesuaiannya untuk domain steganografi gambar berwarna. Komentar
+    dari pembimbing terkait metode penelitian akan terus diintegrasikan dalam
+    pengembangan. Diharapkan tahap implementasi dan pengujian awal dapat
+    diselesaikan sesuai jadwal. }
 
 \section{Background} \label{background}
-Background section provides a description of the basic facts and importance of
-the research area - What is your research area, the motivation of research, and
-how important is it for the industry practice/knowledge advancement?
-
-\justify{Starting with providing reasons of why phenomenon is chosen as the research topic; possibility that the phenomenon will give new concepts as a result;  }
-
-Afterward, provide a brief outline of the most important studies that have been
-conducted so far related to above mentioned phenomenon.
-
-At the end of the section, provide brief statement stating {\bf the importance
-        of this phenomenon to be discussed} by showing the gap of existing condition
-and the future condition.
+\justify{
+    Keamanan data digital menjadi sangat penting di era digital saat ini untuk melindungi informasi sensitif \cite{pujianto2021uji, siaulhak2023sistem}. Kriptografi dan steganografi adalah dua solusi utama untuk tujuan ini. Steganografi menyembunyikan keberadaan pesan rahasia di dalam media lain, seperti gambar, tanpa terdeteksi \cite{pujianto2021uji}. Umumnya, pesan dienkripsi terlebih dahulu sebelum disembunyikan \cite{soetarmono2012studi}. Gambar digital populer digunakan sebagai media penyembunyian karena ketersediaannya yang luas, kapasitas penyembunyian yang inheren, dan kemudahan manipulasi piksel. Namun, tantangan utamanya adalah menyeimbangkan kapasitas, kualitas gambar, dan ketahanan terhadap deteksi \cite{fikri2022optimasi}. Penelitian ini berfokus pada peningkatan kapasitas steganografi pada gambar berwarna (RGB) yang memiliki tiga channel, melampaui keterbatasan metode sebelumnya yang seringkali fokus pada gambar grayscale. Dengan mengoptimalkan ketiga channel warna, diharapkan kapasitas dapat ditingkatkan signifikan sambil menjaga kualitas visual dan ketahanan.
+}
 
 \section{Literature Review}
-This section provides a summary of previous related research on the research
-problem and their strength and weakness and a justification of your research -
-What is known/what have been done by others? And, why your research is still
-necessary?
-
-If necessary, describe the existing software/system/method which is usually
-used for solving related problems.
+\justify{
+    Penelitian sebelumnya telah mengeksplorasi berbagai metode steganografi. Kingsley et al. \cite{kingsley2020improving} menggunakan teknik multiple embedding berbasis kode pada gambar grayscale dan berhasil meningkatkan kapasitas hingga 450\% dengan PSNR 51 dB, namun terbatas pada grayscale. Penelitian lain seperti modifikasi GifShuffle oleh Andika et al. \cite{andika2020modifikasi} meningkatkan kapasitas pada GIF tetapi kompleks. Kombinasi LSB dengan RSA oleh Susanto et al. \cite{susanto2020kombinasi} atau dengan Caesar Cipher dan RC4 oleh Wiranata et al. \cite{wiranata2021aplikasi} meningkatkan keamanan namun menambah kompleksitas atau ukuran file. Metode LSB standar, seperti yang diteliti Basri et al. \cite{basri2021penerapan} dan Abdillah et al. \cite{abdillah2023implementasi}, efektif menjaga kualitas visual tetapi terbatas kapasitasnya dan rentan manipulasi. Secara umum, metode yang ada menunjukkan trade-off antara kapasitas, kualitas visual (PSNR), dan ketahanan, serta seringkali terbatas pada format gambar tertentu (misalnya grayscale atau GIF). Penelitian ini mencoba mengatasi keterbatasan kapasitas pada metode berbasis kode sebelumnya dengan menerapkan multiple embedding dan Polar Codes pada gambar RGB.
+}
 
 \section{Problem Statement}
-Problem statement concludes the challenge issues/open problems based on {\bf
-        the strength} and limitation emerged on the previous section. It provides a
-clear and concise description of the issues that need to be addressed - What is
-the specific problem in that research area that you will address (e.g. lack of
-understanding of a subject, low performance ...)?
+\justify{
+    Metode steganografi berbasis kode sebelumnya, seperti yang dikembangkan oleh Kingsley et al. \cite{kingsley2020improving}, telah berhasil meningkatkan kapasitas penyembunyian data secara signifikan hingga 450\%. Namun, implementasinya pada gambar grayscale membatasi aplikasinya secara luas \cite{soetarmono2012studi} karena sebagian besar gambar digital yang digunakan saat ini adalah gambar berwarna (RGB) yang memiliki tiga channel warna. Terdapat kebutuhan untuk mengembangkan metode steganografi berbasis kode yang dapat memanfaatkan potensi penuh gambar RGB untuk mencapai kapasitas penyembunyian yang lebih tinggi sambil tetap menjaga kualitas visual yang baik dan ketahanan terhadap deteksi.
+}
 
 \section{Objective and Hypotheses}
-
-This section should contain objective research direction (sharp and measurable)
-and the hypotheses (The explanation of method, concept which will be used to
-solve the problem as well as the reason why they will be used in the research;
-the explanation about the difference between method, concept, and theorem which
-will be used and the method, concept method, concept which were used previously
-).
+\justify{
+    Tujuan utama penelitian ini adalah:
+    \begin{enumerate}
+        \item Mengembangkan teknik steganografi berbasis kode dengan multiple embedding yang
+              dioptimalkan untuk gambar RGB, dengan target peningkatan kapasitas
+              penyembunyian data minimal 50\% dibandingkan metode sebelumnya (Kingsley et al.
+              \cite{kingsley2020improving}). Hipotesisnya adalah penggunaan Polar Codes pada
+              gambar RGB akan memungkinkan peningkatan kapasitas yang lebih besar daripada
+              aplikasi pada gambar grayscale.
+        \item Mempertahankan kualitas visual gambar stego dengan nilai Peak Signal-to-Noise
+              Ratio (PSNR) di atas 40 dB. Hipotesisnya adalah peningkatan kapasitas melalui
+              multiple embedding dan Polar Codes tidak akan secara signifikan menurunkan
+              kualitas visual gambar \cite{nasution2018image}.
+    \end{enumerate}
+    Metode yang diusulkan, yaitu multiple embedding dengan Polar Codes, dipilih karena potensi Polar Codes dalam mencapai kapasitas Shannon dengan kompleksitas yang relatif rendah dan kemampuannya dalam koreksi kesalahan, yang diharapkan dapat menyeimbangkan antara kapasitas dan kualitas visual pada gambar RGB.
+}
 
 \section{Research Method}
+\subsection{Method requirement specification }
+\justify{
+    Kebutuhan utama metode yang dikembangkan adalah:
+    \begin{enumerate}
+        \item Mampu meningkatkan kapasitas penyembunyian data minimal 50\% dibandingkan
+              metode Kingsley et al. \cite{kingsley2020improving}.
+        \item Menjaga kualitas visual gambar stego dengan PSNR di atas 40 dB.
+        \item Mengimplementasikan algoritma penyisipan multiple embedding yang efektif untuk
+              gambar berwarna RGB.
+    \end{enumerate}
+    Sistem harus dapat memproses gambar input (secret image) dan gambar penampung (cover image) dalam format RGB, melakukan proses encoding/embedding dan decoding/extraction, serta tahan terhadap serangan umum.
+}
 
-This section should contain the following procedure
-
-\subsection{Software/system/method requirement specification }
-Describe the software/system/method requirement which has to be fulfilled by
-the the developed software/system/method (e.g.describing the scope of work:
-knowledge, facility, user, and usability).
-
-\subsection{Design and Implementation of the proposed software/system/method }
-Explain the design of the software/system/method and its implementation based
-on the method which was proposed in the thesis proposal.
-
-It is better to put the diagram to illustrate the scope of your work (e.g. the
-input, process and output as well as the environment).
+\subsection{Design and Implementation of the proposed method }
+\justify{
+    Desain metode yang diusulkan melibatkan beberapa tahapan kunci seperti yang diilustrasikan pada Gambar 1 dalam proposal. Proses utamanya adalah menyisipkan bit-bit rahasia dari 'Secret Image' ke dalam 'Cover Color Image' menggunakan Polar Codes. Polar Codes digunakan untuk mengkodekan data rahasia sebelum penyisipan untuk meningkatkan reliabilitas dan mencapai kapasitas yang tinggi dengan kompleksitas $O(N \log N)$. Posisi piksel untuk penyisipan ditentukan secara acak namun deterministik berdasarkan seed. Selain itu, digunakan mekanisme Key Trace yang disisipkan ke dalam 'Agreed Image' untuk menghasilkan 'Agreed Stego', serta skema pembagian kunci (Shamir's Secret Sharing) di mana 'Share 2' disisipkan ke 'Stego Image' dan 'Share 1' disimpan terpisah. Implementasi dilakukan menggunakan Python dengan library OpenCV dan NumPy, mendukung gambar RGB dan grayscale untuk perbandingan. Fokus implementasi adalah pada mekanisme multiple embedding, adaptasi Polar Codes untuk RGB, optimasi kapasitas ($>$50\%), dan preservasi kualitas (PSNR $>$ 40 dB).
+}
 
 \subsection{Experimental results }
-Explain in detail the experiment strategy and insert all experimental results
-in the form of table/data/picture. Describe the meaning of the indicated
-table/data/picture.
+\justify{
+    Tahap eksperimen dirancang untuk mengevaluasi tiga aspek utama: Imperceptibility, Robustness, dan Capacity, seperti pada Gambar 2 proposal. Imperceptibility diukur menggunakan Mean Square Error (MSE) dan Peak Signal-to-Noise Ratio (PSNR) untuk membandingkan kualitas visual gambar stego dengan gambar asli. Robustness diuji terhadap berbagai serangan seperti Noise (Gaussian \cite{selamiEffectGaussian}, Salt \& Pepper \cite{kaisar2008salt}, Speckle \cite{mansourpour2006effects}), Cropping, Scratching (Single \& Multiple), dan Kompresi JPEG \cite{reddy2015medical}, dengan mengukur PSNR gambar rahasia yang berhasil dipulihkan. Capacity dievaluasi dengan mengukur rasio bit rahasia yang dapat disematkan terhadap ukuran gambar cover (bpp), menggunakan variasi ukuran secret image dan karakteristik gambar cover. Hasil eksperimen metode yang diusulkan (Polar Codes dengan multiple embedding) akan dibandingkan dengan metode sebelumnya (Reed-Muller code dengan multiple embedding). Saat ini, pengujian awal sedang dipersiapkan seiring dengan penyelesaian tahap implementasi.
+}
 
 \subsection{Analysis of the experimental results}
-Analysis the experimental results using methods which were proposed in the
-thesis proposal.
+\justify{
+    Analisis hasil eksperimen akan difokuskan pada perbandingan kuantitatif antara metode yang diusulkan (Polar Codes) dan metode acuan (Reed-Muller). Metrik utama yang akan dianalisis adalah:
+    \begin{itemize}
+        \item Imperceptibility: Nilai MSE dan PSNR akan dihitung dan dibandingkan. PSNR yang
+              lebih tinggi (di atas 40 dB) dan MSE yang lebih rendah menunjukkan kualitas
+              visual yang lebih baik.
+        \item Robustness: Nilai PSNR dari gambar rahasia yang dipulihkan setelah berbagai
+              serangan akan dianalisis untuk mengukur ketahanan metode. Kemampuan koreksi
+              kesalahan (ECC) dari kode yang digunakan (Polar Codes vs Reed-Muller) akan
+              dievaluasi berdasarkan tingkat keberhasilan pemulihan data.
+        \item Capacity: Kapasitas penyisipan (EC) dalam bit per pixel (bpp) akan dihitung
+              menggunakan persamaan (6) dan dibandingkan antar metode. Analisis akan mencakup
+              pengaruh variasi histogram gambar dan ukuran secret image terhadap kapasitas.
+    \end{itemize}
+    Analisis statistik seperti uji-t atau ANOVA mungkin digunakan untuk mengevaluasi signifikansi perbedaan kinerja antar metode.
+}
 
 \section{Schedule Realization}
 
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
 \begin{table}[h]
-    \begin{tabular}{|l|ll|ll|l|l|}
+    \centering
+    \begin{tabular}{|l|c|c|c|c|l|l|}
         \hline
-        \multicolumn{1}{|c|}{\multirow{2}{*}{Activity}}                       & \multicolumn{2}{c|}{Schedule} & \multicolumn{2}{c|}{Realization} & \multicolumn{1}{c|}{\multirow{2}{*}{Output Target}} & \multicolumn{1}{c|}{\multirow{2}{*}{Realization}}                                                 \\ \cline{2-5}
-        \multicolumn{1}{|c|}{}                                                & \multicolumn{1}{c|}{Start}    & \multicolumn{1}{c|}{End}         & \multicolumn{1}{c|}{Start}                          & \multicolumn{1}{c|}{End}                          & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} \\ \hline
-        Reference tracing                                                     & \multicolumn{1}{l|}{}         &                                  & \multicolumn{1}{l|}{}                               &                                                   &                       &                       \\ \hline
-        \begin{tabular}[c]{@{}l@{}}Requirement \\ identification\end{tabular} & \multicolumn{1}{l|}{}         &                                  & \multicolumn{1}{l|}{}                               &                                                   &                       &                       \\ \hline
-        Design process                                                        & \multicolumn{1}{l|}{}         &                                  & \multicolumn{1}{l|}{}                               &                                                   &                       &                       \\ \hline
-        \begin{tabular}[c]{@{}l@{}}Implementation \\ process\end{tabular}     & \multicolumn{1}{l|}{}         &                                  & \multicolumn{1}{l|}{}                               &                                                   &                       &                       \\ \hline
-        \begin{tabular}[c]{@{}l@{}}Experiment design \\ and plan\end{tabular} & \multicolumn{1}{l|}{}         &                                  & \multicolumn{1}{l|}{}                               &                                                   &                       &                       \\ \hline
-        Analysis / Evaluation                                                 & \multicolumn{1}{l|}{}         &                                  & \multicolumn{1}{l|}{}                               &                                                   &                       &                       \\ \hline
+        \rowcolor[HTML]{FFFFFF}
+        \multicolumn{1}{|c|}{\cellcolor[HTML]{FFFFFF}\multirow{2}{*}{Activity}} & \multicolumn{2}{c|}{\cellcolor[HTML]{FFFFFF}Schedule} & \multicolumn{2}{c|}{\cellcolor[HTML]{FFFFFF}Realization} & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}\multirow{2}{*}{Output Target}} & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}\multirow{2}{*}{Realization}}                                                                                                 \\ \cline{2-5}
+        \rowcolor[HTML]{FFFFFF}
+        \multicolumn{1}{|c|}{\cellcolor[HTML]{FFFFFF}}                          & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}Start}    & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}End}         & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}Start}                          & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}End}                          & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}} & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}} \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Literature study                                                        & Sem 1                                                 & Sem 1                                                    & Sem 1                                                                       & Sem 1                                                                     & Proposal Bab 1, 2                             & Selesai                                       \\ \hline
+        Problem identification                                                  & Sem 1                                                 & Sem 1                                                    & Sem 1                                                                       & Sem 1                                                                     & Proposal Bab 3                                & Selesai                                       \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Contribution formulation                                                & Sem 1                                                 & Sem 1                                                    & Sem 1                                                                       & Sem 1                                                                     & Proposal Bab 4                                & Selesai                                       \\ \hline
+        Hypothesis formulation                                                  & Sem 1                                                 & Sem 1                                                    & Sem 1                                                                       & Sem 1                                                                     & Proposal Bab 4                                & Selesai                                       \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Proposal                                                                & Sem 1                                                 & Sem 1                                                    & Sem 1                                                                       & Sem 1                                                                     & Dokumen Proposal                              & Selesai                                       \\ \hline
+        Design Encoding Process                                                 & Sem 2                                                 & Sem 2                                                    & Sem 2                                                                       & Sem 2                                                                     & Desain Algoritma                              & Selesai                                       \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Implement embedding schema                                              & Sem 2                                                 & Sem 3                                                    & Sem 2                                                                       & \blue Sem 3                                                               & Kode Program (Embedding)                      & \blue On Progress (50\%)                      \\ \hline
+        Design decoding process                                                 & Sem 2                                                 & Sem 2                                                    & Sem 2                                                                       & Sem 2                                                                     & Desain Algoritma                              & Selesai                                       \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Design sharing schema                                                   & Sem 2                                                 & Sem 3                                                    & Sem 2                                                                       & \blue Sem 3                                                               & Kode Program (Sharing)                        & \blue On Progress (50\%)                      \\ \hline
+        Imperceptibility testing                                                & Sem 3                                                 & Sem 3                                                    & Sem 3                                                                       & -                                                                         & Hasil Uji PSNR/MSE                            & Belum Mulai                                   \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Robustness testing                                                      & Sem 3                                                 & Sem 4                                                    & Sem 3                                                                       & -                                                                         & Hasil Uji Serangan                            & Belum Mulai                                   \\ \hline
+        Capacity testing                                                        & Sem 3                                                 & Sem 4                                                    & Sem 3                                                                       & -                                                                         & Hasil Uji Kapasitas                           & Belum Mulai                                   \\ \hline
+        \rowcolor[HTML]{EFEFEF}
+        Thesis draft                                                            & Sem 4                                                 & Sem 4                                                    & Sem 4                                                                       & -                                                                         & Draft Tesis Lengkap                           & Belum Mulai                                   \\ \hline
     \end{tabular}
+    \caption{Realisasi Jadwal per 18 April 2025}
 \end{table}
+
+% Tambahkan bagian Daftar Pustaka
+\newpage % Mulai halaman baru untuk daftar pustaka jika diinginkan
+\begin{thebibliography}{99} % Angka 99 adalah placeholder untuk label terpanjang
+
+    \bibitem{pujianto2021uji}
+    Ikwan Pujianto. "Uji Ketahanan Citra Digital Terhadap Manipulasi Robustness Pada Steganography". \textit{Jurnal Informatika dan Rekayasa Perangkat Lunak} 2.1 (2021), pp. 16-27.
+
+    \bibitem{siaulhak2023sistem}
+    Siaulhak Siaulhak, Safwan Kasma et al. "Sistem Pengiriman File Menggunakan Steganografi Pengolahan Citra Digital Berbasis Matriks Laboratory". \textit{BANDWIDTH: Journal of Informatics and Computer Engineering} 1.2 (2023), pp. 75-81.
+
+    \bibitem{soetarmono2012studi}
+    Anggya ND Soetarmono. "Studi Mengenai Aplikasi Steganografi Camouflage". \textit{Teknika} 1.1 (2012), pp. 55-65.
+
+    \bibitem{fikri2022optimasi}
+    Muhammad Alfin Fikri and FX Ferdinandus. "Optimasi Teknik Steganografi Amelsbr Pada Empat Bit Terakhir Dengan Cover Image Berwarna". \textit{Antivirus: Jurnal Ilmiah Teknik Informatika} 16.1 (2022), pp. 25-38.
+
+    \bibitem{kingsley2020improving}
+    Katandawa Alex Kingsley and Ari Moesriami Barmawi. "Improving Data Hiding Capacity in Code Based Steganography using Multiple Embedding." In: (). % Mungkin perlu dilengkapi info publikasi jika ada
+
+    \bibitem{andika2020modifikasi}
+    Dwi Andika and Dedi Darwis. "Modifikasi Algoritma Gifshuffle Untuk Peningkatan Kualitas Citra Pada Steganografi". \textit{Jurnal Ilmiah Infrastruktur Teknologi Informasi} 1.2 (2020), pp. 19-23.
+
+    \bibitem{susanto2020kombinasi}
+    Ajib Susanto and Ibnu Utomo Wahyu Mulyono. "Kombinasi LSB-RSA untuk Peningkatan Imperceptibility pada Kripto-Stegano Gambar RGB". In: (2020). % Mungkin perlu dilengkapi info publikasi jika ada
+
+    \bibitem{basri2021penerapan}
+    Muh Basri and Muhammad Fadhlil Gushari. "Penerapan Steganografi Gambar Berwarna pada Delapan Image Cover Menggunakan Metode LSB". \textit{Jurnal Sintaks Logika} 1.3 (2021), pp. 153-158.
+
+    \bibitem{wiranata2021aplikasi}
+    Ade Davy Wiranata and Rima Tamara Aldisa. "Aplikasi Steganografi Menggunakan Least Significant Bit (LSB) dengan Enkripsi Caesar Chipper dan Rivest Code 4 (RC4) Menggunakan Bahasa Pemrograman JAVA". \textit{Jurnal JTIK (Jurnal Teknologi Informasi dan Komunikasi)} 5.3 (2021), pp. 277-281.
+
+    \bibitem{abdillah2023implementasi}
+    Muhammad Oemar Abdillah, Ogie Ariansah Pane and Farhan Rusdy Asyhary Lubis. "Implementasi Keamanan Aset Informasi Steganografi Menggunakan Metode Least Significant Bit (LSB)". \textit{Jurnal Sains dan Teknologi (JSIT)} 3.1 (2023), pp. 40-46.
+
+    \bibitem{juneja2013improved}
+    Mamta Juneja and Parvinder S Sandhu. "An improved LSB based steganography technique for RGB color images". \textit{International journal of computer and communication engineering} 2.4 (2013), p. 513.
+
+    \bibitem{nasution2018image}
+    AB Nasution, S Efendi and S Suwilo. "Image steganography in securing sound file using arithmetic coding algorithm, triple data encryption standard (3DES) and modified least significant bit (MLSB)". \textit{Journal of Physics: Conference Series}. Vol. 1007. 1. IOP Publishing. 2018, p. 012010.
+
+    \bibitem{selamiEffectGaussian}
+    Ameen Mohammed Abd-Alsalam Selami and Ahmed Freidoon Fadhil. "A Study of the Effects of Gaussian Noise on Image". In: (). % Mungkin perlu dilengkapi info publikasi jika ada
+
+    \bibitem{kaisar2008salt}
+    Shakair Kaisar and Jubayer AI Mahmud. "Salt and Pepper Noise Detection and removal by Tolerance based selective Arithmetic Mean Filtering Technique for image restoration". \textit{International Journal of computer science and network security} 8.6 (2008), pp. 271-278.
+
+    \bibitem{mansourpour2006effects}
+    Mostafa Mansourpour, MA Rajabi and JAR Blais. "Effects and performance of speckle noise reduction filters on active radar and SAR images". In: Proc. Isprs. Vol. 36. 1. 2006, W41. % Mungkin perlu dilengkapi info publikasi jika ada
+
+    \bibitem{reddy2015medical}
+    Mr Venugopal Reddy CH et al. "Medical image watermarking schemes against salt and pepper noise attack". \textit{International Journal of Bio-Science and Bio-Technology} 7.6 (2015), pp. 55-64.
+
+\end{thebibliography}
 
 %\section{Summary}
 %\supervisorcomments
