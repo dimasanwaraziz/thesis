@@ -1,0 +1,43 @@
+Jelaskan ide besarnya
+Embed ke cover dari secrer bit
+Sisi kiri porses ini, sisi kanan proses apa
+Jelaskan proses besar
+Data yang dikirim belum terlihat informasinya
+Skenarionya harus ada
+Skenario disimpan di mana agreed stego di mana
+Walau belum selesai harus ada gambaran besarnya
+Objective
+Penjelasan ilustrasi pengujian
+Ilistrasi tradeoff di steganography di rgb
+Ilustrasi trade off
+Alurnya 
+
+Studi literatur, ilustrasikan, kapasitas ketahanan,
+Datazet
+Dataset buatkan folder
+Cover image, Agreed image.
+polar codes on the hipotes
+
+embedding random pixel screnario <-- fix RGB
+ 
+alasan, penerapan, cases orang menggunakan gray atau color
+
+RGB stegano masih banyak dibahas
+
+Bukan dari metode, dari penyelesaian masalah
+
+Kalsifikasn masalah
+
+simpulkan ambil celah yang belum terselesaikan
+
+Ex: belum ada yang menyelesaikan masalah trade off, gunakan ... sehingga ...
+
+Paper kingsley muncul di belakang, bukan di awal.
+
+(Schema masih sama) RGB dulu.
+
+Bagan besarnya (big picture)
+
+multiple embedding -> subset
+
+buat table perbandingan
