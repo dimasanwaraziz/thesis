@@ -531,7 +531,7 @@ def generate_round_keys(key_bits):
     key_permuted = permute(key_bits, PC1_TABLE)
     # 56 bits -> 8x7
     print_bits_as_matrix(
-        "Key after PC-1 (56 bits)", key_permuted, 8, indent=""
+        "Key after PC-1 (56 bits)", key_permuted, 7, indent=""
     )  # Baris terakhir 7 bit
 
     C = key_permuted[:28]
