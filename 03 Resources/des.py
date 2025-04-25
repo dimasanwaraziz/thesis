@@ -177,6 +177,38 @@ def initial_permutation_manual_correct(input_bin_64):
     return "".join(output_bits)
 
 
+def expansion_logic(right_32_bin):
+    """
+    Melakukan Expansion Permutation (E) secara 'manual' berdasarkan pola.
+    Mengubah 32 bit input menjadi 48 bit output.
+    """
+    if len(right_32_bin) != 32:
+        raise ValueError("Input untuk Expansion (E) harus 32 bit")
+    if not all(c in '01' for c in right_32_bin):
+        raise ValueError("Input harus berupa string biner ('0' atau '1')")
+
+    output_bits = []  # List untuk menampung bit hasil (lebih efisien)
+    n_bits = 32  # Panjang input
+
+    for i in range(8):
+        prev_bit_index = (4 * i - 1 + n_bits) % n_bits
+        output_bits.append(right_32_bin[prev_bit_index])
+
+        for j in range(4):
+            current_bit_index = 4 * i + j
+            output_bits.append(right_32_bin[current_bit_index])
+
+        next_bit_index = (4 * i + 4) % n_bits
+        output_bits.append(right_32_bin[next_bit_index])
+
+    # Verifikasi panjang output
+    if len(output_bits) != 48:
+        raise ValueError(
+            f"Logika ekspansi menghasilkan {len(output_bits)} bit, seharusnya 48.")
+
+    return "".join(output_bits)
+
+
 # --- Fungsi Inti DES ---
 
 def generate_keys(key_bin_64):
@@ -250,7 +282,8 @@ def generate_keys(key_bin_64):
 
 def des_round_function(right_32_bin, round_key_48_bin):
     """Menjalankan fungsi Feistel f(R, K)."""
-    expanded_r = permute(right_32_bin, E_TABLE)
+    # expanded_r = permute(right_32_bin, E_TABLE)
+    expanded_r = expansion_logic(right_32_bin)
     xor_result = xor(expanded_r, round_key_48_bin)
     sbox_output = ""
     for i in range(8):
