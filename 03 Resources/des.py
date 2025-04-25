@@ -180,27 +180,71 @@ def initial_permutation_manual_correct(input_bin_64):
 # --- Fungsi Inti DES ---
 
 def generate_keys(key_bin_64):
-    """Menghasilkan 16 kunci ronde 48-bit dari kunci 64-bit."""
+    """Menghasilkan 16 kunci ronde 48-bit dari kunci 64-bit,
+       dengan perbandingan metode PC-1 (standar vs pola)."""
     if len(key_bin_64) != 64:
         raise ValueError("Kunci awal harus 64 bit")
     if not all(c in '01' for c in key_bin_64):
         raise ValueError("Kunci awal harus berupa string biner ('0' atau '1')")
 
-    key_permuted_56 = permute(key_bin_64, PC1_TABLE)
+    print("\n--- Generating Round Keys ---")
+    print(f"Input Key 64-bit (bin): {textwrap.fill(key_bin_64, width=64)}")
+
+    # --- LANGKAH 1: Permuted Choice 1 (PC-1) ---
+    print("\n--- Permuted Choice 1 (PC-1) Comparison ---")
+
+    # Metode 1: Standar (permute + PC1_TABLE)
+    key_permuted_56_std = permute(key_bin_64, PC1_TABLE)
+    print(f" PC-1 Result (Standard - permute) ".center(70, "-"))
+    print(f"  Bin: {textwrap.fill(key_permuted_56_std, width=56)}")
+
+    # Metode 2: Manual berdasarkan Pola Kolom/Baris
+    try:
+        key_permuted_56_pattern = pc1_pattern_logic(key_bin_64)
+        print(f" PC-1 Result (Manual Pattern Logic) ".center(70, "-"))
+        print(f"  Bin: {textwrap.fill(key_permuted_56_pattern, width=56)}")
+
+        # Bandingkan hasil kedua metode
+        if key_permuted_56_std == key_permuted_56_pattern:
+            print("\n---> Hasil PC-1 dari Standard vs Pattern Logic SAMA (MATCH) <---")
+            # Pilih hasil dari metode pola untuk melanjutkan
+            key_permuted_56 = key_permuted_56_pattern
+        else:
+            print(
+                "\n---> !!! Hasil PC-1 dari Standard vs Pattern Logic BERBEDA (MISMATCH) !!! <---")
+            # Jika berbeda, mungkin ada kesalahan dalam logika pola atau pemahaman
+            # Lanjutkan dengan hasil pola untuk debug
+            key_permuted_56 = key_permuted_56_pattern
+            print(
+                "     (Melanjutkan proses key generation dengan hasil metode pattern logic)")
+
+    except Exception as e:
+        # Tangani jika ada error saat menjalankan logika pola
+        print(
+            f"!!! Error generating PC-1 using pattern logic: {e} !!!".center(70))
+        print("     (Melanjutkan proses key generation dengan hasil metode standard)")
+        key_permuted_56 = key_permuted_56_std  # Gunakan hasil standar sebagai fallback
+
+    print("-" * 70)  # Penutup bagian perbandingan
+
+    # --- Lanjutan Proses Key Generation ---
+    # Langkah 2: Bagi jadi C0 dan D0 (masing-masing 28 bit)
     C = key_permuted_56[:28]
     D = key_permuted_56[28:]
+    print(f" C0 (from selected PC-1): {C}")
+    print(f" D0 (from selected PC-1): {D}")
 
     round_keys = []
-    print("\n--- Generating Round Keys ---")
+    # Proses shift left dan PC-2 (tetap sama)
     for i in range(16):
         shifts = SHIFT_SCHEDULE[i]
         C = shift_left(C, shifts)
         D = shift_left(D, shifts)
         CD_combined = C + D
-        round_key = permute(CD_combined, PC2_TABLE)
+        round_key = permute(CD_combined, PC2_TABLE)  # PC-2 masih pakai permute
         round_keys.append(round_key)
-        # print(f" K{i+1:<2} (bin): {textwrap.fill(round_key, width=48)}") # Komentari agar output tidak terlalu panjang
-    print(" (Round keys generated)")
+
+    print("\n(Round keys generated successfully based on selected PC-1 result)")
     return round_keys
 
 
@@ -217,6 +261,69 @@ def des_round_function(right_32_bin, round_key_48_bin):
         sbox_output += bin(sbox_val)[2:].zfill(4)
     final_f_result = permute(sbox_output, P_TABLE)
     return final_f_result
+
+
+def pc1_pattern_logic(key_bin_64):
+    """
+    Melakukan Permuted Choice 1 (PC-1) secara 'manual' berdasarkan pola
+    kolom/baris yang kompleks untuk C0 dan D0.
+    Menghasilkan 56 bit dari input 64 bit key.
+    """
+    if len(key_bin_64) != 64:
+        raise ValueError("Input kunci untuk PC-1 harus 64 bit")
+    if not all(c in '01' for c in key_bin_64):
+        raise ValueError(
+            "Input kunci harus berupa string biner ('0' atau '1')")
+
+    output_bits = []  # List untuk menampung bit hasil
+
+    # --- Bagian 1: Menghasilkan C0 (Output bit 0-27) ---
+    # Pola C0 lebih kompleks dari sekedar baca kolom penuh
+    # Col 0: baris 7->1 (56,48,40,32,24,16,8), lalu baris 0 (0) --- Total 8 bit
+    for row_idx in range(7, 0, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 0])
+    output_bits.append(key_bin_64[0 * 8 + 0])
+    # Col 1: baris 7->2 (57,49,41,33,25,17), lalu baris 1 (9), lalu baris 0 (1) --- Total 8 bit
+    for row_idx in range(7, 1, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 1])
+    output_bits.append(key_bin_64[1 * 8 + 1])
+    output_bits.append(key_bin_64[0 * 8 + 1])
+    # Col 2: baris 7->3 (58,50,42,34,26), lalu baris 2 (18), 1 (10), 0 (2) --- Total 8 bit
+    for row_idx in range(7, 2, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 2])
+    output_bits.append(key_bin_64[2 * 8 + 2])
+    output_bits.append(key_bin_64[1 * 8 + 2])
+    output_bits.append(key_bin_64[0 * 8 + 2])
+    # Col 3: baris 7->4 (59,51,43,35) --- Total 4 bit
+    for row_idx in range(7, 3, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 3])
+    # Total C0 harus 8+8+8+4 = 28 bit
+    if len(output_bits) != 28:
+        raise ValueError(
+            f"Kesalahan logika C0: dihasilkan {len(output_bits)} bit, seharusnya 28.")
+
+    # --- Bagian 2: Menghasilkan D0 (Output bit 28-55) --- (Logika ini sudah benar)
+    # Bagian 2A: Bit 28-51 (24 bit pertama D0)
+    # Baca kolom input 6, 5, 4 - masing-masing dari bawah ke atas (row 7 -> 0)
+    d0_part_a_cols = [6, 5, 4]
+    for col_idx in d0_part_a_cols:
+        for row_idx in range(7, -1, -1):  # Iterasi baris dari 7 turun ke 0
+            input_index = row_idx * 8 + col_idx
+            output_bits.append(key_bin_64[input_index])
+
+    # Bagian 2B: Bit 52-55 (4 bit terakhir D0)
+    # Baca kolom input 3, HANYA dari baris 3 turun ke 0
+    d0_part_b_col = 3
+    for row_idx in range(3, -1, -1):  # Iterasi baris dari 3 turun ke 0
+        input_index = row_idx * 8 + d0_part_b_col
+        output_bits.append(key_bin_64[input_index])
+
+    # Verifikasi panjang output total (seharusnya 28 + 28 = 56)
+    if len(output_bits) != 56:
+        raise ValueError(
+            f"Logika pola PC-1 menghasilkan {len(output_bits)} bit total, seharusnya 56.")
+
+    return "".join(output_bits)
 
 
 def process_des(input_bin_64, round_keys, mode='encrypt'):
