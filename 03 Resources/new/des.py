@@ -622,6 +622,36 @@ def expansion_logic(right_32_bin):
     return "".join(output_bits)
 
 
+def final_permutation_manual(input_bin_64):
+    """
+    MANUAL FP (IP Inverse): Melakukan Final Permutation (FP) 64-bit
+    berdasarkan logika pembalikan dari initial_permutation_manual_correct.
+    """
+    if len(input_bin_64) != 64:
+        raise ValueError("FP Manual: Input harus 64 bit")
+    if not all(c in '01' for c in input_bin_64):
+        raise ValueError("FP Manual: Input harus biner")
+
+    inverse_ip_mapping = [0] * 64
+
+    output_idx_ip = 0
+    column_read_order = [1, 3, 5, 7, 0, 2, 4, 6]
+
+    for col_idx in column_read_order:
+        for row_idx in range(7, -1, -1):  # IP_manual baca dari bawah ke atas
+            original_input_index = row_idx * 8 + col_idx
+            inverse_ip_mapping[output_idx_ip] = original_input_index
+            output_idx_ip += 1
+
+    output_bits = [''] * 64
+    for fp_input_pos in range(64):
+        bit_value = input_bin_64[fp_input_pos]
+        fp_output_pos = inverse_ip_mapping[fp_input_pos]
+        output_bits[fp_output_pos] = bit_value
+
+    return "".join(output_bits)
+
+
 # ==============================================================================
 # Fungsi Inti DES (dengan Output Detail dan Format Matriks)
 # ==============================================================================
@@ -691,7 +721,8 @@ def function_F(right_half_32bits, round_key_48bits):
     expanded_bits_old = permute(right_half_32bits, E_TABLE)
     expanded_bits = expansion_logic(right_half_32bits)
     # E(R) (48 bit -> 8x6)
-    print_bits_as_matrix("E(R) (48 bits) OLD", expanded_bits_old, 8, indent="    ")
+    print_bits_as_matrix("E(R) (48 bits) OLD",
+                         expanded_bits_old, 8, indent="    ")
     print_bits_as_matrix("E(R) (48 bits)", expanded_bits, 8, indent="    ")
 
     xored_bits = xor(expanded_bits, round_key_48bits)
@@ -771,7 +802,10 @@ def des_encrypt_block(plaintext_bits, key_bits):
     print("Before Final Permutation (R16L16):")
     print_bits_as_matrix("R16L16", final_LR, 8, indent="")
 
-    ciphertext_bits = permute(final_LR, FP_TABLE)
+    ciphertext_bits_old = permute(final_LR, FP_TABLE)
+    ciphertext_bits = final_permutation_manual(final_LR)
+    print("\nAfter Final Permutation (FP) OLD:")
+    print_bits_as_matrix("Ciphertext", ciphertext_bits_old, 8, indent="")
     print("\nAfter Final Permutation (FP):")
     print_bits_as_matrix("Ciphertext", ciphertext_bits, 8, indent="")
     print("========== DES ENCRYPTION END ==========")
