@@ -593,6 +593,35 @@ def pc1_pattern_logic(key_bin_64):
     return "".join(output_bits)
 
 
+def expansion_logic(right_32_bin):
+    """
+    MANUAL E: Melakukan Expansion Permutation (E) 32->48 bit berdasarkan pola:
+    Untuk blok output ke-i: bit_akhir[i-1] + 4bit[i] + bit_awal[i+1] (wrap-around).
+    """
+    if len(right_32_bin) != 32:
+        raise ValueError("Expansion Manual: Input harus 32 bit")
+    if not all(c in '01' for c in right_32_bin):
+        raise ValueError("Expansion Manual: Input harus biner")
+
+    output_bits = []
+    n_bits = 32
+
+    for i in range(8):  # 8 blok output
+        # Bit pertama: bit terakhir grup input sebelumnya
+        prev_bit_index = (4 * i - 1 + n_bits) % n_bits
+        output_bits.append(right_32_bin[prev_bit_index])
+        # 4 bit tengah: 4 bit grup input saat ini
+        for j in range(4):
+            output_bits.append(right_32_bin[4 * i + j])
+        # Bit terakhir: bit pertama grup input berikutnya
+        next_bit_index = (4 * i + 4) % n_bits
+        output_bits.append(right_32_bin[next_bit_index])
+
+    if len(output_bits) != 48:
+        raise ValueError(f"Expansion Manual error: {len(output_bits)} bits")
+    return "".join(output_bits)
+
+
 # ==============================================================================
 # Fungsi Inti DES (dengan Output Detail dan Format Matriks)
 # ==============================================================================
@@ -635,13 +664,13 @@ def generate_round_keys(key_bits):
 
         CD = C + D
         print_bits_as_matrix(
-            f"C{i+1}D{i+1} (56 bits)", CD, 8, indent="  "
+            f"C{i+1}D{i+1} (56 bits)", CD, 7, indent="  "
         )  # Baris terakhir 7 bit
 
         round_key = permute(CD, PC2_TABLE)
         # 48 bits -> 8x6
         print_bits_as_matrix(
-            f"Round Key K{i+1} (48 bits)", round_key, 8, indent="  "
+            f"Round Key K{i+1} (48 bits)", round_key, 6, indent="  "
         )  # Baris terakhir 6 bit
         round_keys.append(round_key)
 
@@ -659,8 +688,10 @@ def function_F(right_half_32bits, round_key_48bits):
     print_bits_as_matrix("Input K (48 bits)",
                          round_key_48bits, 8, indent="    ")
 
-    expanded_bits = permute(right_half_32bits, E_TABLE)
+    expanded_bits_old = permute(right_half_32bits, E_TABLE)
+    expanded_bits = expansion_logic(right_half_32bits)
     # E(R) (48 bit -> 8x6)
+    print_bits_as_matrix("E(R) (48 bits) OLD", expanded_bits_old, 8, indent="    ")
     print_bits_as_matrix("E(R) (48 bits)", expanded_bits, 8, indent="    ")
 
     xored_bits = xor(expanded_bits, round_key_48bits)
