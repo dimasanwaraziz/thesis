@@ -433,7 +433,7 @@ def bits_to_string(bits):
     padded_len = (len(bits) + 7) // 8 * 8
     bits = bits.ljust(padded_len, "0")
     for i in range(0, len(bits), 8):
-        byte = bits[i : i + 8]
+        byte = bits[i: i + 8]
         try:
             # Coba konversi ke integer lalu ke karakter
             value = int(byte, 2)
@@ -447,7 +447,8 @@ def bits_to_string(bits):
             ]:  # Printable ASCII + NULL, TAB, LF, CR
                 chars.append(chr(value))
             else:
-                chars.append("?")  # Ganti byte non-printable/non-ASCII dengan '?'
+                # Ganti byte non-printable/non-ASCII dengan '?'
+                chars.append("?")
         except ValueError:
             # Jika int(byte, 2) gagal (seharusnya tidak terjadi jika input adalah '0'/'1')
             chars.append("?")
@@ -458,7 +459,7 @@ def bits_to_hex(bits):
     """Konversi string biner ke string heksadesimal."""
     hex_string = ""
     for i in range(0, len(bits), 4):
-        nibble = bits[i : i + 4]
+        nibble = bits[i: i + 4]
         hex_char = hex(int(nibble, 2))[2:]
         hex_string += hex_char
     return hex_string.upper()
@@ -490,7 +491,7 @@ def left_circular_shift(bits, n):
 
 def split_bits(bits, n):
     """Membagi string biner menjadi potongan-potongan berukuran 'n'."""
-    return [bits[i : i + n] for i in range(0, len(bits), n)]
+    return [bits[i: i + n] for i in range(0, len(bits), n)]
 
 
 # Versi Baru (Spasi antar setiap bit)
@@ -507,13 +508,89 @@ def print_bits_as_matrix(label, bits, row_len=8, indent="  "):
     matrix_line_indent = indent + "  "  # Indentasi untuk baris data
 
     for i in range(0, len(bits), row_len):
-        row_bits = bits[i : i + row_len]  # Ambil bit untuk satu baris
+        row_bits = bits[i: i + row_len]  # Ambil bit untuk satu baris
 
         # Gunakan ' '.join() untuk menyisipkan spasi antar setiap karakter
         formatted_row = " ".join(row_bits)
 
         # Cetak baris yang sudah diformat dengan spasi
         print(f"{matrix_line_indent}{formatted_row}")
+
+
+def initial_permutation_manual_correct(input_bin_64):
+    """
+    MANUAL IP: Melakukan Initial Permutation (IP) 64-bit berdasarkan
+    logika pembacaan kolom matriks 8x8 (kolom [1,3,5,7,0,2,4,6] dibaca Btm-Up).
+    """
+    if len(input_bin_64) != 64:
+        raise ValueError("IP Manual: Input harus 64 bit")
+    if not all(c in '01' for c in input_bin_64):
+        raise ValueError("IP Manual: Input harus biner")
+
+    output_bits = [''] * 64
+    output_idx = 0
+    # Urutan kolom input yg dibaca
+    column_read_order = [1, 3, 5, 7, 0, 2, 4, 6]
+
+    for col_idx in column_read_order:
+        for row_idx in range(7, -1, -1):  # Baca dari bawah ke atas
+            input_index = row_idx * 8 + col_idx
+            # Tidak perlu cek output_idx < 64 jika column_read_order dan range(7,-1,-1) benar
+            output_bits[output_idx] = input_bin_64[input_index]
+            output_idx += 1
+
+    return "".join(output_bits)
+
+
+def pc1_pattern_logic(key_bin_64):
+    """
+    MANUAL PC-1: Melakukan Permuted Choice 1 (PC-1) 64->56 bit berdasarkan
+    pola kolom/baris (C0: pola kompleks; D0: Kolom 6,5,4 Btm-Up + Kolom 3[3..0]).
+    """
+    if len(key_bin_64) != 64:
+        raise ValueError("PC-1 Manual: Input harus 64 bit")
+    if not all(c in '01' for c in key_bin_64):
+        raise ValueError("PC-1 Manual: Input harus biner")
+
+    output_bits = []
+
+    # --- Bagian 1: Menghasilkan C0 (Output bit 0-27) ---
+    # Pola C0 kompleks, diimplementasikan sesuai urutan tabel PC1_TABLE standar
+    # Col 0: baris 7->1 (7 bit), lalu baris 0 (1 bit)
+    for row_idx in range(7, 0, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 0])
+    output_bits.append(key_bin_64[0 * 8 + 0])
+    # Col 1: baris 7->2 (6 bit), lalu baris 1 (1 bit), lalu baris 0 (1 bit)
+    for row_idx in range(7, 1, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 1])
+    output_bits.append(key_bin_64[1 * 8 + 1])
+    output_bits.append(key_bin_64[0 * 8 + 1])
+    # Col 2: baris 7->3 (5 bit), lalu baris 2, 1, 0 (3 bit)
+    for row_idx in range(7, 2, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 2])
+    output_bits.append(key_bin_64[2 * 8 + 2])
+    output_bits.append(key_bin_64[1 * 8 + 2])
+    output_bits.append(key_bin_64[0 * 8 + 2])
+    # Col 3: baris 7->4 (4 bit)
+    for row_idx in range(7, 3, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + 3])
+    if len(output_bits) != 28:
+        raise ValueError(f"PC-1 Manual C0 error: {len(output_bits)} bits")
+
+    # --- Bagian 2: Menghasilkan D0 (Output bit 28-55) ---
+    # Bagian 2A: Bit 28-51 (24 bit pertama D0) - Kolom 6, 5, 4 Btm-Up
+    d0_part_a_cols = [6, 5, 4]
+    for col_idx in d0_part_a_cols:
+        for row_idx in range(7, -1, -1):
+            output_bits.append(key_bin_64[row_idx * 8 + col_idx])
+    # Bagian 2B: Bit 52-55 (4 bit terakhir D0) - Kolom 3, baris 3->0
+    d0_part_b_col = 3
+    for row_idx in range(3, -1, -1):
+        output_bits.append(key_bin_64[row_idx * 8 + d0_part_b_col])
+    if len(output_bits) != 56:
+        raise ValueError(f"PC-1 Manual total error: {len(output_bits)} bits")
+
+    return "".join(output_bits)
 
 
 # ==============================================================================
@@ -528,8 +605,12 @@ def generate_round_keys(key_bits):
         raise ValueError("Kunci harus 64 bit")
     print_bits_as_matrix("Initial Key (64 bits)", key_bits, 8, indent="")
 
-    key_permuted = permute(key_bits, PC1_TABLE)
+    key_permuted_old = permute(key_bits, PC1_TABLE)
+    key_permuted = pc1_pattern_logic(key_bits)
     # 56 bits -> 8x7
+    print_bits_as_matrix(
+        "Key after PC-1 (56 bits)", key_permuted_old, 7, indent=""
+    )  # Baris terakhir 7 bit
     print_bits_as_matrix(
         "Key after PC-1 (56 bits)", key_permuted, 7, indent=""
     )  # Baris terakhir 7 bit
@@ -572,9 +653,11 @@ def function_F(right_half_32bits, round_key_48bits):
     """Fungsi F dalam putaran Feistel DES dengan output detail."""
     print(f"    -- Function F Start --")
     # Input R (32 bit -> 8x4)
-    print_bits_as_matrix("Input R (32 bits)", right_half_32bits, 8, indent="    ")
+    print_bits_as_matrix("Input R (32 bits)",
+                         right_half_32bits, 8, indent="    ")
     # Input K (48 bit -> 8x6)
-    print_bits_as_matrix("Input K (48 bits)", round_key_48bits, 8, indent="    ")
+    print_bits_as_matrix("Input K (48 bits)",
+                         round_key_48bits, 8, indent="    ")
 
     expanded_bits = permute(right_half_32bits, E_TABLE)
     # E(R) (48 bit -> 8x6)
@@ -599,7 +682,8 @@ def function_F(right_half_32bits, round_key_48bits):
         )
         sbox_output += sbox_out_bits
     # S-Box Output (32 bit -> 8x4)
-    print_bits_as_matrix("S-Box Output (32 bits)", sbox_output, 8, indent="    ")
+    print_bits_as_matrix("S-Box Output (32 bits)",
+                         sbox_output, 8, indent="    ")
 
     final_output_32bits = permute(sbox_output, P_TABLE)
     # P(S-Box Output) (32 bit -> 8x4)
@@ -619,7 +703,10 @@ def des_encrypt_block(plaintext_bits, key_bits):
 
     round_keys = generate_round_keys(key_bits)
 
-    permuted_block = permute(plaintext_bits, IP_TABLE)
+    permuted_block_old = permute(plaintext_bits, IP_TABLE)
+    permuted_block = initial_permutation_manual_correct(plaintext_bits)
+    print("\nAfter Initial Permutation (IP) OLD:")
+    print_bits_as_matrix("IP Result", permuted_block_old, 8, indent="")
     print("\nAfter Initial Permutation (IP):")
     print_bits_as_matrix("IP Result", permuted_block, 8, indent="")
 
@@ -703,8 +790,10 @@ def des_decrypt_block(ciphertext_bits, key_bits):
         print_bits_as_matrix(f"R_out", R, 8, indent="  ")
 
     print("\n--- After 16 Rounds of Decryption ---")
-    print_bits_as_matrix("L0 (from decryption)", L, 8, indent="")  # Seharusnya L0 asli
-    print_bits_as_matrix("R0 (from decryption)", R, 8, indent="")  # Seharusnya R0 asli
+    print_bits_as_matrix("L0 (from decryption)", L, 8,
+                         indent="")  # Seharusnya L0 asli
+    print_bits_as_matrix("R0 (from decryption)", R, 8,
+                         indent="")  # Seharusnya R0 asli
     final_LR = R + L  # Swap: R0 diikuti L0
     print("Before Final Permutation (R0L0):")
     print_bits_as_matrix("R0L0", final_LR, 8, indent="")
@@ -763,7 +852,8 @@ if __name__ == "__main__":
             decrypted_str = bits_to_string(decrypted_bits)
 
             print("\n--- Hasil Dekripsi Final ---")
-            print_bits_as_matrix("Decrypted bits", decrypted_bits, 8, indent="")
+            print_bits_as_matrix(
+                "Decrypted bits", decrypted_bits, 8, indent="")
             print(
                 f"Decrypted text : '{decrypted_str}'"
             )  # Tampilkan dalam kutip agar jelas
