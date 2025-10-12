@@ -4,5 +4,18 @@
 \addcontentsline{toc}{chapter}{\protect\numberline{}ABSTRACT}
 \normalfont\LARGE\textbf{ABSTRACT}
 \end{center}
-YOUR ABSTRACT.\\\\
-\textbf{Keywords:} temp1, temp2
+The demand for high-capacity digital watermarking, particularly for embedding entire images for robust copyright protection, continually pushes the boundaries of steganographic techniques. While recent methods combining Pixel Value Differencing (PVD) and edge detection in the RGB color space \cite{liu2025color} have notably increased payload capacity, they often employ complex, sequential embedding processes where data is hidden across channels in a dependent manner. This sequential approach can introduce inter-channel dependencies and limit the ultimate payload, posing a challenge for embedding visually complex, high-resolution watermarks.
+
+This research proposes a novel Multiple Embedding Steganography (MES) framework designed to overcome these limitations by introducing a parallel embedding architecture. Instead of a sequential process, our method treats the Red, Green, and Blue channels as three independent, parallel data carriers. The watermark image is first decomposed, and its constituent data segments are embedded simultaneously into designated bit-planes of each respective color channel. This parallel architecture maximizes the spatial utilization of the RGB color space and decouples the complex channel adjustments required by previous works. Furthermore, the embedding strength within each channel is adaptively controlled, allowing for greater data density in textured or edge regions to preserve high imperceptibility, building upon established principles of the Human Visual System (HVS).
+
+The primary expected outcome is a substantial increase in embedding capacity, projected to surpass the ~3.0 bpp ceiling of recent sequential PVD methods, thereby enabling the practical embedding of a full-size image as a watermark. This is achieved while maintaining high visual quality, with a target Peak Signal-to-Noise Ratio (PSNR) value well above the 30 dB threshold considered imperceptible to the human eye. The parallel embedding strategy is also hypothesized to distribute statistical artifacts more evenly, enhancing resilience against steganalysis. This research contributes a more robust and high-capacity steganographic framework tailored for the demanding application of image-in-image watermarking, presenting a significant advancement in balancing capacity and imperceptibility.\\\\
+\textbf{Keywords:} Multiple Embedding, Steganography, Image Watermarking, RGB Color Space, High Capacity, Parallel Embedding, Imperceptibility, PSNR
+
+% \chapter*{}
+% \vspace*{-1.0cm}
+% \begin{center}
+% \addcontentsline{toc}{chapter}{\protect\numberline{}ABSTRACT}
+% \normalfont\LARGE\textbf{ABSTRACT}
+% \end{center}
+% YOUR ABSTRACT.\\\\
+% \textbf{Keywords:} temp1, temp2

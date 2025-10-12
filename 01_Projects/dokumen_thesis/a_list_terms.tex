@@ -2,12 +2,37 @@
 \addcontentsline{toc}{chapter}{\protect\numberline{}\textbf{LIST OF TERMS}}
 \normalfont\LARGE\textbf{LIST OF TERMS}
 \end{center}
-\begin{longtable}{p{2.5cm} p{11.5cm}}
+\begin{longtable}{p{3.5cm} p{10.5cm}}
 	\textbf{Terms} & \textbf{Definition}\\
 	\hline \endhead
-	Classes & Number of individual in biometrics data\\
-	Sample & Number of images can be used to represent population in a class.\\
-	... & ...\\
+	\textbf{Steganography} & The art and science of hiding a secret message within another, non-secret message or object (the cover) to conceal the very existence of the secret message. \\
+	\textbf{Cover-Image} & The original, ordinary image (in this case, an RGB image) that is used as a medium to hide the secret data. \\
+	\textbf{Stego-Image} & The resulting image after the secret data (payload) has been successfully embedded into the cover-image. \\
+	\textbf{Payload} & The secret information or data that is to be hidden inside the cover-image. \\
+	\textbf{Embedding} & The process of inserting the payload into the cover-image using a specific steganography algorithm. \\
+	\textbf{Extraction} & The reverse process of embedding, where the hidden payload is retrieved from the stego-image. \\
+	\textbf{RGB Image} & An image that uses the RGB (Red, Green, Blue) color model. Each pixel in the image is represented by a combination of intensities of these three primary colors. \\
+	\textbf{Pixel} & The smallest addressable element in a digital image. Each pixel contains color and brightness information, typically as values for its color channels (e.g., R, G, and B). \\
+	\textbf{LSB} & \textit{Least Significant Bit}. The rightmost bit in a binary number. LSB substitution is a common steganographic technique where the LSBs of the cover-image's pixel data are replaced with the bits of the payload. \\
+	\textbf{Bit Plane} & A set of bits corresponding to a specific bit position in each of the binary numbers representing the pixels. An 8-bit grayscale image, for example, can be decomposed into 8 separate bit-planes. \\
+	\textbf{Imperceptibility} & A crucial requirement in steganography, referring to the inability of the human visual system (HVS) to distinguish between the cover-image and the stego-image. \\
+	\textbf{Capacity} & The maximum amount of secret data that can be embedded into a cover-image without causing statistically significant or noticeable distortion. \\
+	\textbf{PSNR} & \textit{Peak Signal-to-Noise Ratio}. A common metric used to measure the quality of the stego-image by quantifying the level of distortion compared to the cover-image. A higher PSNR value generally indicates better imperceptibility. \\
+	\textbf{MSE} & \textit{Mean Squared Error}. A metric that measures the average of the squares of the differences between the pixel values of the cover-image and the stego-image. It is often used to calculate PSNR. \\
+	\textbf{Steganalysis} & The discipline dedicated to detecting the presence of hidden messages in media. It is the counterpart to steganography. \\
+	\textbf{Cryptography} & The practice of securing communication by converting a message into an unreadable format (ciphertext). Unlike steganography which hides the message's existence, cryptography obscures its content. \\
 \end{longtable}
+
+% \begin{center}  
+% \addcontentsline{toc}{chapter}{\protect\numberline{}\textbf{LIST OF TERMS}}
+% \normalfont\LARGE\textbf{LIST OF TERMS}
+% \end{center}
+% \begin{longtable}{p{2.5cm} p{11.5cm}}
+% 	\textbf{Terms} & \textbf{Definition}\\
+% 	\hline \endhead
+% 	Classes & Number of individual in biometrics data\\
+% 	Sample & Number of images can be used to represent population in a class.\\
+% 	... & ...\\
+% \end{longtable}
 
 
