@@ -1,0 +1,7 @@
+services:
+  app:
+    build: .
+    volumes: 
+      - ./:/data
+    command:
+      - pdflatex /data/Thesis_Book.tex
