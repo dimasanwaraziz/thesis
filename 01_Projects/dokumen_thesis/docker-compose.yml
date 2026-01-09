@@ -1,7 +1,12 @@
 services:
-  app:
-    build: .
-    volumes: 
-      - ./:/data
-    command:
-      - pdflatex /data/Thesis_Book.tex
+  latex:
+    image: texlive/texlive:latest
+    container_name: thesis_latex
+    volumes:
+      - .:/workdir
+    working_dir: /workdir
+    # Using latexmk to handle dependencies and multiple runs automatically
+    # -pdf: generates pdf
+    # -interaction=nonstopmode: prevents stopping on errors
+    # -outdir=out: puts output files in 'out' directory to keep root clean
+    command: latexmk -pdf -interaction=nonstopmode -synctex=1 -outdir=out Thesis_Book.tex
