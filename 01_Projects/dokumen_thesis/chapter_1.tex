@@ -1,42 +1,53 @@
 \chapter{INTRODUCTION}
-This chapter includes the following subtopics, namely: (1) Rationale; (2) Theoretical Framework; (3) Conceptual Framework/Paradigm; (4) Statement of the problem; (5) Hypothesis (Optional); (6) Assumption (Optional); (7) Scope and Delimitation;  and (8) Importance of the study.
 
 % =========================================================
-\section{Rationale}
+\section{Background of the Study}
 % =========================================================
-This section have to explain: (a) the background of the study; (b) describe the problem situation considering global, national and local forces; (c) Justify the existence of the problem situation by citing statistical data and authoritative sources; and (d) Make a clinching statement that will relate the background to the proposed research problem.
+The rapid proliferation of digital media on the internet has led to an increasing demand for robust copyright protection and secure data communication. Steganography, the art and science of hiding information within other media in such a way that no one, apart from the intended recipient, usually expects existing of the message, has emerged as a key solution. Unlike cryptography, which scrambles data to make it unreadable, steganography conceals the very existence of the data. 
 
-% =========================================================
-\section{Theoretical Framework}
-% =========================================================
-Discuss the theories and/or concepts, which are useful in conceptualizing the research.
+In the realm of digital images, the RGB color space offers a vast landscape for data embedding. Recent advancements, such as those by Liu and Su \cite{liu2025color}, have explored combining Pixel Value Differencing (PVD) with edge detection to enhance embedding capacity while maintaining visual imperceptibility. However, traditional approaches often rely on sequential embedding, where data is hidden in one channel (e.g., Red) before moving to the next (e.g., Green, then Blue). This sequential dependency can create bottlenecks in capacity and introduce complex inter-channel artifacts that are susceptible to steganalysis.
 
-% =========================================================
-\section{Conceptual Framework/Paradigm}
-% =========================================================
-Identify and discuss the variables related to the problem, and present a schematic diagram of the paradigm of the research and discuss the relationship of the elements/variables therein.
+This research introduces a "Multiple Embedding Steganography" (MES) framework that shifts the paradigm from sequential to parallel embedding. By treating the R, G, and B channels as independent carriers processed simultaneously, we aim to significantly unlock higher payload capacities required for embedding large data, such as full-size secret images, without compromising the visual integrity of the cover image.
 
 % =========================================================
 \section{Statement of the Problem}
 % =========================================================
-The general problem must be reflective of the title. It should be stated in such a way that it is not answerable by yes or no, not indicative of when and where. Rather, it should reflect between and among variables. Each sub-problem should cover mutually exclusive dimensions (no overlapping). The sub-problem should be arranged in logical order from actual to analytical following the flow in the research paradigm.
+Existing high-capacity steganographic methods, particularly those operating in the RGB domain, face the following challenges:
+\begin{enumerate}
+    \item \textbf{Sequential Dependency Limitation:} Most current algorithms embed data sequentially across color channels. This creates a dependency where the embedding capacity and modification in one channel may constrain or affect the others, limiting the overall payload.
+    \item \textbf{Capacity vs. Imperceptibility Trade-off:} Achieving high embedding capacity often results in significant distortion, lowering the Peak Signal-to-Noise Ratio (PSNR) and making the stego-image visually detectable.
+    \item \textbf{Limited Payload for Large Data:} Current methods struggle to embed large payloads, such as a full-resolution image within another image of the same size, without causing noticeable degradation.
+\end{enumerate}
 
 % =========================================================
-\section{Objective and Hypotheses}
+\section{Research Objectives}
 % =========================================================
-First, explain the objective according the problem, then hypothesis. A hypothesis should be measurable/ desirable. It expresses expected relationship between two or more variables. It is based on the theory and/or empirical evidence. There are techniques available to measure or describe the variables. It is on a one to one correspondence with the specific problems of the study. A hypothesis in statistical form has the following characteristics: (a) it is used when the test of significance of relationships and difference of measures are involved; and (b) the level of significance if stated.
-
-% =========================================================
-\section{Assumption}
-% =========================================================
-An assumption should be based on the general and specific problems. It is stated in simple, brief, generally accepted statement.
+The primary objective of this study is to develop a Multiple Embedding Steganography (MES) framework for RGB images that utilizes a parallel embedding architecture.
+Specific objectives include:
+\begin{enumerate}
+    \item To design a parallel embedding algorithm that processes Red, Green, and Blue channels independently to maximize spatial utilization.
+    \item To implement an adaptive embedding strength mechanism based on edge detection to preserve visual quality in smooth regions.
+    \item To achieve an embedding capacity greater than 3.0 bits per pixel (bpp).
+    \item To maintain a high visual quality with a PSNR value above 30 dB.
+\end{enumerate}
 
 % =========================================================
 \section{Scope and Delimitation}
 % =========================================================
-Indicate the principal variables, locale, timeframe, and justification.
+\textbf{Scope:}
+\begin{itemize}
+    \item The study focuses on digital images in the RGB color space.
+    \item The proposed method utilizes Pixel Value Differencing (PVD) and Edge Detection techniques.
+    \item Performance evaluation will be based on Embedding Capacity (bpp), PSNR, and SSIM metrics.
+\end{itemize}
+
+\textbf{Delimitations:}
+\begin{itemize}
+    \item This research does not cover robustness against active attacks (e.g., crop, rotation, compression).
+    \item The study is limited to spatial domain embedding and does not explore frequency domain techniques (e.g., DCT/DWT).
+\end{itemize}
 
 % =========================================================
 \section{Significance of the Study}
 % =========================================================
-This section describes the contributions of the study as new knowledge, make findings more conclusive. It cites the usefulness of the study to the specific groups.
+This research contributes to the field of information security by demonstrating that parallel processing in the color domain can significantly enhance steganographic capacity. The findings will be beneficial for applications requiring the covert transmission of large data files, such as medical imaging privacy and secure military communication, providing a method that offers both high capacity and high imperceptibility.

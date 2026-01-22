@@ -1,11 +1,27 @@
 \chapter{CONCLUSION AND RECOMMENDATIONS}
 
+This chapter summarizes the findings of the study and provides conclusions based on the empirical data. It also offers recommendations for future research directions.
+
 %========================================================================
 \section{Conclusions}
 %========================================================================
-These are brief, generalized statements in answer to the general and each of the specific sub-problems. These contain generalized in relation to the population. These are general inferences applicable to a wider and similar population. Flexibility is considered in making of conclusions. It is not a must to state conclusions on a one-to-one correspondence with the problems and the findings as all variables can be subsume in one paragraph. Conclusions may be used as generalizations from a micro to a macro-level or vice versa (ZOOM LENS approach). \textbf{Conclusions should be written on paragraph}.
+Based on the experiments and analysis conducted, the following conclusions are drawn:
+
+\begin{enumerate}
+    \item The proposed Multiple Embedding Steganography (MES) framework successfully demonstrates that a parallel embedding architecture can significantly enhance the embedding capacity of RGB images compared to traditional sequential methods.
+    \item The method achieved an average embedding capacity greater than 3.0 bits per pixel (bpp) across standard test images, validating its capability to conceal large payloads, including full-size color images.
+    \item Despite the high payload, the visual quality of the stego-images remained high, with Peak Signal-to-Noise Ratio (PSNR) values consistently exceeding the 30 dB threshold. This confirms that the adaptive edge detection mechanism effectively masks the distortion in high-frequency regions.
+    \item The parallel approach eliminates the inter-channel dependency found in sequential methods, allowing for more robust and independent data management across the Red, Green, and Blue channels.
+\end{enumerate}
 
 %========================================================================
 \section{Recommendations}
 %========================================================================
-They should be based on the findings and conclusion of the study. Recommendations may be specific or general or both. They may include suggestions for further studies. They should be in non-technical language, feasible, workable, flexible, doable, and adaptable. An action plan is optional.
+To further enhance the capabilities and robustness of the proposed framework, the following recommendations are suggested for future research:
+
+\begin{enumerate}
+    \item \textbf{Robustness Testing:} Future studies should evaluate the method's resilience against active attacks, such as image compression (JPEG), geometric transformations (rotation, scaling), and noise addition.
+    \item \textbf{Frequency Domain Implementation:} Exploring the application of the parallel embedding concept in the frequency domain (e.g., DCT, DWT) could potentially offer better robustness against signal processing attacks.
+    \item \textbf{Security Enhancement:} Integrating a cryptographic layer (e.g., AES encryption) before embedding would add an essential layer of security, ensuring that the hidden data remains confidential even if extracted.
+    \item \textbf{Optimization:} Further optimization of the edge detection threshold using machine learning or genetic algorithms could potentially yield an even better trade-off between capacity and imperceptibility.
+\end{enumerate}

@@ -1,15 +1,29 @@
 \chapter{REVIEW OF LITERATURE AND STUDIES} \label{cap:chapter2}
 
-This chapter starts with a brief introductory paragraph concerning the researcher’s exploration of related literature and studies on the research problem. It should be organized thematically to confirm to the specific problems. It should synthesize evidence from all studies reviewed to get an overall understanding of the state of the knowledge in the problem area. As much as possible, the reviewed should be limited within the last ten years. A statement showing how the related materials had assisted the researchers in the present study should be the last part.  
-
-This chapter discusses the literature studies and theories of this study. It is divided into two sections: (1) the related literatures; and (2) the related studies.
+This chapter reviews relevant literature and studies related to digital steganography, focusing on techniques and concepts foundational to this research. It covers the principles of Steganography, the RGB Color Model, Pixel Value Differencing (PVD), and Edge Detection.
 
 % =========================================================
 \section{Related Literatures}
 % =========================================================
-This section discusses state of the art of biometrics technologies and typical process which should be conducted in biometrics such as: data acquisition; preprocessing; feature extraction; and classification.
+
+\subsection{Digital Steganography}
+Steganography constitutes the practice of concealing a file, message, image, or video within another file, message, image, or video. The word steganography combines the Greek words \textit{steganos}, meaning "covered," and \textit{graphein}, meaning "writing". In digital terms, it involves hiding secret data within a carrier file—such as an image—so that the very existence of the secret data is concealed. The primary goal is imperceptibility, ensuring that the stego-image (the image containing the secret) is visually indistinguishable from the original cover image.
+
+\subsection{RGB Color Model}
+The RGB color model is an additive color model in which red, green, and blue light are added together in various ways to reproduce a broad array of colors. A standard digital color image is typically represented by these three channels. In an 8-bit depth image, each channel has a value ranging from 0 to 255. This structure provides a significant capacity for steganography, as each pixel is composed of 24 bits (8 bits x 3 channels), offering multiple planes for data embedding.
+
+\subsection{Pixel Value Differencing (PVD)}
+PVD is a popular steganographic technique that exploits the sensitivity of the human eye to changes in edge areas versus smooth areas. The algorithm divides the image into non-overlapping blocks of two consecutive pixels and calculates the difference between their values. If the difference is small (smooth area), a small amount of data is embedded to maintain visual quality. If the difference is large (edge area), more data can be embedded because the human eye is less sensitive to noise in complex textures. This adaptive approach allows PVD to achieve a good balance between capacity and imperceptibility.
+
+\subsection{Edge Detection in Steganography}
+Edge detection algorithms, such as Canny, Sobel, or Laplacian filters, are often used to identify regions of an image where there are sharp changes in intensity. In steganography, these edge regions are preferred for embedding larger amounts of data because the Human Visual System (HVS) masks distortion in high-frequency areas.
 
 % =========================================================
 \section{Related Studies}
 % =========================================================
-This section discusses about the related studies which support in the designing of the proposed method.
+
+\subsection{Sequential Embedding Techniques}
+Many existing RGB steganography methods employ a sequential approach. For instance, common LSB (Least Significant Bit) substitutions or PVD variants process the Red channel first, then the Green, and finally the Blue. While straightforward, this method often leads to "inter-channel dependency," where modifications in the first channel limit the embedding potential of subsequent channels to avoid color artifacts.
+
+\subsection{Recent Developments}
+A significant recent study by \cite{liu2025color} proposed a color image steganography method based on the RGB model and edge detection. Their work demonstrated that combining edge detection with PVD could significantly enhance embedding efficiency. However, their approach largely retained a sequential processing logic. This research builds upon their findings but proposes a divergence towards a fully parallel architecture to overcome the capacity limitations inherent in sequential processing, aiming to fully utilize the 24-bit depth of RGB images simultaneously.
