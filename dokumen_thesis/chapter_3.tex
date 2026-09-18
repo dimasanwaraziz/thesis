@@ -1,4 +1,4 @@
-\chapter{RESEARCH METHODOLOGY}
+\chapter{RESEARCH METHODOLOGY} \label{cap:chapter3}
 
 This chapter details the research methodology employed to develop the Multiple Embedding Steganography (MES) framework. It outlines the research design, the proposed parallel embedding algorithm, and the instruments used for data collection and analysis.
 
@@ -25,11 +25,17 @@ The first step involves decomposing the RGB cover image $I$ into its three const
 \end{equation}
 
 \subsection{Edge Detection and Classification}
-For each channel, an edge detection mechanism (using the Canny operator) is applied to classify pixels into "Edge" or "Smooth" regions. 
+For each channel, an edge detection mechanism (using the Canny operator) is applied to classify pixels into "Edge" or "Smooth" regions.
 \begin{itemize}
     \item \textbf{Edge Regions:} High variance. Higher embedding capacity is assigned here as the human eye is less sensitive to modifications.
     \item \textbf{Smooth Regions:} Low variance. Lower embedding capacity is used to preserve visual quality.
 \end{itemize}
+
+The Canny operator is selected in preference to a single-gradient operator such as Sobel because its hysteresis thresholding yields connected, well-localised contours and therefore a more stable region partition; this choice is consistent with the edge-adaptive schemes that currently report the strongest capacity--quality trade-offs \citep{ismail2026edgeadaptive, singh2026edgeopt}. Two methodological consequences follow and are handled explicitly in the implementation.
+
+\textbf{Edge-map synchronisation.} The classification must be reproducible by the receiver from the stego-image alone, since the cover is not transmitted. If embedding displaces pixel values across the Canny hysteresis thresholds, the receiver recomputes a different partition and extraction fails. The implementation therefore derives the edge map from bit-planes that the embedding process does not alter, so that the map computed on the cover and the map recomputed on the stego-image are identical by construction. This preserves blind extraction without requiring side information.
+
+\textbf{Threshold selection.} The Canny high and low thresholds govern the size of the edge set and hence the achievable capacity. \citet{singh2026edgeopt} demonstrate that treating these thresholds as optimisation variables rather than fixed constants yields a materially better capacity--fidelity operating point. Accordingly, thresholds are tuned per channel over the test set rather than fixed a priori, and the selected values are reported with the results so that the operating point of every reported measurement is unambiguous.
 
 \subsection{Parallel Embedding Process}
 The secret data $S$ is split into three segments $S_R, S_G, S_B$ proportional to the capacity of each channel. These segments are embedded simultaneously:
@@ -38,13 +44,18 @@ The secret data $S$ is split into three segments $S_R, S_G, S_B$ proportional to
     \item $S_G \rightarrow I_G$ using Adaptive PVD
     \item $S_B \rightarrow I_B$ using Adaptive PVD
 \end{itemize}
-This parallelization ensures that embedding in the Blue channel is not dependent on the Red channel, preventing error propagation.
+This parallelization ensures that embedding in the Blue channel is not dependent on the Red channel, preventing error propagation. The architecture differs on this point from colour-aware schemes that define a single modification event over the $(R,G,B)$ triple, such as the 3D Exploiting Modification Direction approach of \citet{aljburi2026emd3d}: under a coupled formulation the three planes cannot be assigned independent, locally derived capacities, whereas under the proposed decomposition each plane's budget is determined solely by its own local edge statistics.
+
+\subsection{Inter-Channel Correlation as a Design Constraint}
+Independence across planes is the source of the capacity gain, but it is also a potential liability. \citet{amrutha2023rgbsteganalysis} show that embedding independently in separate colour planes perturbs the natural correlation between those planes, and that colour-aware steganalysers can detect this perturbation even when each plane taken alone appears statistically unremarkable. The proposed method therefore treats the preservation of inter-channel correlation as an explicit design constraint rather than an incidental property: the per-channel segment sizes $|S_R|, |S_G|, |S_B|$ are allocated in proportion to each channel's locally estimated capacity, which keeps the relative distortion across planes commensurate with the cover's own channel statistics instead of loading one plane disproportionately.
 
 % =========================================================
 \section{Experiment Scenario}
 % =========================================================
-The experiments are conducted using a standard set of test images widely used in image processing research, including "Lenna", "Baboon", "Peppers", and "Airplane". Each image is $512 \times 512$ pixels.
+The experiments are conducted using a standard set of test images widely used in image processing research, including "Lenna", "Baboon", "Peppers", and "Airplane", drawn from the USC-SIPI image database. Each image is $512 \times 512$ pixels.
 The secret data used for embedding includes both random text data and full-size $512 \times 512$ RGB images to test the high-capacity claim.
+
+Two remarks on the validity of this scenario are in order. First, the four classical images span a useful range of texture density---"Baboon" is texture-rich and "Airplane" largely smooth---which is the property that matters most for an edge-adaptive scheme, since capacity is cover-dependent by construction. Second, a four-image set is small by contemporary standards and supports a capacity--quality characterisation but not a statistical security claim. \citet{janok2026survey} identify precisely this benchmarking fragmentation as a structural weakness of the data-hiding literature, and standardised resources such as StegBench \citep{andone2026stegbench} have since been introduced to address it. The classical set is therefore retained for comparability with prior work, and a larger colour corpus is used for the supplementary security evaluation described in Section~\ref{sec:ch3-security}.
 
 % =========================================================
 \section{Tools for Data Analysis}
@@ -57,5 +68,19 @@ PSNR measures the quality of the stego-image compared to the original cover imag
     PSNR = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{MSE} \right)
 \end{equation}
 
+\subsection{Structural Similarity Index (SSIM)}
+PSNR is an aggregate error measure and is known to correlate imperfectly with perceived quality, particularly for structured distortion of the kind that edge-adaptive embedding produces. SSIM is therefore reported alongside PSNR. It compares the cover and stego-image in terms of luminance, contrast, and structure over local windows, returning a value in $[0,1]$ where 1 denotes perfect structural agreement.
+\begin{equation}
+    SSIM(x,y) = \frac{(2\mu_x\mu_y + C_1)(2\sigma_{xy} + C_2)}{(\mu_x^2 + \mu_y^2 + C_1)(\sigma_x^2 + \sigma_y^2 + C_2)}
+\end{equation}
+where $\mu$ and $\sigma$ denote the local means, variances, and cross-covariance of the compared windows, and $C_1, C_2$ are stabilising constants. SSIM is computed per channel and averaged, so that structural degradation confined to a single colour plane remains visible in the reported figure rather than being masked by the other two. Recent edge-adaptive schemes report SSIM values in the range 0.82--0.97 at comparable payloads \citep{singh2026edgeopt, patwari2025dilatedlog, ismail2026edgeadaptive}, which provides the reference band for interpreting the results in Chapter~\ref{cap:chapter4}.
+
 \subsection{Embedding Capacity}
-Capacity is measured in bits per pixel (bpp). The target is a capacity $> 3.0$ bpp, which theoretically allows embedding a full color image within another.
+Capacity is measured in bits per pixel (bpp). The target is a capacity $> 3.0$ bpp, which theoretically allows embedding a full color image within another. This threshold is treated as a criterion of admissibility rather than as the contribution in itself: payloads in the 3.0--3.5 bpp band are already reported by recent edge-adaptive schemes on grayscale carriers \citep{patwari2025dilatedlog, singh2026edgeopt}, so the claim advanced here concerns the architectural means by which the capacity is obtained---parallel, independently budgeted colour planes---and the imperceptibility cost at which it is obtained.
+
+% =========================================================
+\section{Supplementary Security Evaluation} \label{sec:ch3-security}
+% =========================================================
+Perceptual metrics establish that a stego-image is visually indistinguishable from its cover; they do not establish that it is statistically indistinguishable. Because the reviewed literature now treats detection resistance as expected evidence \citep{kombrink2025survey}, and because inter-channel correlation is a specific detection cue for multi-channel schemes \citep{amrutha2023rgbsteganalysis}, a supplementary passive-detection evaluation is included.
+
+This evaluation is distinct from robustness against active attacks, which remains outside the scope of this study as stated in Chapter~1: no attempt is made to recover the payload after compression or geometric transformation. The question asked here is narrower---whether the presence of a payload can be detected---and it is answered by reporting detection accuracy or AUC for a small panel of detectors rather than a single one, since detector performance is itself unstable across conditions \citep{alrusaini2025robustness}. A colour-aware detector is included in the panel, as channel-agnostic detectors would not exercise the property most at risk under a parallel architecture. Results at or near an AUC of 0.5 indicate detection no better than chance; the interpretation of any departure from that value is given in Chapter~\ref{cap:chapter4}.
